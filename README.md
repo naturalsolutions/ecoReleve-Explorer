@@ -4,9 +4,10 @@ A free and open source biodiversity data management software.
 
 ![ecoReleve](https://raw.github.com/NaturalSolutions/ecoReleve/master/Logos/logo-LABS_explorer_small.jpg)
 
-We provide Software for these people:
+This Software allow data browsing and mapping.
 
-* Scientist: Formalize ecological questions and data gathering processes
+Screens shots
+------------
 
 
 Contributing

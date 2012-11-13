@@ -12,10 +12,11 @@ Screens shots
 ------------
 
 ![Screens](https://raw.github.com/NaturalSolutions/ecoReleve-Explorer/master/Screens/splash.png)
-![Screens](https://raw.github.com/NaturalSolutions/ecoReleve-Explorer/master/Screens/ScreenShot001.png)
-![Screens](https://raw.github.com/NaturalSolutions/ecoReleve-Explorer/master/Screens/ScreenShot002.png)
-![Screens](https://raw.github.com/NaturalSolutions/ecoReleve-Explorer/master/Screens/ScreenShot003.png)
-![Screens](https://raw.github.com/NaturalSolutions/ecoReleve-Explorer/master/Screens/ScreenShot004.png)
+
+Installation notes
+-----------------
+ * TLS 1.2 must be checked in your internet explorer options(<a href="https://ecoreleve.googlecode.com/hg/photo/internet_options.png">Screen</a>)
+ * To exchange data (layer, comments ...) with natural solutions's server you must install the certificate authenticating natural solutions as a source of secure data(<a href="https://ecoreleve.googlecode.com/hg/doc/HowToInstallCertificate.pdf">how-to</a>)
 
 Contributing
 ------------
@@ -32,10 +33,14 @@ Technical details
 •Openscales 1.8 
 •Puremvc simple core 
 
-Installation notes
------------------
- * TLS 1.2 must be checked in your internet explorer options(<a href="https://ecoreleve.googlecode.com/hg/photo/internet_options.png">Screen</a>)
- * To exchange data (layer, comments ...) with natural solutions's server you must install the certificate authenticating natural solutions as a source of secure data(<a href="https://ecoreleve.googlecode.com/hg/doc/HowToInstallCertificate.pdf">how-to</a>)
+
+Demo
+--------
+
+![Screens](https://raw.github.com/NaturalSolutions/ecoReleve-Explorer/master/Screens/ScreenShot001.png)
+![Screens](https://raw.github.com/NaturalSolutions/ecoReleve-Explorer/master/Screens/ScreenShot002.png)
+![Screens](https://raw.github.com/NaturalSolutions/ecoReleve-Explorer/master/Screens/ScreenShot003.png)
+![Screens](https://raw.github.com/NaturalSolutions/ecoReleve-Explorer/master/Screens/ScreenShot004.png)
 
 History
 --------

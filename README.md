@@ -11,6 +11,7 @@ ecoRelevé explorer is a free and open source data browsing software for field o
 Screens shots
 ------------
 
+![Screens](https://raw.github.com/NaturalSolutions/ecoReleve-Explorer/master/Screens/splash.png)
 
 Contributing
 ------------

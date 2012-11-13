@@ -2,7 +2,7 @@ ecoRelevé Explorer
 =========
 A free and open source biodiversity data management software.
 
-![ecoReleve](https://raw.github.com/NaturalSolutions/ecoReleve/master/Logos/logo-LABS_exploreur.jpg)
+![ecoReleve](https://raw.github.com/NaturalSolutions/ecoReleve/master/Logos/logo-LABS_exploreur (2).jpg)
 
 We provide Software for these people:
 

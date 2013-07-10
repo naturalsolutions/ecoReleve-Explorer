@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="50" 
+		 horizontalScrollPolicy="off" verticalScrollPolicy="off" horizontalAlign="center" verticalAlign="middle">
+	
+	<mx:Metadata>
+        [Event(name="OpacityButtonClicked",type="org.openscales.core.events.LayerOpacityEvent")]
+    </mx:Metadata>
+	
+	<mx:Script>
+    	<![CDATA[
+			import com.ecoReleve.ressources.skin.RibbonSliderSkin.SliderThb;
+			import com.ecoReleve.view.events.LayerOpacityEvent;
+			
+			import mx.controls.dataGridClasses.DataGridListData;
+			import mx.controls.listClasses.ListBase;
+			
+			import org.openscales.core.events.LayerEvent;
+			import org.openscales.core.layer.FeatureLayer;
+			import org.openscales.core.layer.Layer;
+			import org.openscales.core.layer.ogc.WMSC;
+			import org.openscales.core.style.Style;
+			import org.openscales.core.style.marker.WellKnownMarker;
+			import org.openscales.core.style.symbolizer.LineSymbolizer;
+			import org.openscales.core.style.symbolizer.PointSymbolizer;
+			import org.openscales.core.style.symbolizer.PolygonSymbolizer;
+		
+            	
+			[Bindable] private var _data:Layer;
+			
+            // Override the set method for the data property.
+            [Bindable]
+            override public function set data(value:Object):void 
+            {
+				super.data = value;//very important dont forget to set super.data when overriding set data
+                _data = value as Layer;
+	
+			}
+                
+			private function getOpacityLayer(lay:Layer):Number
+			{
+				if (lay is WMSC){
+					return Math.ceil((lay as WMSC).alpha * 100);
+				}else if (lay is FeatureLayer){					
+					var style:Style=(lay as FeatureLayer).style;
+					if (style.rules[0].symbolizers[0] is PointSymbolizer){					
+						var symbPoint:PointSymbolizer=style.rules[0].symbolizers[0] as PointSymbolizer;
+						if (symbPoint!=null){
+							var wkn:WellKnownMarker=symbPoint.graphic as WellKnownMarker;
+							return Math.ceil(wkn.fill.opacity * 100);
+						}else{
+							return 0;	
+						}
+					}else{						
+						return lay.alpha * 100;
+					}	
+				}else {
+					return 0;
+				}
+			}
+			
+			
+            //override public getter for data property
+            override public function get data():Object
+            {
+            	return _data;
+            	
+        	}
+        	
+        	private function onDrag(event:Event):void 
+        	{
+	        	event.stopPropagation();
+	     	}
+            
+			private function changeOpacityHandler():void
+			{
+               dispatchEvent(new LayerOpacityEvent("OpacityButtonClicked",_data,opacityControl.value, true, true));
+            }
+	
+	    ]]>
+  </mx:Script>
+
+    	
+	<mx:HSlider id="opacityControl" value="{getOpacityLayer(_data)}" 	
+				width="100" height="5" maximum="100" snapInterval="10" labels="['0%','100%']" tickValues="['0','100']"
+				mouseDown="onDrag(event)" change="changeOpacityHandler()" liveDragging="true"
+				sliderThumbClass="{SliderThb}" styleName="styleHSlider" 
+				toolTip="change layer opacity" />
+
+</mx:HBox>

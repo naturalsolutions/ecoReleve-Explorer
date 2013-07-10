@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+		 	    horizontalScrollPolicy="off" verticalScrollPolicy="off"
+		        width="500" height="400" title="Layer manager" 
+		        showCloseButton="true" close="sendEvent(CANCEL)"
+			    paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="20">
+	         		
+		<mx:Script>
+			<![CDATA[	
+				import mx.events.DragEvent;
+				
+				import org.openscales.core.events.LayerEvent;
+				import org.openscales.core.layer.Layer;
+				
+				public static const CANCEL:String = 'cancel';
+				public static const CHANGE_LAYER_ORDER:String = 'changelayerorder';
+				public static const REMOVE_LAYER:String = 'removelayer';
+				
+				[Bindable]
+				public var overlayArray:Array;
+				
+				[Bindable]
+				public var baselayArray:Array;
+				
+				[Bindable]
+				[Embed('com/ecoReleve/ressources/images/close.png')]
+				public var IcoClose:Class;
+				
+			    private function sendEvent( action:String ):void
+	            {
+	                dispatchEvent(new Event( action, true ));
+	            }
+				
+				private function sendDragEvent( action:String ):void
+				{
+					dispatchEvent(new DragEvent( action, true ));
+				}
+
+				public function sendRemoveLayerEvent(data:Object):void
+				{
+					var lay:Layer=data as Layer					
+					dispatchEvent(new LayerEvent("deleteButtonClicked",lay, true, true));
+				}
+				
+			]]>
+		</mx:Script>
+	
+	
+	<mx:DataGrid id="overlayList" resizableColumns="false" width="100%"
+				 sortableColumns="false" dataProvider="{overlayArray}" styleName="styleManagerDatagrid"
+				 dragEnabled="true" dropEnabled="true" dragMoveEnabled="true" dragComplete="sendDragEvent(CHANGE_LAYER_ORDER)" 
+				 rowHeight="50">
+		<mx:columns>
+			<mx:DataGridColumn headerText="layer name" width="320">
+				<mx:itemRenderer>
+					<mx:Component>
+						<mx:HBox horizontalAlign="center" verticalAlign="middle">
+							<mx:Label text="{data.name}" width="100%" textAlign="left" styleName="styleMangerLayerName"/>						
+						</mx:HBox>
+					</mx:Component>
+				</mx:itemRenderer>
+			</mx:DataGridColumn>
+			<!--<mx:DataGridColumn headerText="epsg" width="100">
+				<mx:itemRenderer>
+					<mx:Component>
+						<mx:HBox horizontalAlign="center" verticalAlign="middle">
+							<mx:Label text="{data.projection.srsCode}" width="100%" textAlign="left" styleName="styleMangerLayerName"/>						
+						</mx:HBox>
+					</mx:Component>
+				</mx:itemRenderer>
+			</mx:DataGridColumn>-->
+			<mx:DataGridColumn id="colOpacity" headerText="opacity" width="120" itemRenderer="com.ecoReleve.view.renderer.OpacityRenderer"/>
+			<mx:DataGridColumn headerText="remove" width="60">
+				<mx:itemRenderer>
+					<mx:Component>
+						<mx:HBox horizontalAlign="center" verticalAlign="middle">
+							<mx:Image click="outerDocument.sendRemoveLayerEvent(data);" 
+									  source="{outerDocument.IcoClose}" toolTip="remove layer"
+									  buttonMode="true" useHandCursor="true" width="16" height="16"/>						
+						</mx:HBox>
+					</mx:Component>
+				</mx:itemRenderer>
+			</mx:DataGridColumn>
+		</mx:columns>
+	</mx:DataGrid>
+
+	</mx:TitleWindow>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:mx="library://ns.adobe.com/flex/mx" 
+					  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:os="http://openscales.org"
+					  width="100%" height="100%" styleName="PanelCanvas" >
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.ItemClickEvent;
+			import org.openscales.core.handler.feature.SelectFeaturesHandler;
+			import org.openscales.core.events.FeatureEvent;
+			
+			[Bindable]
+			[Embed('com/ecoReleve/ressources/images/MActionSelect.png')]
+			private var icoSelect:Class;
+			
+			[Bindable]
+			[Embed('com/ecoReleve/ressources/images/MActionDeleteSelected.png')]
+			private var icoDeleteSelected:Class;
+			
+			[Bindable]
+			[Embed('com/ecoReleve/ressources/images/MActionPan.png')]
+			private var icoPan:Class;
+			
+			public static const CLEAR_SELECTION:String='clearSelection'
+			public static const MAP_CREATED:String = 'mapcreated';
+							
+			
+	        private function fadein(event:Event):void
+	        {
+	            if (fadeOut.isPlaying){
+	            	fadeOut.stop();
+	            }
+	            fadeIn.alphaFrom=event.currentTarget.alpha
+	            fadeIn.play([event.currentTarget]);
+	        }
+	        
+	        private function fadeout(event:Event):void
+	        {
+	        	if (fadeIn.isPlaying){
+	            	fadeIn.stop();
+	            }
+	            fadeOut.alphaFrom=event.currentTarget.alpha
+	            fadeOut.play([event.currentTarget]);
+	        }
+			
+			
+		    // Envoit l'évenement 
+            private function sendEvent( eventName:String ):void
+            {
+                dispatchEvent( new Event( eventName, true ) );
+            }
+		]]>
+	</fx:Script>	  
+
+	<fx:Declarations>
+		<s:Fade id="fadeOut" duration="500" alphaFrom="1.0" alphaTo="0.5"/>
+		<s:Fade id="fadeIn" duration="500" alphaFrom="0.5" alphaTo="1.0"/>	
+	</fx:Declarations>
+		
+        	
+		<!-- MAP  -->
+		<s:Group height="100%" width="100%">
+	
+			<os:TraceInfo id="traceInfo" left="10" top="10"/>
+			<!-- centerLonLat="538850.47459,5740916.1243"-->
+			<os:Map id="fxmap" width="100%" height="100%"  creationComplete="sendEvent(MAP_CREATED)">
+
+				<!-- tools -->
+				<os:ScaleLine x="10" y="{height-80}"/>
+				<os:MousePosition id="mousPos" x="150" y="{height-20}" displayProjection="EPSG:900913"/>
+
+				<os:Spinner id="spinner" x="{width / 2}" y="{height / 2}"/>
+				
+				<!-- handlers -->
+				<os:DragHandler id="dragHandler" active="true"/>
+				<os:WheelHandler/>
+				<os:SelectFeaturesHandler id="selectFeaturesHandler"  active="false" enableClickSelection="true" enableBoxSelection="true" enableOverSelection="false"  />
+			</os:Map>
+							
+			<!--  Navigation Tool  -->		
+			<s:Panel id="mapToolsPanel" title="tools" x="{width-70}" y="150" width="60" height="300" styleName="ZoomPanel" alpha="0.5" rollOver="fadein(event)" rollOut="fadeout(event)">
+				<s:VGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+					<os:Zoom id="ToolZoomSlideMap" x="{fxmap.width-140}" y="150" />
+				    <os:ZoomBox id="ToolZoomBoxMap" width="32" height="32"/>
+					<s:Image id="imgSelect" source="{icoSelect}" 
+							 click="selectFeaturesHandler.active=true;dragHandler.active=false" 
+							 useHandCursor="true" buttonMode="true" toolTip="select features" />
+					<s:Image id="imgDeleteSelected" source="{icoDeleteSelected}" 
+							 useHandCursor="true" buttonMode="true" toolTip="delete selected features"
+							 click="sendEvent(CLEAR_SELECTION);"/>
+					<s:Image id="imgPan" source="{icoPan}" 
+							 click="selectFeaturesHandler.active=false;dragHandler.active=true"
+							 useHandCursor="true" buttonMode="true" toolTip="active pan"/>				
+				</s:VGroup>	
+			</s:Panel>
+			
+			<!--<MyComponents:Selection id="viewSelection" x="{this.width/2 - viewSelection.width/2}" y="{this.height - viewSelection.height -10}"/>
+			-->
+			<!--  OverView Tool 
+			<s:Panel id="miniMapPanel" title="Overview map" x="{width-150}" y="10" width="140" alpha="0.5" styleName="OverViewPanel" rollOver="fadein(event)" rollOut="fadeout(event)">
+				<os:OverviewMap id="ToolOverViewMap"  width="100%" height="100%" extentColor="0xFF3300" newExtentColor="0x00FF33"/> 
+			</s:Panel>-->
+				<!--<os:OverviewMapRatio id="ToolOverViewMap" x="{width-150}" y="10" width="140" alpha="0.5" styleName="OverViewPanel" rollOver="fadein(event)" rollOut="fadeout(event)" projection="EPSG:900913">
+				<os:Mapnik name="mapnik overwiew" minResolution="5,EPSG:900913" />
+			</os:OverviewMapRatio> 
+			-->
+			<s:Panel id="miniMapPanel" title="Overview map" x="{width-150}" y="10" width="140" alpha="0.5" styleName="OverViewPanel" rollOver="fadein(event)" rollOut="fadeout(event)">
+				<os:OverviewMap id="ToolOverViewMap" width="100%" height="100%" >
+		            <os:Mapnik name="Mapnik"/>
+		        </os:OverviewMap>
+			</s:Panel>
+	</s:Group>
+</s:SkinnableContainer>
+

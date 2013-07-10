@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 	xmlns:s="library://ns.adobe.com/flex/spark" 
+		 	xmlns:mx="library://ns.adobe.com/flex/mx">
+	
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple).-->
+		<s:Sequence id="hide">
+			<s:Fade duration="10" target="{lblHideLog}" alphaFrom="1.0" alphaTo="0"/>
+			<s:Move duration="500" target="{this}" yBy="{this.height}" effectStart="lblHideLog.alpha=0" effectEnd="lblShowLog.alpha=1.0"/>
+		</s:Sequence>
+		
+		<s:Sequence id="show">
+			<s:Fade duration="10" target="{lblShowLog}" alphaFrom="1.0" alphaTo="0"/>
+			<s:Move duration="500" target="{this}" yBy="{-this.height}" effectEnd="lblHideLog.alpha=1.0"/>
+		</s:Sequence>
+
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			
+			[Bindable]
+			public var strLog:String=""
+			
+			private function toggleBtn(e:MouseEvent):void
+			{
+				if(e.currentTarget.label== 'hide log')
+					hide.play();
+				else 
+					show.play();
+			}
+				
+			private function clearStrLog():void
+			{
+				strLog="";
+			}
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:VerticalLayout gap="0" paddingLeft="0" paddingBottom="0" paddingRight="0" paddingTop="0"/>
+	</s:layout>
+	
+	<mx:LinkButton id="lblShowLog" label="show log" click="toggleBtn(event)"/>
+	<s:BorderContainer id="commandBar" width="100%" height="30">
+		<s:layout>
+			<s:HorizontalLayout gap="0" paddingLeft="1" paddingBottom="1" paddingRight="1" paddingTop="1"/>
+		</s:layout>
+		
+		<!-- STYLE -->
+		<s:backgroundFill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0x767a83"/>
+				<s:GradientEntry color="0xbec1c8"/>
+			</s:LinearGradient>
+		</s:backgroundFill>
+		<s:borderStroke>
+			<mx:SolidColorStroke color="black" weight="1"/>
+		</s:borderStroke>
+		
+		<s:HGroup width="100%" height="100%" horizontalAlign="left" verticalAlign="middle">
+			<mx:LinkButton id="lblHideLog" label="hide log" click="toggleBtn(event)"/>
+		</s:HGroup>
+		<s:HGroup width="100%" height="100%" horizontalAlign="right" verticalAlign="middle">
+			<s:Button label="clear" click=" clearStrLog()" useHandCursor="true" buttonMode="true"/>
+		</s:HGroup>
+
+	</s:BorderContainer> 
+	<s:BorderContainer id="container" borderColor="white" width="100%" height="100%">
+		<s:Scroller width="100%" height="100%">
+			<s:RichEditableText id="txtLog" text="{strLog}" editable="true" selectable="false"
+								width="100%"/>
+		</s:Scroller>	
+	
+	</s:BorderContainer>
+</s:Group>

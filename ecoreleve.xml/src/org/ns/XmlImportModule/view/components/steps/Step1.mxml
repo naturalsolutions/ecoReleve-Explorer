@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WizardStep xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			xmlns:s="library://ns.adobe.com/flex/spark" 
+			xmlns:mx="library://ns.adobe.com/flex/mx"
+			xmlns="org.ns.genericComponents.wizard.*" 
+			stepName="File"
+			stepDescription="Choose file to import" width="600" height="350">
+	
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			public var f:File;
+			
+			override public function get stepDecision():* 
+			{
+				return f;
+			}
+			
+			override public function get readableStepDecision():String 
+			{
+				return f.nativePath;
+			}
+			
+			private function sendEvent(action:String):void
+			{
+				dispatchEvent(new Event(action));
+			}
+		]]>
+	</fx:Script>
+
+	
+	<s:HGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+		<s:TextInput id="txtFilePath" text="{String(f.nativePath)}" width="350"/>
+		<s:Button id="browseButton" label="..." width="30" click="sendEvent('BROWSE')"/>
+	</s:HGroup>
+</WizardStep>

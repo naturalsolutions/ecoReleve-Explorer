@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- http://blog.flexexamples.com/2009/03/18/using-a-custom-item-renderer-with-the-fxlist-control-in-flex-gumbo/ -->
+<s:ItemRenderer name="ResizingItemRenderer"
+				xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				focusEnabled="false">
+	
+	<fx:Script>
+		<![CDATA[
+			import flashx.textLayout.conversion.TextConverter;
+			
+			import org.ns.common.model.utils.QueryVOCast;
+			import org.ns.common.model.VO.QueryVO;
+		]]>
+	</fx:Script>
+	
+	
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+		<s:State name="normalAndShowsCaret"/>
+		<s:State name="hoveredAndShowsCaret"/>
+		<s:State name="selectedAndShowsCaret"/>
+	</s:states>
+	
+	<s:VGroup left="3" right="10" top="3" bottom="3">
+		<s:Label text="{data.qry_name}" fontWeight="bold" />
+		<s:RichEditableText editable="false" mouseChildren="false"
+							width="430" textFlow="{TextConverter.importToFlow(QueryVOCast.toText(data as QueryVO),TextConverter.TEXT_FIELD_HTML_FORMAT)}"
+							includeIn="hovered,selected, selectedAndShowsCaret">
+		</s:RichEditableText>
+	</s:VGroup>
+	
+</s:ItemRenderer>

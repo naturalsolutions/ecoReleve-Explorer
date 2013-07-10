@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:ns="org.ns.genericComponents.ribbon.*"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+	 	 width="100%" height="100%">
+	 	 
+	<fx:Script>
+		<![CDATA[
+			import com.ecoReleve.view.mycomponents.ribbon.Ribbon;
+			
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+            [Embed('com/ecoReleve/ressources/images/FilterSpecies.png')]
+            private var IcoFilter:Class;
+
+			[Bindable]
+			public var species:ArrayCollection=new ArrayCollection();
+			
+			[Bindable]
+			public var boEnabled:Boolean=false;
+			
+			 private function sendEvent(action:String):void
+             {
+                dispatchEvent(new Event(action,true));
+             }
+
+		]]>
+	</fx:Script>
+
+	<s:layout>
+		<s:VerticalLayout gap="10" paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" />
+	</s:layout>
+	
+	<s:Label text="Species filter"/>
+	<s:List id="lstSpecies" dataProvider="{species}" allowMultipleSelection="true"
+			width="100%" height="100%"/>
+	
+</s:SkinnableContainer>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:myComponents="org.ns.dataconnecteur.shell.view.components.*" width="100%" height="100%">
+	
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+		<s:Sequence id="fadeAndHide"
+					target="{txtAddedStations}"
+					duration="1500">
+			<s:Fade id="fadeShow" 
+					alphaFrom="0.0"
+					alphaTo="1.0"/>
+			<s:Fade id="fadeHide" 
+					alphaFrom="1.0"
+					alphaTo="0.0"/>
+		</s:Sequence> 
+		
+		<s:Fade id="Show" duration="500" alphaFrom="0.0" alphaTo="1.0"/>
+		<s:Fade id="Hide" duration="500" alphaFrom="1.0" alphaTo="0.0"/>
+
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle" paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5"/>
+	</s:layout>
+
+	<s:Group>
+		<s:layout>
+			<s:VerticalLayout horizontalAlign="center"/>
+		</s:layout>
+		<s:Group>
+			<s:layout>
+				<s:BasicLayout/>
+			</s:layout>
+			<s:BitmapImage source="@Embed('org/ns/dataconnecteur/shell/ressources/image/db.png')"/>
+			<s:Label id="txtTotalStations" y="0" x="0" backgroundAlpha="0.0" width="100%" height="100%" textAlign="center" verticalAlign="middle" fontSize="26" fontWeight="bold"/>
+			<s:Label id="txtAddedStations" text="" backgroundAlpha="1.0"  verticalAlign="top" textAlign="center" fontSize="24" 
+					 horizontalCenter="0" top="0"  color="#6C94EF"/>
+		</s:Group>
+	</s:Group>	
+	
+	<s:VGroup width="100%" horizontalAlign="center" verticalAlign="middle" gap="4">
+		<s:ButtonBar dataProvider="{vs}" buttonMode="true" visible="false">
+			<s:layout>  
+				<s:HorizontalLayout gap="0" paddingLeft="0" paddingRight="0"/>  
+			</s:layout>  
+		</s:ButtonBar> 
+		
+		<mx:ViewStack id="vs" creationPolicy="all" width="100%" height="100%">
+			<s:NavigatorContent label="Data summary" showEffect="{Show}" hideEffect="{Hide}">
+				<myComponents:PieChart id="myPie" width="100%"/>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Data Grid" showEffect="{Show}" hideEffect="{Hide}">
+				<myComponents:DataGrid id="myDg" width="100%"/>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="Data summary" showEffect="{Show}" hideEffect="{Hide}">
+				<myComponents:OLAP id="myOlap" width="100%"/>
+			</s:NavigatorContent>	
+			<s:NavigatorContent label="Query details" showEffect="{Show}" hideEffect="{Hide}">
+				<myComponents:TimeLine id="myTimeLine" width="100%"/>
+			</s:NavigatorContent>
+			<s:NavigatorContent label="frfrfr" showEffect="{Show}" hideEffect="{Hide}">
+				
+			</s:NavigatorContent>
+		</mx:ViewStack> 
+	</s:VGroup>
+
+</s:SkinnableContainer>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group  xmlns:mx="library://ns.adobe.com/flex/mx"
+					   xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+				       width="200" height="40">
+		
+		<fx:Script>
+			<![CDATA[
+				import mx.collections.ArrayCollection;
+				import mx.events.SliderEvent;
+				
+				[Bindable]
+				[Embed('com/ecoReleve/ressources/images/btn-prev.png')]
+				private var icoPrevious:Class;
+				
+				[Bindable]
+				[Embed('com/ecoReleve/ressources/images/btn-next.png')]
+				private var icoNext:Class;
+				
+				public static const SELECTION_ITEM_NEXT:String='itemNext'
+				public static const SELECTION_ITEM_PREVIOUS:String='itemPrevious'
+				
+				private function prev():void
+				{
+					var pos:int = lstSelectFeatures.selectedIndex-1;
+					var min:int=0;
+					var value:int = Math.max(pos, min);
+					lstSelectFeatures.selectedIndex=value;
+					lstSelectFeatures.scrollToIndex(lstSelectFeatures.selectedIndex);
+					sendEvent(SELECTION_ITEM_PREVIOUS)
+				}
+				
+				private function suiv():void
+				{
+					var pos:int = lstSelectFeatures.selectedIndex+1;
+					var max:int = (lstSelectFeatures.dataProvider as ArrayCollection).length;
+					var value:int = Math.min(pos, max);
+					lstSelectFeatures.selectedIndex=value;
+					lstSelectFeatures.scrollToIndex(lstSelectFeatures.selectedIndex);
+					sendEvent(SELECTION_ITEM_NEXT)
+				}
+				
+				
+				
+				private function sliderChangeHandler(event:SliderEvent):void
+				{
+					//grdStations.horizontalScrollPosition = event.value;
+					lstSelectFeatures.selectedIndex=event.value;
+					lstSelectFeatures.scrollToIndex(lstSelectFeatures.selectedIndex);
+				}
+					
+				// Envoit l'évenement 
+				private function sendEvent( eventName:String ):void
+				{
+					dispatchEvent( new Event( eventName, true ) );
+				}
+			]]>
+		</fx:Script>
+	
+	
+	<s:layout>
+		<s:HorizontalLayout paddingBottom="2" paddingLeft="2" paddingRight="2" paddingTop="2" horizontalAlign="center" verticalAlign="middle"/>
+	</s:layout>
+
+	<s:Image id="previous" source="{icoPrevious}" click="prev();" useHandCursor="true" buttonMode="true"/>
+	<mx:HorizontalList id="lstSelectFeatures" columnWidth="30"
+					   change="{lstSelectFeatures.scrollToIndex(lstSelectFeatures.selectedIndex)}"
+					   rowCount="1" rowHeight="30" width="300" 
+					   horizontalScrollPolicy="on" horizontalScrollBarStyleName="styleHScrollBarQuickInfo" 
+					   verticalScrollPolicy="off" 
+					   itemRenderer="com.ecoReleve.view.renderer.StationListRenderer">
+	</mx:HorizontalList>
+	<s:Image id="next" source="{icoNext}" click="suiv();" useHandCursor="true" buttonMode="true" />
+
+	
+</s:Group>

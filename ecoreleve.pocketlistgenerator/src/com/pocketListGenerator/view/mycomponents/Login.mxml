@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group   xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		   xmlns:s="library://ns.adobe.com/flex/spark" 
+		   xmlns:mx="library://ns.adobe.com/flex/mx" 
+		   xmlns:spinner="Spinner.controls.*"
+		   width="100%" height="100%" currentState="signin">
+	
+	<fx:Script>
+		<![CDATA[	
+			import com.pocketListGenerator.model.VO.UserVO;
+			import mx.validators.Validator;
+			
+			public static const SIGNIN:String = 'signin';
+			
+			[Bindable] public var user:UserVO;
+			
+			private function signin():void
+			{
+				var validators:Array=[];
+				validators=Validator.validateAll([validLogin,validPwd]);      	
+				
+				if (!validators.length){
+					user = new UserVO(	null,
+						null,
+						null,
+						null,
+						username.text,
+						password.text,
+						NaN,
+						null);
+					
+					sendEvent(SIGNIN);
+				}
+			}
+			
+			private function sendEvent( action:String ):void
+			{
+				dispatchEvent(new Event( action, true ));
+			} 		
+		]]>
+	</fx:Script>
+	
+	<!-- VALIDATORS -->
+	<fx:Declarations>			
+		<!--<mx:EmailValidator id="validEmail" source="{username}" property="text" trigger="{Submit}" triggerEvent="click" />-->
+		<mx:StringValidator id="validLogin" source="{username}" property="text" trigger="{Submit}" triggerEvent="click"/>
+		<mx:StringValidator id="validPwd" source="{password}" property="text" trigger="{Submit}" triggerEvent="click"/>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="signin"/>	
+		<s:State name="Unauthorized"/>
+		<s:State name="ConnexionFailed"/>
+	</s:states>
+	
+	<mx:Grid width="100%" height="100%">
+		<mx:GridRow id="row1" width="100%" height="10%">
+			<mx:GridItem colSpan="3" width="100%" height="100%" verticalAlign="middle" horizontalAlign="right">
+				<mx:Image source="com/pocketListGenerator/ressources/images/logo_natural_small.png"/>
+				<mx:Spacer width="10"/>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow id="row2" width="100%" height="80%">
+			<mx:GridItem colSpan="3" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">		
+				<s:SkinnableContainer id="loginContainer">
+					<s:layout>
+						<s:VerticalLayout/>
+					</s:layout>
+					<s:Group id="mainGroup">
+						<s:layout>
+							<s:VerticalLayout/>
+						</s:layout>
+						
+						<mx:Form id="loginForm" width="100%" paddingTop="3" paddingBottom="3">
+							<mx:FormItem required="true" label="Login:" styleName="styleLoginFormItemLabel">
+								<mx:TextInput id="username" text="{user.LOGIN}" styleName="styleLoginFormItemInput"/>
+							</mx:FormItem>
+							<mx:FormItem required="true" label="Password:" styleName="styleLoginFormItemLabel">
+								<mx:TextInput id="password" text="{user.PASSWORD}" displayAsPassword="true" styleName="styleLoginFormItemInput"/>
+							</mx:FormItem>
+								
+						</mx:Form>						
+					</s:Group>	
+					
+					<s:RichText text="The username or password you entered is incorrect" width="200" mouseChildren="false" color="red" includeIn="Unauthorized"/>
+					<s:RichText text="The server is actually unreachable. Please try later" width="200" mouseChildren="false" color="red" includeIn="ConnexionFailed"/>
+					
+					<s:Group>
+						<s:layout>
+							<s:HorizontalLayout paddingLeft="100" horizontalAlign="center"/>
+						</s:layout>						
+						<s:Button id="Submit" label="Login" click="signin()" styleName="submitStyle"/>
+						<spinner:Spinner id="MySpinner" width="100%" visible="false"/>
+					</s:Group>
+				</s:SkinnableContainer>
+			</mx:GridItem>
+		</mx:GridRow>
+		<mx:GridRow id="row3" width="100%" height="10%">
+			<mx:GridItem colSpan="3" width="100%" height="100%" verticalAlign="middle"/>					
+		</mx:GridRow>
+		
+	</mx:Grid>
+</s:Group>

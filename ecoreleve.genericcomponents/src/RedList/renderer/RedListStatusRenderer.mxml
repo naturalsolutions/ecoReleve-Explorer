@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="30" height="40" horizontalAlign="center" verticalAlign="middle">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.listClasses.*;		
+			
+			override protected function updateDisplayList(unscaledWidth:Number,unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledHeight);
+				
+				//figure out if this itemRenderer is selected
+				if(ListBase(owner).isItemSelected(data))
+				{
+					setStyle('fontSize',22);
+					setStyle('fontWeight', 'bold');
+				}else{
+					setStyle('fontSize', 10);
+					setStyle('fontWeight', 'normal');
+				}
+			} 
+		]]>
+	</mx:Script>
+	<mx:Label text="{data.status}"/>
+</mx:VBox>

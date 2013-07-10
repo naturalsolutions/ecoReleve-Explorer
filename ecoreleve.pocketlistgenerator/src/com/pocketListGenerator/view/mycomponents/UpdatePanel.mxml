@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:mx="http://www.adobe.com/2006/mxml"
+	     width="100%" height="100%" styleName="UpdatePanel" xmlns:s="library://ns.adobe.com/flex/spark">
+		
+		<mx:Script>
+			<![CDATA[
+				public static const CLICK_YES:String = 'clickyes';
+				public static const CLICK_NO:String = 'clickno';
+				
+				[Bindable] public var strVersion:String="";
+				[Bindable] public var strNbSec:String="3";
+				
+				[Bindable]
+            	[Embed('com/pocketListGenerator/ressources/images/download.png')]
+            	private var IcoLogo:Class;
+				
+	 			private function sendEvent( action:String ):void
+	            {
+	                dispatchEvent(new Event( action, true ));
+	            } 
+			]]>
+		</mx:Script>
+		
+	<s:states>
+		<s:State name="BeforeInstall"/>	
+		<s:State name="Error"/>
+	</s:states>
+	
+	<s:HGroup>
+		<s:BitmapImage id="logo" source="{IcoLogo}" />
+		<s:VGroup>
+			<s:Label id="myLabel" text="New Release {strVersion} is available"/>
+			<s:Label id="ask" text="Do you want to download it and install?"/>
+			<mx:ProgressBar id="prgBar" label="Downloading %3%" visible="false"/>
+			<s:HGroup>
+				<s:Button id="btnYes" label="Yes"/>
+				<s:Button id="btnNo" label="No"/>
+			</s:HGroup>
+		</s:VGroup>
+	</s:HGroup>
+	
+	
+	
+	<!--
+		<mx:states>
+			<mx:State name="BeforeInstall">
+				<mx:AddChild relativeTo="{txtArea}" position="lastChild" creationPolicy="all">
+					<mx:Label id="lblInstall" text="The new release will be install in {strNbSec} s " styleName="UpdateLabelInstall"/>
+				</mx:AddChild>
+				
+				<mx:RemoveChild target="{myLabel}"/>
+				<mx:RemoveChild target="{ask}"/>
+				<mx:RemoveChild target="{prgBar}"/>
+				<mx:RemoveChild target="{cmdCtl}"/>
+			</mx:State>
+			<mx:State name="Error">
+				<mx:AddChild relativeTo="{txtArea}" position="lastChild" creationPolicy="all">
+					<mx:Label id="lblError" text="Updating failed. Plase try again later" styleName="UpdateLabelError"/>
+				</mx:AddChild>
+				
+				<mx:RemoveChild target="{lblInstall}"/>
+				<mx:RemoveChild target="{myLabel}"/>
+				<mx:RemoveChild target="{ask}"/>
+				<mx:RemoveChild target="{prgBar}"/>
+				<mx:RemoveChild target="{cmdCtl}"/>
+			</mx:State>
+		</mx:states>
+		
+		<mx:HBox verticalAlign="middle" horizontalAlign="center" width="100%" height="100%" >
+			<mx:Image id="logo" source="{IcoLogo}" horizontalAlign="right"/>
+			<mx:VBox id="txtArea" verticalAlign="middle" horizontalAlign="center" width="100%" height="100%" >
+				<mx:Label id="myLabel" text="New Release {strVersion} is available" styleName="UpdateLabelRelease"/>
+				<mx:Label id="ask" text="Do you want to download it and install?" styleName="UpdateLabelAsk"/>
+				<mx:ProgressBar id="prgBar" label="Downloading %3%" visible="false" styleName="UpdateProgressBar"/>
+				<mx:HBox id="cmdCtl" >
+					<mx:Button id="btnYes" label="Yes" click="sendEvent(CLICK_YES)" />
+					<mx:Button id="btnNo" label="No" click="sendEvent(CLICK_NO)" />
+				</mx:HBox>
+			</mx:VBox>
+		</mx:HBox>-->
+		
+</s:Group>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fab:FlexModule xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				xmlns:myComponents="org.ns.CoreImportModule.view.components.*"
+				xmlns:fab="org.puremvc.as3.multicore.utilities.fabrication.components.*" xmlns:components="org.ns.RemoteImportModule.view.components.*" xmlns:view="org.ns.OdataImportModule.view.*" xmlns:components1="org.ns.OdataImportModule.view.components.*">
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import org.ns.OdataImportModule.controller.moduleStartupCommand
+				
+				override public function getStartupCommand():Class 
+				{
+					return moduleStartupCommand;
+				}
+				
+				override public function getClassByName(path:String):Class  
+				{
+					return getDefinitionByName(path) as Class;
+				}
+				
+		]]>
+	</fx:Script>
+	
+	
+	<components1:odataWizard id="wizard"/>
+	
+</fab:FlexModule>

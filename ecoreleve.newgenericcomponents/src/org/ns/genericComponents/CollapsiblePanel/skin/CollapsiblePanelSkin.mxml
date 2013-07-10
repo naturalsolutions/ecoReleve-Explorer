@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ADOBE SYSTEMS INCORPORATED
+Copyright 2008 Adobe Systems Incorporated
+All Rights Reserved.
+
+NOTICE: Adobe permits you to use, modify, and distribute this file
+in accordance with the terms of the license agreement accompanying it.
+
+-->
+
+<!--- The default skin class for a Spark Panel container.  
+
+    @see spark.components.Panel
+
+    @langversion 3.0
+    @playerversion Flash 10
+    @playerversion AIR 1.5
+    @productversion Flex 4
+-->
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" alpha.disabled="0.5" blendMode="normal" xmlns:mx="library://ns.adobe.com/flex/mx">
+    <fx:Metadata>[HostComponent("org.ns.genericComponents.CollapsiblePanel.CollapsiblePanel")]</fx:Metadata>
+    
+    <fx:Script fb:purpose="styling">
+        <![CDATA[
+		import mx.core.FlexVersion;
+		
+		/* Define the skin elements that should not be colorized. 
+        For panel, border and title background are skinned, but the content area, background, border, and title text are not. */
+        static private const exclusions:Array = ["background", "titleDisplay", "contentGroup", "controlBarGroup", "border"];
+			
+		/* exclusions before Flex 4.5 for backwards-compatibility purposes */
+		static private const exclusions_4_0:Array = ["background", "titleDisplay", "contentGroup", "controlBarGroup"];
+		
+		/**
+		 * @private
+		 */
+		override public function get colorizeExclusions():Array 
+		{
+			// Since border is styleable via borderColor, no need to allow chromeColor to affect
+			// the border.  This is wrapped in a compatibility flag since this change was added  
+			// in Flex 4.5
+			if (FlexVersion.compatibilityVersion < FlexVersion.VERSION_4_5)
+			{
+				return exclusions_4_0;
+			}
+			
+			return exclusions;
+		}
+			
+        /**
+         * @private
+         */
+        override protected function initializationComplete():void
+        {
+            useChromeColor = true;
+            super.initializationComplete();
+        }
+
+		]]>
+    </fx:Script>
+    
+	<fx:Declarations>
+		<s:Power id="collapseEaser" easeInFraction="1" />
+		<s:Power id="uncollapseEaser" easeInFraction="0" />
+	</fx:Declarations>
+	
+    <s:states>
+        <s:State name="normal" />
+		<s:State name="normalAndCollapsed" />
+		<s:State name="normalAndMaximized" />
+        <s:State name="disabled" />
+		<s:State name="normalWithControlBar"/>
+		<s:State name="disabledWithControlBar"/>
+    </s:states>
+    
+	<s:transitions>
+		<s:Transition fromState="normal" toState="normalAndCollapsed">
+			<s:Sequence>
+				<s:Fade target="{contentGroup}" duration="100" />
+				<s:Parallel targets="{[titleBarGroup, this]}" >
+					<s:Move target="{this}" duration="100" easer="{collapseEaser}" />
+					<s:Rotate target="{titleBarGroup}" duration="100" />
+					<s:Resize target="{this}" duration="100" easer="{collapseEaser}" />
+				</s:Parallel>
+			</s:Sequence>
+		</s:Transition>
+		<s:Transition fromState="normalAndCollapsed" toState="normal">
+			<s:Sequence>
+				<s:Parallel targets="{[titleBarGroup, this]}" >
+					<s:Move target="{this}" duration="100" easer="{uncollapseEaser}" />
+					<s:Rotate target="{titleBarGroup}" duration="100" />
+					<s:Resize target="{this}" duration="100" easer="{uncollapseEaser}" />
+				</s:Parallel>
+				<s:Fade target="{contentGroup}" duration="100" />
+			</s:Sequence>
+		</s:Transition>
+		<s:Transition fromState="normalAndMaximized" toState="normal">
+			<s:Resize targets="{this}" duration="100" easer="{collapseEaser}" />
+		</s:Transition>
+		<s:Transition fromState="normal" toState="normalAndMaximized">
+				<s:Resize targets="{this}" duration="100" easer="{uncollapseEaser}" />
+		</s:Transition>
+		<s:Transition fromState="normalAndMaximized" toState="normalAndCollapsed">
+			<s:Sequence>
+				<s:Fade target="{contentGroup}" duration="100" />
+				<s:Move target="{this}" duration="100" easer="{collapseEaser}" />
+				<s:Parallel targets="{[titleBarGroup, this]}" >
+					<s:Rotate target="{titleBarGroup}" duration="100" />
+					<s:Resize target="{this}" duration="100" easer="{collapseEaser}" />
+				</s:Parallel>
+			</s:Sequence>
+		</s:Transition>
+	</s:transitions>
+
+	<!-- drop shadow -->
+	<s:RectangularDropShadow id="shadow" blurX="20" blurY="20" alpha="0.32" distance="11" 
+							 angle="90" color="#000000" left="0" top="0" right="0" bottom="0"/>
+	
+	
+	<!-- title bar (not a skin part) -->
+	<s:Group id="titleBarGroup" left="0" top="0" right="0" bottom="0" 
+			 maxHeight="32" rotation.normalAndCollapsed="90">
+		
+		<!-- layer 3: title bar fill -->
+		<s:Rect left="1" right="1" top="1" height="30">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="0xE2E2E2" />
+					<s:GradientEntry color="0xD9D9D9" />
+				</s:LinearGradient>
+			</s:fill>
+		</s:Rect>
+		
+		<!-- layer 4: title bar highlight -->
+		<s:Rect left="1" right="1" top="1" height="30">
+			<s:stroke>
+				<s:LinearGradientStroke rotation="90" weight="1">
+					<s:GradientEntry color="0xEAEAEA" />
+					<s:GradientEntry color="0xD9D9D9" />
+				</s:LinearGradientStroke>
+			</s:stroke>
+		</s:Rect>
+		<s:Rect left="1" right="1" top="31" height="1">
+			<s:fill>
+				<s:SolidColor color="0xC0C0C0" />
+			</s:fill>
+		</s:Rect>
+		
+		<!-- layer 5: text -->
+		<!--- Defines the appearance of the PanelSkin class's title bar. -->
+		<s:Label id="titleDisplay" lineBreak="explicit" 
+				 textAlign.normalAndCollapsed="center" textAlign.normalAndMaximized="left" textAlign.normal="left" 
+				 width="100%"
+				 left="10" right="30" top="2" height="30"
+				 verticalAlign="middle" fontWeight="bold" useHandCursor.normalAndCollapsed="true" buttonMode.normalAndCollapsed="true">
+		</s:Label>
+		
+		<s:HGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="right" paddingLeft="2" paddingRight="5" excludeFrom="normalAndCollapsed">
+
+			<s:HSlider id="slider" minimum="0.1" maximum="1" stepSize="0.1" value="1" change="{contentGroup.alpha=slider.value}" width="50"  visible.normalAndCollapsed="false"/>			
+			
+			<s:Button id="minButton"  useHandCursor="true" buttonMode="true" label="min" visible.normal="false" 
+					  visible.normalAndCollapsed="false" skinClass="org.ns.genericComponents.CollapsiblePanel.skin.LinkButtonSkin"/>
+			<s:Button id="maxButton"  useHandCursor="true" buttonMode="true" label="max" 
+					  visible.normalAndCollapsed="false" skinClass="org.ns.genericComponents.CollapsiblePanel.skin.LinkButtonSkin"/>
+			<s:Button id="collapseButton"  useHandCursor="true" buttonMode="true" label="collapse" 
+					  visible.normalAndCollapsed="false" skinClass="org.ns.genericComponents.CollapsiblePanel.skin.LinkButtonSkin"/>
+			</s:HGroup>
+	</s:Group>
+	
+	<!-- layer 1: border -->
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:stroke>
+			<s:SolidColorStroke color="0" alpha="0.50" weight="1" />
+		</s:stroke>
+	</s:Rect>
+	
+	<!--
+	Note: setting the minimum size to 0 here so that changes to the host component's
+	size will not be thwarted by this skin part's minimum size.   This is a compromise,
+	more about it here: http://bugs.adobe.com/jira/browse/SDK-21143
+	-->
+	<s:Group id="contentGroup" left="1" right="1" top="32" bottom="1" minWidth="0" minHeight="0"
+			 visible.normalAndCollapsed="false" excludeFrom="normalAndCollapsed">
+	</s:Group>
+</s:SparkSkin>

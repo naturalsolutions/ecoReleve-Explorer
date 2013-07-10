@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+		 xmlns:filter="com.fnicollet.datafilter.filter.*" 
+		 paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5" 
+		 borderStyle="solid" borderThickness="2">
+		 
+	<mx:Metadata>
+        [Event(name="SetFilterEvent",type="flash.events.Event")]                     
+    </mx:Metadata>
+    <mx:Script>
+        <![CDATA[
+        	import mx.events.ListEvent;
+        	import mx.collections.ArrayCollection;
+		 	import com.fnicollet.datafilter.filter.DataFilterType;
+		 	import com.fnicollet.datafilter.filter.DataFilterParameters;
+      		import com.fnicollet.datafilter.filter.DataFilterSingleValueOperator;
+ 
+ 			[Bindable]private var _columns:Array;
+                
+            public function set columns(value:Array):void  
+            {
+                _columns = value;                                
+            }
+            
+            public function get filterParameter():DataFilterParameters  
+            {
+                var _filtParam:DataFilterParameters=new DataFilterParameters;
+                _filtParam.filterType=DataFilterType.SINGLE_VALUE;
+                _filtParam.filterKeys=cmbColumns.selectedItem.dataField;
+                _filtParam.filterOperator=DataFilterSingleValueOperator.STARTS_WITH
+                _filtParam.filterValues=txtInput.text
+                _filtParam.invert=invertTextCB.selected as Boolean;
+                
+                return _filtParam                           
+            }
+ 
+             private function cmbChangeHandler(event:ListEvent):void 
+             {
+             	txtInput.text=""
+             	invertTextCB.selected=false;
+             	dispatchEvent(new Event('SetFilterEvent',true));
+             }
+             
+             private function clearButtonHandler(event:MouseEvent):void 
+             {
+             	txtInput.text=""
+             	invertTextCB.selected=false;
+             	dispatchEvent(new Event('SetFilterEvent',true));
+             }
+        ]]>
+    </mx:Script>
+	
+	
+	<mx:ComboBox id="cmbColumns" dataProvider="{_columns}" labelField="headerText"  
+				 toolTip="column to filter" change="cmbChangeHandler(event)" rowCount="{Math.max(5,(_columns.length))}"/>
+	<mx:TextInput id="txtInput" width="80" toolTip="filter text" change="dispatchEvent(new Event('SetFilterEvent',true));"/>
+	<mx:LinkButton label="x" useHandCursor="true" click="clearButtonHandler(event)" toolTip="clear text" />
+	<mx:CheckBox id="invertTextCB" toolTip="invert filter" change="dispatchEvent(new Event('SetFilterEvent',true));"/>
+
+</mx:HBox>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:ns="org.ns.genericComponents.ribbon.*"
+		 width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+	
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+
+			import com.ecoReleve.view.mycomponents.ribbon.Ribbon;
+			
+			[Bindable]
+            [Embed('com/ecoReleve/ressources/images/layer_biologique.png')]
+            private var IcoBio:Class;
+            
+            [Bindable]
+            [Embed('com/ecoReleve/ressources/images/layer_administration.png')]
+            private var IcoAdm:Class;
+            
+            [Bindable]
+            [Embed('com/ecoReleve/ressources/images/layer_physique.png')]
+            private var IcoPhy:Class;
+
+
+
+			[Bindable]
+			public var boEnabled:Boolean=true;
+
+
+			[Bindable] public var bioLayerArrCol:ArrayCollection=new ArrayCollection;
+			[Bindable] public var phyLayerArrCol:ArrayCollection=new ArrayCollection;
+			[Bindable] public var admLayerArrCol:ArrayCollection=new ArrayCollection;
+			
+			public static const SELECT_BIO_WMS_LAYER:String = 'selectBioWmsLayer';
+			public static const SELECT_PHY_WMS_LAYER:String = 'selectPhyWmsLayer';
+			public static const SELECT_ADM_WMS_LAYER:String = 'selectAdmWmsLayer';
+			
+			private function sendEvent(action:String):void
+            {
+               dispatchEvent(new Event(action,true));
+            } 
+
+		]]>
+	</fx:Script>
+	
+	<s:VGroup gap="0">
+		<ns:RibbonButton id="btnBioWmsLayer" label="Biological" icon="{IcoBio}" iconPlacement="top" 
+						 toolTip="Add biological wms layer" toolTipTitle="Wms" 
+						 AncestorToolTip="{Ribbon}" PopUp="{popupBio}"/>
+		<ns:RibbonButtonPopup id="popupBio">
+			<s:VGroup width="220">
+				<s:List id="lstBio" width="100%"  dataProvider="{bioLayerArrCol}"
+						 change="sendEvent(SELECT_BIO_WMS_LAYER)" itemRenderer="com.ecoReleve.view.renderer.LayerWmsRenderer">
+				</s:List>
+			</s:VGroup>
+		</ns:RibbonButtonPopup>		
+	</s:VGroup>
+	
+	<s:VGroup gap="0">
+		<ns:RibbonButton id="btnAdmWmsLayer" icon="{IcoAdm}" label="Administrative"  iconPlacement="top" 
+						 toolTip="Add administrative wms layer" toolTipTitle="Wms"
+						 AncestorToolTip="{Ribbon}" PopUp="{popupAdm}"/>
+		<ns:RibbonButtonPopup id="popupAdm">
+			<s:VGroup width="220">
+				<s:List id="lstAdm" width="100%"  dataProvider="{admLayerArrCol}"
+						 change="sendEvent(SELECT_ADM_WMS_LAYER)"
+						 itemRenderer="com.ecoReleve.view.renderer.LayerWmsRenderer">
+				</s:List>
+			</s:VGroup>
+		</ns:RibbonButtonPopup>
+	</s:VGroup>
+	
+	<s:VGroup gap="0">
+		<ns:RibbonButton id="btnPhyWmsLayer" icon="{IcoBio}" label="Physical" iconPlacement="top" 
+						 toolTip="Add physical wms layer" toolTipTitle="Wms" 
+						 AncestorToolTip="{Ribbon}" PopUp="{popupPhy}"/>
+		<ns:RibbonButtonPopup id="popupPhy">
+			<s:VGroup width="220">
+				<s:List id="lstPhy" width="100%"  dataProvider="{phyLayerArrCol}"
+						 change="sendEvent(SELECT_PHY_WMS_LAYER)"
+						 itemRenderer="com.ecoReleve.view.renderer.LayerWmsRenderer">
+				</s:List>
+			</s:VGroup>
+		</ns:RibbonButtonPopup>
+	</s:VGroup>
+	
+</s:HGroup>

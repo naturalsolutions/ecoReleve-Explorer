@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 		xmlns:s="library://ns.adobe.com/flex/spark" 
+		 		xmlns:mx="library://ns.adobe.com/flex/mx"
+				xmlns:Search="org.ns.genericComponents.Search.*" width="450" height="250"
+		 		title="query creator" close="sendEvent('CLOSE')" xmlns:geonames="org.ns.genericComponents.geonames.*" >
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			import org.ns.common.model.VO.QueryVO;
+			
+			private function sendEvent(action:String):void
+			{
+				dispatchEvent(new Event(action));
+			}
+		]]>
+	</fx:Script>
+	
+	
+	
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	
+	<s:Form id="FormQuery" height="70%" width="100%">
+		<s:FormItem label="WHEN">
+			<s:DropDownList id="ddlDateInterval" selectedIndex="0" change="sendEvent('CHANGE_INTERVAL')">
+				<mx:ArrayCollection>
+					<fx:String>last 2 days</fx:String>
+					<fx:String>last month</fx:String>
+					<fx:String>last year</fx:String>
+					<fx:String>last 10 years</fx:String>
+				</mx:ArrayCollection>
+			</s:DropDownList>
+			<s:HGroup width="100%">
+				<s:Label text="begin date: "/>
+				<mx:DateField id="mindate" yearNavigationEnabled="true" formatString="DD/MM/YYYY" />
+				<s:Label text="end date: "/>
+				<mx:DateField id="maxdate" yearNavigationEnabled="true" formatString="DD/MM/YYYY" selectedDate="{new Date()}"/>
+			</s:HGroup>
+		</s:FormItem>
+		
+		<s:FormItem label="WHERE">
+			<s:VGroup>
+				<geonames:GeonamesSearch id="geoSearch" height="50"/>
+				<s:HGroup width="100%">
+					<s:TextInput id="minLat" text="-90" width="50"/>
+					<s:TextInput id="maxLat" text="90" width="50"/>
+					<s:TextInput id="minLon" text="-180" width="50"/>
+					<s:TextInput id="maxLon" text="180" width="50"/> 
+					<s:HSlider id="slider" width="50" enabled="false" value="0" minimum="0" maximum="40" stepSize="0.1" change="sendEvent('CHANGE_EXTENT')"/>
+					<s:Label id="txtArea"/>
+				</s:HGroup>
+			</s:VGroup>
+		</s:FormItem>
+		
+		<s:FormItem label="WHAT">
+			<s:HGroup width="100%">
+				<s:Label text="species: "/>
+				<s:TextInput id="species" width="200"/>
+			</s:HGroup>
+		</s:FormItem>
+		
+		<s:FormItem label="QUERY" required="true">
+			<s:HGroup>
+				<s:Label text="query name: "/>
+				<s:TextInput id="queryName" width="300"/>
+			</s:HGroup>
+		</s:FormItem>
+		
+	</s:Form>
+	
+	<s:HGroup width="100%" height="100%" verticalAlign="middle" horizontalAlign="left">
+		<s:Spacer width="20"/>
+		<s:Button label="test query" toolTip="test query" click="sendEvent('TESTQUERY')"/>
+		<s:Spacer width="20"/>
+		<s:Label id="strResultTest" visible="false"/>
+		<mx:ProgressBar id="pgTest" indeterminate="true" labelPlacement="right" label="loading" visible="false"/>	
+	</s:HGroup>
+	
+	<s:controlBarContent>
+		<s:HGroup width="100%" horizontalAlign="center">
+			<s:Button id="btnRecord" label="Save and OK" toolTip="record this query for later use" click="sendEvent('RECORDQUERY')" enabled="{queryName.text!=''}"/>
+			<s:Button id="btnUse" label="OK" toolTip="use this query only on this session" click="sendEvent('USEQUERY')" enabled="{queryName.text!=''}"/>
+			<s:Button id="btnCancel" label="Cancel"  click="sendEvent('CANCEL')"/>
+		</s:HGroup>
+	</s:controlBarContent>
+</s:TitleWindow>

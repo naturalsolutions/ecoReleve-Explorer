@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<mx:HBox width="100%" xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:CmdLnk="CommandLinks.*">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.dataGridClasses.DataGridListData;
+			
+			[Bindable] private var _data:Object;
+			
+			[Bindable] private var strTitle:String;
+			[Bindable] private var strAbstract:String;
+			[Bindable] private var strSRS:String;
+										              
+            // Override the set method for the data property.
+            [Bindable]
+            override public function set data(value:Object):void 
+            {
+                _data = value;
+                if (_data.title!="" || _data.title==null){
+                	var str:String=_data.title
+					strTitle=str
+                }
+                if (_data.abstract!="" || _data.abstract==null){
+                	strAbstract=_data.abstract
+                }
+                if (_data.srs!="" || _data.srs==null){
+                	strSRS="srs: " + _data.srs
+                }
+            }
+            
+            //override public getter for data property
+            override public function get data():Object
+            {
+            	return _data;
+        	}
+		]]>
+	</mx:Script>
+	<mx:VBox>
+		<mx:Label text="{strTitle}" textAlign="left" width="100%" fontWeight="bold" fontSize="12" styleName="myPlainStyle"/>
+		<mx:HBox width="100%">
+			<mx:Spacer width="10"/>
+			<CmdLnk:MultilineLabel text="{strAbstract}" width="350" mouseChildren="false" styleName="myItalicStyle"/>
+		</mx:HBox>
+		<!--<mx:HBox width="100%">
+			<mx:Spacer width="10"/>
+			<mx:Label text="{strSRS}" width="100%" styleName="myItalicStyle" />
+		</mx:HBox>-->
+	</mx:VBox>
+</mx:HBox>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.List;
+			
+			import org.ns.OdataImportModule.model.VO.QueryOdataVO;
+			
+			import spark.components.DataGroup;
+			
+			[Bindable]private var q:QueryOdataVO=new QueryOdataVO();
+			
+			public function deleteItem():void 
+			{
+				var parentList:DataGroup = owner as DataGroup;
+				// remove the item
+				parentList.dataProvider.removeItemAt(parentList.dataProvider.getItemIndex(data))
+			}
+			
+			override public function set data(newValue:Object):void 
+			{
+				super.data=newValue
+					
+				if (newValue==null){
+					return
+				}
+				q=newValue as QueryOdataVO;
+				if (q.qry_required_field=='MIN_DATE' || q.qry_required_field=='MAX_DATE' || q.qry_required_field=='MIN_LAT' || q.qry_required_field=='MAX_LAT' || q.qry_required_field=='MIN_LON' || q.qry_required_field=='MAX_LON'){
+					lblField.height=0
+					lblOperator.height=0
+					lblValue.height=0
+					btnDelete.height=0
+				}
+			}
+			
+			override public function get data():Object 
+			{
+				return q;
+			}
+		]]>
+	</fx:Script>
+	
+	<!-- states -->
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="hovered" />
+		<s:State name="selected" />
+		<s:State name="normalAndShowsCaret"/>
+		<s:State name="hoveredAndShowsCaret"/>
+		<s:State name="selectedAndShowsCaret"/>
+	</s:states>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle"/>
+	</s:layout>
+
+	<s:Label id="lblField" text="{q.qry_field}"/>
+	<s:Label id="lblOperator" text="{q.qry_operator}"/>
+	<s:Label id="lblValue" text="{q.qry_value}"/>
+	<s:Button id="btnDelete" label="delete" click="deleteItem()"/>
+	
+</s:ItemRenderer>

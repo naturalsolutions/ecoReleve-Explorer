@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:ns="org.ns.genericComponents.ribbon.*"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+	 	 width="100%" height="100%" 
+	 	 verticalAlign="middle" horizontalAlign="center" >
+	 	 
+	<fx:Script>
+		<![CDATA[
+
+			import com.ecoReleve.view.mycomponents.ribbon.Ribbon;
+			
+			[Bindable]
+            [Embed('com/ecoReleve/ressources/images/geoTools.png')]
+            private var IcoTools:Class;
+			
+			[Bindable]
+			[Embed('com/ecoReleve/ressources/images/ClusterMap.png')]
+			private var IcoCluster:Class;
+
+			[Bindable]
+			public var boEnabled:Boolean=false;
+
+			 private function sendEvent(action:String):void
+             {
+                dispatchEvent(new Event(action,true));
+             }
+
+		]]>
+	</fx:Script>
+
+	<s:VGroup gap="0">
+		<ns:RibbonButton id="btnTools" icon="{IcoTools}"  enabled="{boEnabled}" 
+						 toolTip="Tool for geo processing" toolTipTitle="Geo tool" 
+						 AncestorToolTip="{Ribbon}" PopUp="{popupTool}"/>
+		<ns:RibbonButtonPopup id="popupTool">
+			<s:VGroup width="220">
+				<s:List id="lstTool" width="100%" itemRenderer="com.ecoReleve.view.renderer.GeoToolRenderer">
+					<s:dataProvider>	
+						<s:ArrayList>	
+							<fx:Object name="Path" description="Create path from stations (ordered by date)" src="com/ecoReleve/ressources/images/path.png" />
+							<fx:Object name="Home range" description="Calculate home range with MCP(minimum convex polygon) method" src="com/ecoReleve/ressources/images/convex-hull.png" />
+						</s:ArrayList>
+					</s:dataProvider>
+				</s:List>
+			</s:VGroup>
+		</ns:RibbonButtonPopup>		
+	</s:VGroup>
+
+			
+</s:HGroup>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="org.ns.genericComponents.Search.Search"/>
+    <classEntry path="org.ns.genericComponents.Search.skin.SearchSkin"/>
+    <classEntry path="org.ns.genericComponents.geonames.GeonamesSearch"/>
+    <classEntry path="org.ns.genericComponents.geonames.VO.ToponymVO"/>
+    <classEntry path="org.ns.genericComponents.geonames.event.GeonameEvent"/>
+    <classEntry path="org.ns.genericComponents.geonames.event.ToponymEvent"/>
+    <classEntry path="org.ns.genericComponents.geonames.model.Geoname"/>
+    <classEntry path="org.ns.genericComponents.geonames.model.GeonameService"/>
+    <classEntry path="org.ns.genericComponents.geonames.renderer.ToponymListRenderer"/>
+    <classEntry path="org.ns.genericComponents.geonames.skin.GeonamesSearchSkin"/>
+    <classEntry path="org.ns.genericComponents.iconButton.IconButton"/>
+    <classEntry path="org.ns.genericComponents.wizardOld.Wizard"/>
+    <classEntry path="org.ns.genericComponents.wizardOld.WizardStep"/>
+    <classEntry path="org.ns.genericComponents.wizard.interfaces.IWizardStep"/>
+    <classEntry path="org.ns.genericComponents.wizardOld.skin.WizardFilArianeContainerSkin"/>
+    <classEntry path="org.ns.genericComponents.wizardOld.skin.WizardMainContainerSkin"/>
+    <classEntry path="org.ns.genericComponents.wizardOld.skin.WizardTitleWindowSkin"/>
+    <classEntry path="org.ns.genericComponents.RetractableContainer.skin.RetractableContainer"/>
+    <classEntry path="org.ns.genericComponents.ribbon.RibbonButton"/>
+    <classEntry path="org.ns.genericComponents.ribbon.RibbonToolTip"/>
+    <classEntry path="org.ns.genericComponents.ribbon.RibbonNavigator"/>
+    <classEntry path="org.ns.genericComponents.ribbon.RibbonPage"/>
+    <classEntry path="org.ns.genericComponents.ribbon.RibbonGroup"/>
+    <classEntry path="org.ns.genericComponents.ribbon.skin.RibbonPageSkin"/>
+    <classEntry path="org.ns.genericComponents.ribbon.skin.RibbonNavigatorSkin"/>
+    <classEntry path="org.ns.genericComponents.ribbon.skin.RibbonGroupSkin"/>
+    <classEntry path="org.ns.genericComponents.ribbon.skin.RibbonButtonSkin"/>
+    <classEntry path="org.ns.genericComponents.ribbon.RibbonToggleButton"/>
+    <classEntry path="org.ns.genericComponents.ribbon.skin.RibbonToggleButtonSkin"/>
+    <classEntry path="org.ns.genericComponents.ribbon.RibbonButtonPopup"/>
+    <classEntry path="org.ns.genericComponents.timeline.Timeline"/>
+    <classEntry path="org.ns.genericComponents.timeline.skin.TimelineSkin"/>
+    <classEntry path="org.ns.genericComponents.ribbon.skin.RibbonTabBarSkin"/>
+    <classEntry path="org.ns.genericComponents.CollapsiblePanel.skin.CollapsiblePanelSkin"/>
+    <classEntry path="org.ns.genericComponents.CollapsiblePanel.CollapsiblePanel"/>
+    <classEntry path="org.ns.genericComponents.Updater.UpdaterManager"/>
+    <classEntry path="org.ns.genericComponents.Updater.UpdaterPanel"/>
+    <classEntry path="org.ns.genericComponents.Updater.skin.UpdaterPanelSkin"/>
+    <classEntry path="org.ns.genericComponents.CollapsiblePanel.skin.LinkButtonSkin"/>
+    <classEntry path="org.ns.genericComponents.ribbon.skin.RibbonToolTipSkin"/>
+    <classEntry path="org.ns.genericComponents.ribbon.skin.RibbonSwitchSkin"/>
+    <classEntry path="org.ns.genericComponents.wizard.FilArianeLabel"/>
+    <classEntry path="org.ns.genericComponents.wizard.skin.WizardFilArianeLabelSkin"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

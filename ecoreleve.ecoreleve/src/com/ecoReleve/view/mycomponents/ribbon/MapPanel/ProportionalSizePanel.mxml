@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:ns="org.ns.genericComponents.ribbon.*"
+		 width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+		 
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import com.ecoReleve.ressources.skin.RibbonSliderSkin.SliderThb;
+			import com.ecoReleve.view.mycomponents.ribbon.Ribbon;
+			
+			[Bindable]
+            [Embed('com/ecoReleve/ressources/images/proportionalSize.png')]
+            private var IcoSize:Class;
+
+			[Bindable]
+			public var boEnabled:Boolean=false;
+			
+			[Bindable] public var fieldArrCol:ArrayCollection=new ArrayCollection;
+			
+			public static const ATTRIBUTE_SELECTED:String = 'attributeselected';
+			public static const SIZE_CHANGED:String = 'sizechanged';
+			
+			private function sendEvent(action:String):void
+            {
+               dispatchEvent(new Event(action,true));
+            } 
+
+		]]>
+	</fx:Script>
+			
+	<s:VGroup gap="0">
+		<ns:RibbonButton id="myPopup" icon="{IcoSize}"  enabled="{boEnabled}" 
+						 toolTip="create color class" toolTipTitle="Class" 
+						 AncestorToolTip="{Ribbon}" PopUp="{popup}"/>
+		<ns:RibbonButtonPopup id="popup">
+			<s:BorderContainer width="220"  styleName="styleRibbonPopup">
+				<s:layout>
+					<s:VerticalLayout gap="10" paddingBottom="2" paddingLeft="2" paddingRight="2" paddingTop="2" horizontalAlign="center"/>
+				</s:layout>
+
+				<s:Label text="Choose a field:" width="100%" textAlign="left"/>
+				<s:DropDownList id="cmbField" width="100%" dataProvider="{fieldArrCol}" change="sendEvent(ATTRIBUTE_SELECTED)" toolTip="choose field"/>
+				<s:Spacer height="10"/>
+				<s:Label text="Size for maximum value:" width="100%" textAlign="left"/>
+				<s:HSlider id="mySlide" width="100"
+							enabled="false" showDataTip="true"
+							minimum="0" maximum="50" 
+							snapInterval="10" liveDragging="true"
+							change="sendEvent(SIZE_CHANGED)" styleName="ribbonSlider"
+							/>
+
+			</s:BorderContainer> 
+		</ns:RibbonButtonPopup>
+	</s:VGroup>
+</s:HGroup>

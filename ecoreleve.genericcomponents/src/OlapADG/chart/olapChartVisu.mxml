@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" >
+
+    <mx:Script>
+        <![CDATA[
+        	import mx.olap.OLAPMember;
+        	import mx.olap.OLAPAxisPosition;
+        	import mx.charts.series.LineSeries;
+        	import mx.charts.series.ColumnSeries;
+        	import mx.olap.OLAPTuple;
+        	import mx.olap.OLAPResult;
+        	import mx.controls.OLAPDataGrid;
+        	import mx.olap.IOLAPQueryAxis;
+        	import mx.olap.OLAPCube;
+        	import mx.olap.OLAPQuery;
+            import mx.utils.ObjectUtil;
+            
+            private var _result:OLAPResult=new OLAPResult;
+            private var _arrSelectedMembers:Array=new Array();
+            
+            public function set result(value:OLAPResult):void  
+            {
+                _result = value; 
+                createColumnChart()
+                createLineChart()                             
+            }
+            
+            public function set selectedMembers(value:Array):void  
+            {
+                _arrSelectedMembers = value; 
+                createColumnChart()
+                createLineChart()                             
+            }
+
+            private function createColumnChart():void
+            {
+   	
+            	var colAxis:IOLAPQueryAxis = _result.query.getAxis(OLAPQuery.COLUMN_AXIS);
+		        var colLength:Number = _result.getAxis(OLAPQuery.COLUMN_AXIS).positions.length;
+				var rowAxis:IOLAPQueryAxis = _result.query.getAxis(OLAPQuery.ROW_AXIS);
+				var rowLength:Number = _result.getAxis(OLAPQuery.ROW_AXIS).positions.length;
+				var newChartData:Array = [];
+				
+            	var chartSerDP:Array=new Array();
+				for (var i:int=0;i<rowLength;i++) {
+					var rowTuple:OLAPTuple = rowAxis.tuples[i];
+					var serie:String = rowTuple.explicitMembers.toArray().join(",");
+					
+					if(_arrSelectedMembers.indexOf(serie)!=-1){            //Code here (returns -1 if the value isn't found)
+						//ne garde que XXXX ([AAA].[BBBB].[XXXX])
+						serie=serie.substring(serie.lastIndexOf(".")+2,serie.length-1);
+						var mySerie:ColumnSeries=new ColumnSeries();
+						mySerie.xField="key";
+						mySerie.yField="value";
+						mySerie.displayName=serie
+						var serieDP:Array=new Array();
+						for (var j:int=0;j<colLength;j++) {
+							var colTuple:OLAPTuple = colAxis.tuples[j];
+							var key:String = colTuple.explicitMembers.toArray().join(",");
+							//ne garde que XXXX ([AAA].[BBBB].[XXXX])
+							key=key.substring(key.lastIndexOf(".")+2,key.length-1);
+				 			if (key!='(All)'){
+								newChartData.push({key:key, value:_result.getCell(i, j).value, serie:serie});
+								serieDP.push({key:key, value:_result.getCell(i, j).value, serie:serie});
+				 			}
+	
+						}
+				 
+			        	mySerie.dataProvider=serieDP;
+			        	colCatAxis.dataProvider=serieDP;
+			        	chartSerDP.push(mySerie);
+		 
+						}
+					}
+				columnChart.series=chartSerDP;
+            }    
+            
+            private function createLineChart():void
+            {            
+            	var colAxis:IOLAPQueryAxis = _result.query.getAxis(OLAPQuery.COLUMN_AXIS);
+		        var colLength:Number = _result.getAxis(OLAPQuery.COLUMN_AXIS).positions.length;
+				var rowAxis:IOLAPQueryAxis = _result.query.getAxis(OLAPQuery.ROW_AXIS);
+				var rowLength:Number = _result.getAxis(OLAPQuery.ROW_AXIS).positions.length;
+				var newChartData:Array = [];
+				
+            	var chartSerDP:Array=new Array();
+				for (var i:int=0;i<rowLength;i++) {
+					var rowTuple:OLAPTuple = rowAxis.tuples[i];
+					var serie:String = rowTuple.explicitMembers.toArray().join(",");
+					if(_arrSelectedMembers.indexOf(serie)!=-1){            //Code here (returns -1 if the value isn't found)
+						//ne garde que XXXX ([AAA].[BBBB].[XXXX])
+						serie=serie.substring(serie.lastIndexOf(".")+2,serie.length-1);
+						var mySerie:LineSeries=new LineSeries();
+						mySerie.xField="key";
+						mySerie.yField="value";
+						mySerie.displayName=serie
+						var serieDP:Array=new Array();
+						for (var j:int=0;j<colLength;j++) {
+							var colTuple:OLAPTuple = colAxis.tuples[j];
+							var key:String = colTuple.explicitMembers.toArray().join(",");
+							//ne garde que XXXX ([AAA].[BBBB].[XXXX])
+							key=key.substring(key.lastIndexOf(".")+2,key.length-1);
+				 			if (key!='(All)'){
+								newChartData.push({key:key, value:_result.getCell(i, j).value, serie:serie});
+								serieDP.push({key:key, value:_result.getCell(i, j).value, serie:serie});
+				 			}
+						}
+				 
+			        	mySerie.dataProvider=serieDP;
+			        	lineCatAxis.dataProvider=serieDP;
+			        	chartSerDP.push(mySerie);
+		 
+						}
+					}
+				lineChart.series=chartSerDP;
+            }
+            
+        ]]>
+    </mx:Script>   		
+     
+     
+    <mx:WipeUp id="myWU" duration="300"/>
+    <mx:WipeDown id="myWD" duration="300"/>
+    <mx:WipeRight id="myWR" duration="300"/>
+    		
+            
+    <mx:VBox width="300" height="300">
+    	<mx:LinkBar dataProvider="{myViewStack}" borderStyle="solid"  backgroundColor="#EEEEFF"/>
+
+        <mx:ViewStack id="myViewStack" borderStyle="solid" width="100%" height="100%" creationCompleteEffect="{myWR}" creationPolicy="all">
+			<mx:Canvas id="column" label="column" hideEffect="{myWD}" showEffect="{myWU}">
+    			<mx:ColumnChart id="columnChart" height="100%" width="100%" showDataTips="true" >
+					 <mx:horizontalAxis>
+					        <mx:CategoryAxis id="colCatAxis" categoryField="key"/>
+					 </mx:horizontalAxis>
+				</mx:ColumnChart>
+    		</mx:Canvas>
+			<mx:Canvas id="line" label="line" hideEffect="{myWD}" showEffect="{myWU}">
+				<mx:LineChart id="lineChart" height="100%" width="100%" showDataTips="true">
+					 <mx:horizontalAxis>
+					        <mx:CategoryAxis id="lineCatAxis" categoryField="key"/>
+					 </mx:horizontalAxis>
+				</mx:LineChart>
+    		</mx:Canvas>
+        </mx:ViewStack>
+    </mx:VBox>
+    
+</mx:Canvas>

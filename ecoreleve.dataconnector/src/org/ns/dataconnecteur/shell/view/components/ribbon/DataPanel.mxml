@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:ns="org.ns.genericComponents.ribbon.*"
+		  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  width="100%" height="100%"
+		  verticalAlign="middle" horizontalAlign="center">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import org.ns.dataconnecteur.shell.view.components.Ribbon;
+			
+			[Bindable]
+			[Embed('org/ns/dataconnecteur/shell/ressources/image/file.png')]
+			private var IcoFile:Class;
+			
+			[Bindable]
+			[Embed('org/ns/dataconnecteur/shell/ressources/image/database.png')]
+			private var IcoDB:Class;
+			
+			[Bindable]
+			[Embed('org/ns/dataconnecteur/shell/ressources/image/services.png')]
+			private var IcoServices:Class;
+			
+			[Bindable]
+			public var arrLocalModules:ArrayCollection=new ArrayCollection;
+			
+			[Bindable]
+			public var arrWebServiceModules:ArrayCollection=new ArrayCollection;
+			
+			[Bindable]
+			public var arrWebSemanticModules:ArrayCollection=new ArrayCollection;
+			
+			private function sendEvent(action:String):void
+			{
+				dispatchEvent(new Event(action,true));
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<!-- FILE -->
+	<s:VGroup gap="0">
+		<ns:RibbonButton id="btnFile" label="File" icon="{IcoFile}" iconPlacement="top" AncestorToolTip="{Ribbon}"
+						 toolTip="Add file data" toolTipTitle="FILE" PopUp="{popupFile}"/>
+		<ns:RibbonButtonPopup id="popupFile">
+			<s:VGroup width="150">
+				<s:List id="lstFile" width="100%"  dataProvider="{arrLocalModules}" textAlign="left"
+						itemRenderer="org.ns.dataconnecteur.shell.ressources.renderer.LocalModulesListRenderer"/>
+			</s:VGroup>
+		</ns:RibbonButtonPopup>	
+	</s:VGroup>
+	
+	<!-- WEBSERVICES -->
+	<s:VGroup gap="0">
+		<ns:RibbonButton id="btnServices" label="web services" icon="{IcoServices}" iconPlacement="top" AncestorToolTip="{Ribbon}"
+						 toolTip="Add data from web service" toolTipTitle="WEB SERVICE" PopUp="{popupWebServices}"/>
+		<ns:RibbonButtonPopup id="popupWebServices">
+			<s:VGroup width="150">
+				<s:List id="lstWebService" width="100%" dataProvider="{arrWebServiceModules}" textAlign="left" 
+						itemRenderer="org.ns.dataconnecteur.shell.ressources.renderer.RemoteModulesListRenderer"/>
+			</s:VGroup>
+		</ns:RibbonButtonPopup>	
+	</s:VGroup>
+	
+	<!-- WEBSEMANTIC-->
+	<s:VGroup gap="0">
+		<ns:RibbonButton  id="btnWebSemantic" label="semantic web" iconPlacement="top" AncestorToolTip="{Ribbon}"
+						  icon="org/ns/dataconnecteur/shell/ressources/image/webSemantic.png" 
+						  toolTip="Add data from web semantic" toolTipTitle="SEMANTIC WEB" PopUp="{popupWebSemantic}"/>
+		<ns:RibbonButtonPopup id="popupWebSemantic">
+			<s:VGroup width="150">
+				<s:List id="lstWebSemantic" width="100%" dataProvider="{arrWebSemanticModules}" textAlign="left" 
+						itemRenderer="org.ns.dataconnecteur.shell.ressources.renderer.RemoteModulesListRenderer"/>
+			</s:VGroup>
+		</ns:RibbonButtonPopup>		
+	</s:VGroup>
+
+</s:HGroup>

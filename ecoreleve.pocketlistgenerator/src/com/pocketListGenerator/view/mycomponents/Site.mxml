@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 width="100%" height="100%">
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center"/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			
+			[Bindable] public var sites:ArrayCollection;
+			
+			//evenements
+			public static const EXPORT_CSV:String = 'exportcsv';
+			
+			private function sendEvent( action:String ):void
+			{
+				dispatchEvent(new Event( action, true ));
+			} 
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<s:Label text="List of monitored site(s) of my group"/>
+	
+	<mx:DataGrid id="dg" width="100%" rowCount="10" dataProvider="{sites}">
+		<mx:columns>
+			<mx:DataGridColumn dataField="ID" headerText="ID"/>
+			<mx:DataGridColumn dataField="NAME" headerText="NAME"/>
+			<mx:DataGridColumn dataField="LATITUDE" headerText="LAT"/>
+			<mx:DataGridColumn dataField="LONGITUDE" headerText="LON"/>
+			<mx:DataGridColumn dataField="ELEVATION" headerText="ELE"/>
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<s:Button label="create list" styleName="createListStyle" click="sendEvent(EXPORT_CSV)"/>
+</s:Group>

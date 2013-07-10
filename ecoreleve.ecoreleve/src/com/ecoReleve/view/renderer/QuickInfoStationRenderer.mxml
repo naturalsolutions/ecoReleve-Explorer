@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true">
+	
+	<fx:Script>
+		<![CDATA[
+			import org.ns.common.model.VO.StationVO;
+			
+			import mx.controls.Alert;
+			import mx.controls.dataGridClasses.DataGridListData;
+			import mx.formatters.DateFormatter;
+			
+			[Bindable] private var _data:Object;
+			
+			[Bindable]
+			[Embed(source="com/ecoReleve/ressources/images/redlist_logo.gif")]
+			private var icoRedList:Class;
+			
+			// Override the set method for the data property.
+			[Bindable]
+			override public function set data(value:Object):void 
+			{
+				_data = value;
+				var station:StationVO=_data as StationVO;
+				
+				if (station.sta_name!="" || station.sta_name!=null){
+					lblName.text=station.sta_name
+				} 
+				if (station.sta_speciesName!="" || station.sta_speciesName!=null){
+					var cleanSpName:String=cleanSpeciesNames(station.sta_speciesName);
+					lbSp.label=cleanSpName
+
+				} 
+				if (!isNaN(station.sta_latitude) && station.sta_latitude!=0){
+					lblLat.text=String(station.sta_latitude)
+				} 
+				if (!isNaN(station.sta_longitude) && station.sta_longitude!=0){
+					lblLon.text=String(station.sta_longitude)
+				} 
+				if (!isNaN(station.sta_elevation) && station.sta_elevation!=0){
+					lblEle.text=String(station.sta_elevation)
+				} 
+				if (!isNaN(station.ACCURACY) && station.ACCURACY!=0){
+				lblAccuracy.text=String(station.ACCURACY)
+				}
+
+				if (!isNaN(station.sta_nbIndividual) && station.sta_nbIndividual!=0){
+					lblNb.text=String(station.sta_nbIndividual)
+				} 
+				if (station.sta_date!=null ) {
+					var formatter:DateFormatter=new DateFormatter
+					formatter.formatString="DD-MMM-YYYY HH:NN:SS"
+					lblDate.text= formatter.format(station.sta_date)
+				} 
+
+				if (station.sta_comments!="" || station.sta_comments!=null){
+					txtComment.text=station.sta_comments
+				} 
+			}
+			
+			private function cleanSpeciesNames(str:String):String
+			{
+				if (str.indexOf("(")>0){
+					return str.substring(0,str.indexOf("("));
+				} else {
+					return str;
+				}
+			}
+			
+			//override public getter for data property
+			override public function get data():Object
+			{
+				return _data;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Form>
+		<s:layout>
+			<s:FormLayout id="frmLay" gap="0" />
+		</s:layout>
+		
+		<s:FormItem label="Name:"  styleName="myPlainStyle">
+			<s:Label id="lblName" textAlign="right" styleName="myPlainStyle"/>
+		</s:FormItem>
+
+		<s:FormItem label="Coordinates:" styleName="myPlainStyle">
+			<s:layout>				
+				<s:HorizontalLayout />	
+			</s:layout>
+			
+			<s:Label id="lblLon" textAlign="right"  styleName="myPlainStyle"/>
+			<s:Label id="lblLat" textAlign="right"  styleName="myPlainStyle"/>
+		</s:FormItem>
+		
+		<s:FormItem label="Elevation:"  styleName="myPlainStyle">
+			<s:Label id="lblEle"  textAlign="right"  styleName="myPlainStyle"/>
+		</s:FormItem>
+		
+		<s:FormItem label="Accuracy:"  styleName="myPlainStyle">
+			<s:Label id="lblAccuracy" textAlign="right"  styleName="myPlainStyle"/>
+		</s:FormItem>
+		
+		<s:FormItem label="Date:" styleName="myPlainStyle">
+			<s:Label id="lblDate" textAlign="right"  styleName="myPlainStyle"/>
+		</s:FormItem>
+		
+		<s:FormItem label="Observation(s):" styleName="myPlainStyle">
+			<s:layout>				
+				<s:HorizontalLayout />	
+			</s:layout>
+			
+			<s:Label id="lblNb" textAlign="right" styleName="myPlainStyle"/>
+			<mx:LinkButton id="lbSp" click="navigateToURL(new URLRequest('http://en.wikipedia.org/wiki/'+ lbSp.label.replace(' ','_')), 'quote')"/>						  				
+		</s:FormItem>
+		<s:FormItem label="Comments:" styleName="myPlainStyle">
+			<s:Label id="txtComment" width="300" height="30" styleName="myPlainStyle"/>
+		</s:FormItem>
+	</s:Form>
+	
+</s:ItemRenderer>

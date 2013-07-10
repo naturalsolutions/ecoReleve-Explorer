@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+		   horizontalAlign="center" verticalAlign="middle"
+		   width="150" height="120" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.containers.ControlBar;
+			import mx.containers.HBox;
+			import mx.containers.TitleWindow;
+			import mx.controls.HSlider;
+			import mx.controls.HorizontalList;
+			import mx.controls.Label;
+			import mx.controls.LinkButton;
+			import mx.controls.TextArea;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			import GoogleMedias.GoogleMedias;
+			
+			private var win:TitleWindow;
+			private var image:Image;
+			private var slider:HSlider;
+			[Bindable]private var loader:Loader;
+			
+			private function showImage():void
+			{
+				var url:String=data.url
+				
+				if (loader==null){
+					loader= new Loader;
+					
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, picLoaded,false,0,true);
+					loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,onIOError,false,0,true)
+					loader.load(new URLRequest(url));
+					pbr.visible=true;
+				}
+			}
+			
+			private function picLoaded(event:Event):void
+			{	
+				//TitleWindow ==> container
+				win=new TitleWindow();
+				win.showCloseButton=true;
+				win.addEventListener(CloseEvent.CLOSE,closeHandler,false,0,true);
+				win.title=(this.parent.parent.parent.parent.parent as GoogleMedias).searchText;
+					
+				win.setStyle("addedEffect", win_addedEffect);
+				win.setStyle("removedEffect", win_removedEffect);
+				
+				//create image
+				image=new Image
+				image.source= event.target.content as Bitmap;
+				image.addEventListener(MouseEvent.DOUBLE_CLICK,clickHandler,false,0,true);				
+				var scale:Number
+				
+				if (data.height<(this.parentApplication.height/2)){
+					scale=1;
+				} else {
+					scale=(this.parentApplication.height/2)/data.height;
+				}
+				
+				image.scaleY=scale
+				image.scaleX=scale
+				
+				//create slider to resize
+				slider=new HSlider();
+				slider.width=100;
+				slider.minimum=0.1;
+				slider.maximum=1;
+				slider.value=scale;
+				slider.liveDragging=true;
+				slider.dataTipFormatFunction=myDataTipFunc;
+				//Binding slider value property to funcion for resizing image 
+				BindingUtils.bindSetter(setterFunc, slider, "value");				
+				
+				//create url
+				var link:Label=new Label();
+				link.useHandCursor=true;
+				link.buttonMode=true;
+				link.mouseChildren=false;
+				link.text="link";
+				link.addEventListener(MouseEvent.CLICK,jumpTo);
+				link.setStyle("color","blue");
+				link.setStyle("textDecoration","underline");
+				link.toolTip="open context web page"
+					
+				var hbox:HBox=new HBox();
+				hbox.percentWidth=100;
+				hbox.addChild(slider);
+				hbox.addChild(link);	
+					
+				//win.addChild(link);
+				win.addChild(hbox);
+				win.addChild(image);
+				
+				//get parent application for the popup
+				var FirstDO:DisplayObject=this.parentApplication as DisplayObject;
+				
+				//get Horizontalist for unselect item
+				(this.parent.parent as HorizontalList).selectedItem=-1;
+				
+				pbr.visible=false;
+				PopUpManager.addPopUp(win,FirstDO,false);
+				PopUpManager.centerPopUp(win);
+			}
+			
+			public function jumpTo(event:MouseEvent):void
+			{
+				var url:URLRequest=new URLRequest(data.originalContextUrl)
+				navigateToURL(url,"_self");
+			}
+			
+			private function setterFunc(scale:Number):void 
+			{
+				if (image.width!=0){
+					image.scaleX= scale
+					image.scaleY= scale
+				}
+			}
+			
+			private function myDataTipFunc(val:String):String 
+			{
+				return "size:" + String(Math.round((Number(val)*100))) + "%";
+			}
+			
+			private function closeHandler(evt:CloseEvent):void 
+			{
+				kill();
+				PopUpManager.removePopUp(win);
+			}
+			
+			private function clickHandler(evt:MouseEvent):void 
+			{
+				kill();
+				evt.stopPropagation();
+				PopUpManager.removePopUp(win);
+				win=null;
+			}
+			
+			private function kill():void 
+			{
+				//unreference loader for GC
+				loader.unload();
+				loader=null;
+				
+				//unreference image for GC
+				image=null;
+			}
+			
+			private function onIOError(e:IOErrorEvent):void
+			{
+				kill();
+				pbr.visible=false;
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<mx:Parallel id="win_addedEffect">
+		<mx:Fade />
+		<mx:Zoom />
+	</mx:Parallel>
+	
+	<mx:Parallel id="win_removedEffect">
+		<mx:Zoom />
+		<mx:Fade />
+	</mx:Parallel>
+
+	<mx:Image x="10" y="10" source="{data.thumbUrl}" maxHeight="100" maxWidth="145"
+			  click="showImage()" useHandCursor="true" buttonMode="true"/>
+	<mx:ProgressBar id="pbr" indeterminate="true" label="" width="50%" visible="false" showEffect="Fade" hideEffect="Fade"/>
+	
+</mx:VBox>

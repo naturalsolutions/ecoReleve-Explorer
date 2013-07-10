@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WizardStep xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			xmlns:s="library://ns.adobe.com/flex/spark" 
+			xmlns:mx="library://ns.adobe.com/flex/mx"
+			xmlns="org.ns.genericComponents.wizard.*" 
+			xmlns:Search="org.ns.genericComponents.Search.*"
+			xmlns:geonames="org.ns.genericComponents.geonames.*"
+			stepName="Entity query"
+			stepDescription="create query entity" width="600" height="350" >
+	<fx:Script>
+		<![CDATA[
+			import org.ns.OdataImportModule.ressources.skin.DropDownListSkin;
+			import org.ns.OdataImportModule.view.components.odataWizard;
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+		<s:NumberValidator source="{txtMinLat}" property="text" minValue="-90" maxValue="90" domain="real"/>
+		<s:NumberValidator source="{txtMaxLat}" property="text" minValue="-90" maxValue="90" domain="real"/>
+		<s:NumberValidator source="{txtMinLon}" property="text" minValue="-180" maxValue="180" domain="real"/>
+		<s:NumberValidator source="{txtMaxLon}" property="text" minValue="-180" maxValue="180" domain="real"/>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.core.IVisualElement;
+			import org.ns.OdataImportModule.model.VO.QueryOdataVO;
+			import mx.collections.ArrayCollection;
+			import mx.collections.XMLListCollection;
+			import org.ns.common.utils.DateUtils;
+			
+			[Bindable]public var properties:XMLListCollection=new XMLListCollection();
+			[Bindable]public var propertiesDate:XMLListCollection=new XMLListCollection();
+			[Bindable]public var propertiesDouble:XMLListCollection=new XMLListCollection();
+			[Bindable]public var queries:ArrayCollection=new ArrayCollection();
+			
+			[Bindable]public var maxDate:Date;
+			[Bindable]public var minDate:Date;
+			[Bindable]public var minLat:String;
+			[Bindable]public var maxLat:String;
+			[Bindable]public var minLon:String;
+			[Bindable]public var maxLon:String;
+			
+			[Bindable]
+			private var operators:ArrayCollection = new ArrayCollection([
+				{value:"eq", label:"Equal"},
+				{value:"ne", label:"Not equal"},
+				{value:"gt", label:"Greater than"},
+				{value:"ge", label:"Greater than or equal"},
+				{value:"lt", label:"Less than"},
+				{value:"le", label:"Less than or equal"}
+			]);
+			
+			[Bindable]
+			private var period:ArrayCollection = new ArrayCollection([
+				{label:"custom", interval:"", number:""},
+				{label:"last 2 days", interval:"date", number:"-2"},
+				{label:"last month", interval:"month", number:"-1"},
+				{label:"last year", interval:"month", number:"-12"},
+				{label:"last 10 years", interval:"month", number:"-120"}
+			]);
+			
+			
+			override public function get stepDecision():* 
+			{
+				return queries;
+			}
+			
+			override public function get readableStepDecision():String 
+			{
+				var str:String="";
+				var query:QueryOdataVO;
+				for each(query in queries){
+					str+=query.qry_field + ' ' + query.qry_operator + ' ' + query.qry_value + '\n'
+				}
+				return String(str);
+			}
+			
+			private function sendEvent(action:String):void
+			{
+				dispatchEvent(new Event(action));
+			}
+
+			private function fieldDateChange(event:Event):void
+			{
+				var o:Object=ddlDateInterval.selectedItem as Object
+				this.minDate=DateUtils.dateAdd(o.interval,Number(o.number),maxDate)
+				this.maxDate=new Date()	
+			}
+			
+			private function fieldCoordChange(event:Event):void
+			{
+				if (this.lstFieldLAT.selectedIndex!=-1 && this.lstFieldLON.selectedIndex!=-1){
+					var str:String
+					if (minLat==null){minLat="-90"}else{str=minLat;	minLat='';minLat=str;}
+					if (maxLat==null){maxLat="90"}else{str=maxLat;maxLat='';maxLat=str;}
+					if (minLon==null){minLon="-180"}else{str=minLon;minLon='';minLon=str}
+					if (maxLon==null){maxLon="180"}else{str=maxLon;maxLon='';maxLon=str}			
+				}
+			}
+			
+			private function HandleLstFieldChange():void
+			{
+				if (lstField.selectedIndex!=-1){
+					var xml:XML=lstField.selectedItem as XML
+					var type:String=xml.attribute('Type')
+						
+					//mask all control du group containerAdditionalFilters
+					var i:int;
+					for (i=0;i<containerAdditionalFilters.numElements;i++){
+						var el:IVisualElement=containerAdditionalFilters.getElementAt(i) as IVisualElement
+						el.width=0
+						el.visible=false
+					}
+					
+					switch (type){
+						case "Edm.DateTime":
+							dfDateValue.width=150
+							dfDateValue.visible=true	
+							break;
+						case "Edm.Double":
+							txtDoubleValue.width=150
+							txtDoubleValue.visible=true
+							break;
+						case "Edm.Int32":
+							txtIntegerValue.width=150
+							txtIntegerValue.visible=true	
+							break;
+						case 'Edm.Int16':
+							txtIntegerValue.width=150
+							txtIntegerValue.visible=true
+							break
+						case "Edm.String":
+							txtStringValue.width=150
+							txtStringValue.visible=true	
+							break;
+						case "Edm.Boolean":
+							cbBooleanValue.width=30
+							cbBooleanValue.visible=true
+							break;
+					}
+				}
+			}
+			
+		]]>
+	</fx:Script>
+
+	<s:VGroup height="100%" width="100%">
+		
+		<!-- WHEN -->
+		<s:Label text="WHEN (required): " fontWeight="bold"/>
+		<s:HGroup width="100%">
+			<s:DropDownList id="lstFieldDATE" dataProvider="{propertiesDate}" labelField="@Name" prompt="Select the date property" width="150"
+							itemRenderer="org.ns.OdataImportModule.ressources.renderer.EntityPropertiesXMLRenderer" 
+							change="fieldDateChange(event)" skinClass="org.ns.OdataImportModule.ressources.skin.DropDownListSkin">
+				<s:layout>
+					<s:VerticalLayout gap="0" horizontalAlign="contentJustify" requestedRowCount="{(propertiesDate.length>=20)?propertiesDate.length:20}"/>
+				</s:layout>
+			</s:DropDownList>
+			<s:HGroup width="100%" visible="{lstFieldDATE.selectedIndex!=-1}" verticalAlign="middle">
+				<s:Label text="in" />
+				<s:DropDownList id="ddlDateInterval" selectedIndex="1" labelField="label" dataProvider="{period}" 
+								skinClass="org.ns.OdataImportModule.ressources.skin.DropDownListSkin"
+								change="sendEvent('CHANGE_INTERVAL')"/>
+				<s:HGroup width="100%" verticalAlign="middle" enabled="{ddlDateInterval.selectedIndex==0}">
+					<mx:DateField id="dtMinDate" yearNavigationEnabled="true" formatString="DD/MM/YYYY" selectedDate="@{minDate}"/>
+					<s:Label text="To" />
+					<mx:DateField id="dtMaxDate" yearNavigationEnabled="true" formatString="DD/MM/YYYY" selectedDate="@{maxDate}"/>
+				</s:HGroup>
+			</s:HGroup>
+		</s:HGroup>
+		
+		<!-- WHERE -->
+		<s:Label text="WHERE (required): " fontWeight="bold"/>
+		<s:HGroup width="100%" verticalAlign="middle">
+			<s:VGroup width="100%">
+				<s:DropDownList id="lstFieldLAT" dataProvider="{propertiesDouble}" labelField="@Name" prompt="Select the lat property" width="150"
+								itemRenderer="org.ns.OdataImportModule.ressources.renderer.EntityPropertiesXMLRenderer"
+								skinClass="org.ns.OdataImportModule.ressources.skin.DropDownListSkin" change="fieldCoordChange(event)">
+					<s:layout>
+						<s:VerticalLayout gap="0" horizontalAlign="contentJustify" requestedRowCount="{(propertiesDouble.length>=20)?propertiesDouble.length:20}"/>
+					</s:layout>
+				</s:DropDownList>
+				<s:DropDownList id="lstFieldLON" dataProvider="{propertiesDouble}" labelField="@Name" prompt="Select the lon property" width="150"
+								itemRenderer="org.ns.OdataImportModule.ressources.renderer.EntityPropertiesXMLRenderer"
+								skinClass="org.ns.OdataImportModule.ressources.skin.DropDownListSkin" change="fieldCoordChange(event)">
+					<s:layout>
+						<s:VerticalLayout gap="0" horizontalAlign="contentJustify" requestedRowCount="{(propertiesDouble.length>=20)?propertiesDouble.length:20}"/>
+					</s:layout>
+				</s:DropDownList>
+			</s:VGroup>
+			<s:VGroup  width="100%" height="100%" visible="{lstFieldLAT.selectedIndex!=-1 &amp;&amp; lstFieldLON.selectedIndex!=-1}" verticalAlign="middle" horizontalAlign="center">
+				<geonames:GeonamesSearch id="geoSearch" height="50" creationComplete="sendEvent('GEOSEARCH_CREATED')"/>
+			</s:VGroup>		
+			<s:VGroup width="100%" visible="{lstFieldLAT.selectedIndex!=-1 &amp;&amp; lstFieldLON.selectedIndex!=-1}">
+				<s:HGroup width="100%" verticalAlign="middle">	
+					<s:Label text="in" />
+					<s:TextInput id="txtMinLat" text="@{minLat}" width="50"/>
+					<s:Label text="To" />
+					<s:TextInput id="txtMaxLat" text="@{maxLat}" width="50"/>
+				</s:HGroup>
+				<s:HGroup width="100%" verticalAlign="middle">	
+					<s:Label text="in" />
+					<s:TextInput id="txtMinLon" text="@{minLon}" width="50"/>
+					<s:Label text="To" />
+					<s:TextInput id="txtMaxLon" text="@{maxLon}" width="50"/> 
+				</s:HGroup>
+			</s:VGroup>	
+			<s:VGroup  width="100%" height="100%" visible="{lstFieldLAT.selectedIndex!=-1 &amp;&amp; lstFieldLON.selectedIndex!=-1}" verticalAlign="middle" horizontalAlign="center">
+				<s:HSlider id="slider" width="80" enabled="false" value="0" minimum="0" maximum="0.5" stepSize="0.01" change="sendEvent('CHANGE_EXTENT')"/>
+				<s:Label id="txtArea"/>
+			</s:VGroup>
+		</s:HGroup>
+		
+		
+		<!-- WHAT -->
+		<s:Label text="WHAT: " fontWeight="bold"/>
+		<s:HGroup width="100%">
+				<s:DropDownList id="lstField" dataProvider="{properties}" labelField="@Name" prompt="Select a property..." width="150"
+							itemRenderer="org.ns.OdataImportModule.ressources.renderer.EntityPropertiesXMLRenderer"
+							skinClass="org.ns.OdataImportModule.ressources.skin.DropDownListSkin" change="HandleLstFieldChange()">
+					<s:layout>
+						<s:VerticalLayout gap="0" horizontalAlign="contentJustify" requestedRowCount="{(properties.length==20)?properties.length:20}"/>
+					</s:layout>
+				</s:DropDownList>
+				<s:DropDownList id="lstOperator" prompt="Select an operator..." width="150" labelField="label" dataProvider="{operators}" 
+								enabled="{lstField.selectedIndex!=-1}" />
+			<s:Group id="containerAdditionalFilters">	
+				<s:TextInput id="txtStringValue" enabled="{lstOperator.selectedIndex!=-1}"/>
+				<s:TextInput id="txtIntegerValue" restrict="0-9" enabled="{lstOperator.selectedIndex!=-1}" width="0" visible="false"/>
+				<s:TextInput id="txtDoubleValue" restrict="0-9\\.\\" enabled="{lstOperator.selectedIndex!=-1}" width="0" visible="false"/>
+				<mx:DateField id="dfDateValue" enabled="{lstOperator.selectedIndex!=-1}"
+							  yearNavigationEnabled="true" formatString="DD/MM/YYYY" width="0" visible="false"/>
+				<s:CheckBox id="cbBooleanValue" enabled="{lstOperator.selectedIndex!=-1}" width="0" visible="false"/>
+			</s:Group>
+			<s:Button id="btnAdd" label="Add to query" enabled="true"  click="sendEvent('ADD_WHAT_QUERY')"/>
+		</s:HGroup>
+		
+		<s:DataGroup id="dataGroup" width="100%" height="100%" dataProvider="{queries}" itemRenderer="org.ns.OdataImportModule.ressources.renderer.QueryRenderer">
+			<s:layout>
+				<s:VerticalLayout horizontalAlign="center"/>
+			</s:layout>
+		</s:DataGroup>
+
+		<s:HGroup width="100%" height="100%" verticalAlign="bottom" horizontalAlign="center" enabled="{lstFieldLAT.selectedIndex!=-1 &amp;&amp; lstFieldLON.selectedIndex!=-1 &amp;&amp; lstFieldDATE.selectedIndex!=-1}">
+			<s:Spacer width="20"/>
+			<s:Button label="test query" toolTip="test query" click="sendEvent('TEST_QUERY')"/>
+			<s:Spacer width="20"/>
+			<s:Label id="strResultTest" visible="false"/>
+			<mx:ProgressBar id="pgTest" indeterminate="true" labelPlacement="right" label="loading" visible="false"/>	
+		</s:HGroup>
+	</s:VGroup>
+</WizardStep>

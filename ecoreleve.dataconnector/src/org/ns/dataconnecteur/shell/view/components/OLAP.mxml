@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+		
+		<fx:Script>
+			<![CDATA[
+				import mx.charts.series.ColumnSeries;
+				import mx.charts.series.ColumnSet;
+				import mx.collections.ArrayCollection;
+				import mx.controls.Alert;
+				import mx.events.CubeEvent;
+				import mx.olap.IOLAPCube;
+				import mx.olap.IOLAPQuery;
+				import mx.olap.IOLAPQueryAxis;
+				import mx.olap.OLAPQuery;
+				import mx.olap.OLAPResult;
+				import mx.olap.OLAPSet;
+				import mx.olap.OLAPTuple;
+				import mx.rpc.AsyncResponder;
+				import mx.rpc.AsyncToken;
+				import mx.rpc.events.FaultEvent;
+				
+				
+				// Create the OLAP query.
+				private function getQuery(cube:IOLAPCube):IOLAPQuery 
+				{
+					// Create an instance of OLAPQuery to represent the query. 
+					var query:OLAPQuery = new OLAPQuery;
+					
+					// Get the row axis from the query instance.
+					var rowQueryAxis:IOLAPQueryAxis = query.getAxis(OLAPQuery.ROW_AXIS);
+					// Create an OLAPSet instance to configure the axis.
+					var productSet:OLAPSet = new OLAPSet;
+					// Add the Product to the row to aggregate data 
+					// by the Product dimension.
+					productSet.addElements(cube.findDimension("QueryDim").findAttribute("Query").children);
+					// Add the OLAPSet instance to the axis.
+					rowQueryAxis.addSet(productSet);
+					
+					// Get the column axis from the query instance, and configure it
+					// to aggregate the columns by the Quarter dimension. 
+					var colQueryAxis:IOLAPQueryAxis = query.getAxis(OLAPQuery.COLUMN_AXIS);         
+					var quarterSet:OLAPSet= new OLAPSet;
+					quarterSet.addElements(cube.findDimension("SourceDim").findAttribute("Source").children);
+					colQueryAxis.addSet(quarterSet);
+					
+					return query;       
+				}
+				
+				// Event handler to execute the OLAP query 
+				// after the cube completes initialization.
+				private function runQuery(event:CubeEvent):void 
+				{
+					// Get cube.
+					var cube:IOLAPCube = IOLAPCube(event.currentTarget);
+					// Create a query instance.
+					var query:IOLAPQuery = getQuery(cube);
+					// Execute the query.
+					var token:AsyncToken = cube.execute(query);
+					// Set up handlers for the query results.
+					token.addResponder(new AsyncResponder(showResult, showFault));
+				}
+				
+				// Handle a query fault.
+				private function showFault(error:FaultEvent, token:Object):void 
+				{
+					Alert.show(error.fault.faultString);
+				}
+				
+				// Handle a successful query by passing the query results to 
+				// the OLAPDataGrid control..
+				private function showResult(result:Object, token:Object):void 
+				{
+					if (!result) {Alert.show("No results from query.");
+						return;
+					}
+					//myOLAPDG.dataProvider=result as OLAPResult; 
+					var _result:OLAPResult=result as OLAPResult;
+					
+					var colAxis:IOLAPQueryAxis = _result.query.getAxis(OLAPQuery.COLUMN_AXIS);
+					var colLength:Number = _result.getAxis(OLAPQuery.COLUMN_AXIS).positions.length;
+					var rowAxis:IOLAPQueryAxis = _result.query.getAxis(OLAPQuery.ROW_AXIS);
+					var rowLength:Number = _result.getAxis(OLAPQuery.ROW_AXIS).positions.length;
+					var newChartData:Array = [];
+					
+					var data:Array=new Array();
+					var totValue:Number=0;
+					for (var i:int=0;i<rowLength;i++) {
+						var rowTuple:OLAPTuple = rowAxis.tuples[i];
+						var serie:String = rowTuple.explicitMembers.toArray().join(",");
+						
+							serie=serie.substring(serie.lastIndexOf("].")+3,serie.length-1);
+							var serieDP:Array=new Array();
+							var obj:Object=new Object();
+
+							for (var j:int=0;j<colLength;j++) {
+								var colTuple:OLAPTuple = colAxis.tuples[j];
+								var key:String = colTuple.explicitMembers.toArray().join(",");
+								//ne garde que XXXX ([AAA].[BBBB].[XXXX])
+								key=key.substring(key.lastIndexOf("].")+3,key.length-1);
+								
+								//if key is a filePath we just get the file name without extension
+								if (key.indexOf(':\\')!=-1){
+									key=key.substring(key.lastIndexOf('\\') + 1,key.length -5);
+								}
+								
+								//replace () par _
+								if (key.indexOf('(')!=-1){
+									key=key.replace('(','_')
+									key=key.replace(')','')
+								}
+								
+								//if serie is null(no query) we create a specific label
+								if (serie=="null"){									
+									serie="all file data"
+								}
+
+								obj[key]=_result.getCell(i, j).value
+								
+								if(!isNaN(_result.getCell(i, j).value)){
+									totValue+=_result.getCell(i, j).value
+								}
+							}
+							obj.serie=serie;
+							data.push(obj)
+					}
+					
+					//create colSet
+					var colSet:ColumnSet=new ColumnSet;
+					colSet.type='stacked'
+					//loop throught first data to create serie 
+					var firstObj:Object=data[0];
+					var item:String;
+					for ( item in firstObj){
+						if (item!='serie'){
+							var mySerie:ColumnSeries=new ColumnSeries()
+							mySerie.yField=item
+							mySerie.xField='serie'
+							mySerie.displayName="all " + item + " data"	
+							//add to colSet
+							colSet.series.push(mySerie)
+						}
+					}					
+						
+					//configure Axis
+					colCatAxis.dataProvider=data
+					colCatAxis.categoryField='serie'
+					yAxis.maximum=totValue;
+					
+					//add serie
+					columnChart.dataProvider=new ArrayCollection(data)
+					columnChart.series=[colSet];
+									
+					//show legend
+					legGroup.visible=true;
+				}
+			]]>
+		</fx:Script>
+		
+		<fx:Declarations>			
+			<!-- OLAP -->
+			<mx:OLAPCube name="FlatSchemaCube" 
+						 id="myMXMLCube"
+						 complete="runQuery(event);">
+				
+				<mx:OLAPDimension name="QueryDim">
+					<mx:OLAPAttribute name="Query" dataField="queryName"/>
+					<mx:OLAPHierarchy name="QueryHier" hasAll="true">
+						<mx:OLAPLevel attributeName="Query"/>
+					</mx:OLAPHierarchy>
+				</mx:OLAPDimension>
+				
+				<mx:OLAPDimension name="SourceDim">
+					<mx:OLAPAttribute name="Source" dataField="source"/>
+					<mx:OLAPHierarchy name="SourceHier" hasAll="true">
+						<mx:OLAPLevel attributeName="Source"/>
+					</mx:OLAPHierarchy>
+				</mx:OLAPDimension>
+				
+				<mx:OLAPMeasure name="Station" 
+								dataField="ID" 
+								aggregator="COUNT"/>
+			</mx:OLAPCube>
+		</fx:Declarations>
+		
+	<s:layout>  
+		<s:HorizontalLayout gap="0" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" horizontalAlign="center"/>  
+	</s:layout>
+	
+	<!--<mx:OLAPDataGrid id="myOLAPDG" width="100%" height="200" />-->
+	
+	<mx:ColumnChart id="columnChart" width="100%" height="300" showDataTips="true">
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="colCatAxis" title="Datasource queries"/>
+		</mx:horizontalAxis>
+		<mx:verticalAxis>
+			<mx:LinearAxis id="yAxis" title="nb station(s)" autoAdjust="true" baseAtZero="true" alignLabelsToInterval="true"/>
+		</mx:verticalAxis>
+	</mx:ColumnChart>
+	<s:VGroup id="legGroup" visible="false">
+		<s:Label text="Source"/>
+		<mx:Legend id="legend" dataProvider="{columnChart}" />
+	</s:VGroup>
+	
+</s:Group>

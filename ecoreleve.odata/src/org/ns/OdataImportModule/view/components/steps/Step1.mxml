@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WizardStep xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			xmlns:s="library://ns.adobe.com/flex/spark" 
+			xmlns:mx="library://ns.adobe.com/flex/mx"
+			xmlns="org.ns.genericComponents.wizard.*" 
+			stepName="Entity"
+			stepDescription="Choose an entity" width="600" height="350">
+	
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.XMLListCollection;
+			
+			[Bindable]public var entities:XMLListCollection=new XMLListCollection()
+			
+			override public function get stepDecision():* 
+			{
+				return lstEntity.selectedItem;
+			}
+			
+			override public function get readableStepDecision():String 
+			{
+				var str:String="";				
+				str=(lstEntity.selectedItem as XML).attribute('Name');
+				return String(str);
+			}
+			
+			private function sendEvent(action:String):void
+			{
+				dispatchEvent(new Event(action));
+			}
+		]]>
+	</fx:Script>
+	
+	<s:HGroup id="containerError" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+		<s:Label id="lblError"/>
+	</s:HGroup>
+	<s:HGroup id="containerList" width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+		<s:List id="lstEntity" width="450" height="300" dataProvider="{entities}" 
+				verticalScrollPolicy="on" horizontalScrollPolicy="off"  
+				change="this.isValid=true" itemRenderer="org.ns.OdataImportModule.ressources.renderer.EntityXMLRenderer"/>
+	</s:HGroup>
+
+	
+	
+	
+</WizardStep>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 width="500" height="400" 
+		 title="account manager">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var arrDatasources:ArrayCollection=new ArrayCollection;
+			
+			[Bindable]
+			[Embed('org/ns/dataconnecteur/shell/ressources/image/add.png')]
+			private var IcoAdd:Class;
+			
+			[Bindable]
+			private var data:ArrayCollection = new ArrayCollection([
+				{format:"ns", logo:"ns.png",type:"webservice",module:"2"},
+				{format:"sparql", logo:"akn.png",type:"semanticweb",module:"2"},
+				{format:"odata", logo:"odata.png",type:"webservice",module:"5"}
+			]);
+			
+			private function filterHandler(filter:String):void
+			{
+				switch (filter)
+				{
+					case 'all':
+						arrDatasources.filterFunction=filter_all
+						break;
+					case 'semanticweb':
+						arrDatasources.filterFunction=filter_semanticweb
+						break;
+					case 'webservices':
+						arrDatasources.filterFunction=filter_webservice
+						break;
+				}
+				arrDatasources.refresh()
+			}
+			
+			private function filter_all(item:Object):Boolean
+			{
+				return true
+			}
+			
+			private function filter_semanticweb(item:Object):Boolean
+			{
+				return (item.rd_type=='semanticweb')
+			}
+			
+			private function filter_webservice(item:Object):Boolean
+			{
+				return (item.rd_type=='webservice')
+			}
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5"/>
+	</s:layout>
+	
+	<s:states> 
+		<s:State name="default"/> 
+		<s:State name="add"/> 
+	</s:states> 
+	
+	<!--<s:Label text="manage remote datasources" fontWeight="bold" fontSize="16" includeIn="default,add"/>-->
+	
+	<!--default state-->
+	<mx:LinkBar itemClick="filterHandler(String(event.label));" includeIn="default">
+		<mx:dataProvider>
+			<fx:String>all</fx:String>
+			<fx:String>semanticweb</fx:String>
+			<fx:String>webservices</fx:String>
+		</mx:dataProvider>  
+	</mx:LinkBar>
+
+	<s:List id="lstDatasources" dataProvider="{arrDatasources}" 
+			itemRenderer="org.ns.dataconnecteur.shell.ressources.renderer.DatasourceManageListRenderer"
+			width="80%" height="80%" includeIn="default"/>
+
+	<s:Button label="add new account" icon="{IcoAdd}" click="currentState='add';" includeIn="default"/>
+	
+	<!--add state-->
+	
+	<s:Form includeIn="add">
+		<s:layout> 
+			<s:FormLayout gap="-14" paddingLeft="0"/> 
+		</s:layout> 
+		<s:FormItem label="name">
+			<s:TextInput id="frmItmName"/>
+		</s:FormItem>
+		<s:FormItem label="url">
+			<s:TextInput id="frmItmUrl"/>
+		</s:FormItem>
+		<s:FormItem label="authentification">
+			<s:CheckBox id="frmItmAuth" selected="false"/>
+		</s:FormItem>
+		<s:FormItem label="login" enabled="{frmItmAuth.selected}">
+			<s:TextInput id="frmItmLogin"/>
+		</s:FormItem>
+		<s:FormItem label="password" enabled="{frmItmAuth.selected}">
+			<s:TextInput id="frmItmPassword" displayAsPassword="true"/>
+		</s:FormItem>
+		<s:FormItem label="type">
+			<s:List id="frmItmLstData" itemRenderer="org.ns.dataconnecteur.shell.ressources.renderer.DataListRenderer"
+					height="60" width="160" dataProvider="{data}">
+				<s:layout>
+					<s:HorizontalLayout requestedColumnCount="3" gap="3" />
+				</s:layout>
+			</s:List>
+		</s:FormItem>
+	</s:Form>
+	
+	<s:HGroup includeIn="add">
+		<s:Button id="btnAddDatasource" label="save" includeIn="add"/>
+		<s:Button  label="cancel" click="currentState='default';" includeIn="add"/>
+	</s:HGroup>	
+</s:TitleWindow>

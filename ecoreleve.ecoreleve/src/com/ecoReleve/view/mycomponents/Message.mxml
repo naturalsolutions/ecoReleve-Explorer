@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:mx="library://ns.adobe.com/flex/mx"
+					   xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+				       width="250" height="40" backgroundColor="0xFFFFFF" borderStyle="solid"
+					   removedEffect="{fadeOut}">
+		
+		<fx:Script>
+			<![CDATA[
+				
+			]]>
+		</fx:Script>
+
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:Fade id="fadeOut" duration="1000" alphaFrom="1.0" alphaTo="0.0"/>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" paddingBottom="2" paddingLeft="2" paddingRight="2" paddingTop="2"/>
+	</s:layout>
+	
+	<s:Label id="msg" fontSize="12" fontWeight="bold" width="100%" textAlign="center"/>
+	
+</s:BorderContainer>

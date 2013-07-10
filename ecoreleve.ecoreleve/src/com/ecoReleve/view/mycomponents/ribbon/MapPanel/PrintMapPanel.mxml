@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 width="100%" height="100%" verticalAlign="middle" horizontalAlign="center" 
+		 xmlns:ns="org.ns.genericComponents.ribbon.*">
+	<fx:Script>
+		<![CDATA[
+		
+			import com.ecoReleve.view.mycomponents.ribbon.Ribbon;
+			
+			[Bindable]
+            [Embed('com/ecoReleve/ressources/images/p-PNG.png')]
+            private var IcoPNG:Class;
+
+			[Bindable]
+			public var boEnabled:Boolean=true;
+            
+			public static const PRINT_PNG:String = 'printpng';
+	         
+			 private function sendEvent(action:String):void
+             {
+                dispatchEvent(new Event(action,true));
+             } 
+
+		]]>
+	</fx:Script>
+
+	<ns:RibbonButton id="btnPNG" enabled="{boEnabled}" icon="{IcoPNG}" iconPlacement="top" label="PNG" 
+					 click="sendEvent(PRINT_PNG)" AncestorToolTip="{Ribbon}" toolTip="export map as PNG image" toolTipTitle="PNG"/>
+		
+</s:HGroup>

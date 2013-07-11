@@ -23,7 +23,7 @@ Contributing
 
 Want to contribute? Great!
 
-ecoRelevé is an open source project. Please help us by contributing to documentation, reporting bugs, forking the code to add features or make bug fixes or promoting us on twitter, etc.
+EcoRelevé is an open source project. Please help us by contributing to documentation, reporting bugs, forking the code to add features or make bug fixes or promoting us on twitter, etc.
 
 Technical details 
 -----------------

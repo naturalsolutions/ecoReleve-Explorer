@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow   xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 		xmlns:s="library://ns.adobe.com/flex/spark" 
+		 		xmlns:mx="library://ns.adobe.com/flex/mx"
+				width="500" height="400" 
+				title="database manager">
+	
+	<fx:Script>
+		<![CDATA[
+				[Bindable]
+			    public var dbFile:File
+			
+				[Bindable]
+				public var dbRelease:String='';
+		]]>
+	</fx:Script>
+	
+	
+	
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5" horizontalAlign="center" />
+	</s:layout>
+	
+	<!--<s:Label text="Database infos" fontWeight="bold" fontSize="16" />-->
+	
+	<s:Form>
+		<s:FormItem label="release: ">
+			<s:Label text="{dbRelease}"/>
+		</s:FormItem>
+		<s:FormItem label="path: ">
+			<s:RichEditableText width="200"
+								editable="false"
+								selectable="true" text="{dbFile.nativePath}"/>
+		</s:FormItem>
+		<s:FormItem label="size: ">
+			<s:Label id="txtSize" text="{dbFile.size}"/>
+		</s:FormItem>
+	</s:Form>
+	
+	
+	<s:Button id="btnCompact" label="compact database"/>
+	
+</s:TitleWindow>

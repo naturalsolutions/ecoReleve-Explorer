@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wizard xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns="org.ns.genericComponents.wizard.*"  
+		title="xml import wizard" xmlns:Steps="steps.*" logo="{img}"
+		showSummaryStep="true" xmlns:steps="org.ns.XmlImportModule.view.components.steps.*">
+	
+	<fx:Script>
+		<![CDATA[        
+			[Bindable]
+			[Embed('org\\ns\\XmlImportModule\\ressources\\image\\csv.png')]
+			private var img:Class;
+			
+		]]>
+	</fx:Script>
+	
+	<steps>
+		<steps:Step1 id="step1" dataField="file"/>
+	</steps>
+</Wizard>

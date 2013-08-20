@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:ns="org.ns.genericComponents.ribbon.*"
+		 width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+		 
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.ecoReleve.view.mycomponents.ribbon.Ribbon;
+			import com.ecoReleve.view.renderer.ClassColorListRenderer;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.colorPickerClasses.SwatchPanel;
+			import mx.events.DropdownEvent;
+			import mx.skins.halo.SwatchPanelSkin;	
+
+			[Bindable]
+			public var boEnabled:Boolean=false;
+			
+			[Bindable]
+			[Embed('com/ecoReleve/ressources/images/Classcolor.png')]
+             private var Ico:Class;
+            
+			[Bindable]
+			public var fieldArrCol:ArrayCollection=new ArrayCollection;
+            
+			[Bindable]
+			public var classes:ArrayCollection=new ArrayCollection;
+            
+			public static const ATTRIBUTE_SELECTED:String = 'attributeselected';
+			
+			private function sendEvent(action:String):void
+            {
+               dispatchEvent(new Event(action,true));
+            }
+
+		]]>
+	</fx:Script>
+
+	<s:VGroup gap="0">
+		<ns:RibbonButton id="myPopup" icon="{Ico}" enabled="{boEnabled}" 
+						 toolTip="create color class" toolTipTitle="Class" 
+						 AncestorToolTip="{Ribbon}" PopUp="{popup}"/>
+		<ns:RibbonButtonPopup id="popup">
+			<s:BorderContainer width="220" styleName="styleRibbonPopup">
+				<s:layout>
+					<s:VerticalLayout gap="10" paddingBottom="2" paddingLeft="2" paddingRight="2" paddingTop="2" horizontalAlign="center"/>
+				</s:layout>  
+
+					<s:Label text="Choose a field:" width="100%" textAlign="left"/>
+					<s:DropDownList id="cmbField" width="100%" dataProvider="{fieldArrCol}" change="sendEvent(ATTRIBUTE_SELECTED)" toolTip="choose field"/>
+					<s:Spacer height="10"/>
+					<s:List id="lstClass" width="100%" maxHeight="300" enabled="false" dataProvider="{classes}" 
+							 textAlign="center" itemRenderer="com.ecoReleve.view.renderer.ColorClassRenderer"
+							 creationComplete="sendEvent('createList')">
+					</s:List>	
+				
+				</s:BorderContainer>
+		</ns:RibbonButtonPopup>
+	</s:VGroup>
+	
+</s:HGroup>

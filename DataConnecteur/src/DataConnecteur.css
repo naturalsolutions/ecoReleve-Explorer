@@ -1,0 +1,13 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace fx "library://ns.adobe.com/flex/spark";
+
+global {
+	modal-transparency-blur: 5;
+	modal-transparency-color: #000000;
+	modal-transparency: 0.4;
+	modal-transparency-duration: 50;
+	backgroundGradientColors:#ffffff,#5E81A4;
+	
+}

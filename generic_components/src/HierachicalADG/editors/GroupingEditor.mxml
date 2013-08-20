@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:PopUpButton xmlns:mx="http://www.adobe.com/2006/mxml" 
+         		buttonMode="true"  openAlways="true"
+        		maxWidth="270" styleName="groupingButtonStyle"
+        		toolTip = "Grouping">
+    <mx:Metadata>
+        [Event(name="SetGroupingEvent",type="flash.events.Event")]                     
+    </mx:Metadata>
+    <mx:Script>
+        <![CDATA[
+        	import mx.collections.SummaryField;
+        	import mx.collections.SummaryRow;
+            import mx.collections.SortField;
+            import mx.collections.Sort;
+            import mx.collections.GroupingField;
+            import mx.collections.Grouping;            
+            import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
+            import mx.collections.ArrayCollection;
+            import mx.events.CollectionEventKind;
+            import mx.events.CollectionEvent;
+            import mx.utils.ObjectUtil;
+            
+            [Bindable]
+            [Embed(source="../assets/left_arrow.png")]
+            private var leftArrow:Class;
+            
+            [Bindable]
+            [Embed(source="../assets/right_arrow.png")]
+            public var rightArrow:Class;
+            
+            [Bindable]
+            [Embed(source="../assets/bulletCheck.png")]
+            private var BulletCheck:Class;
+            
+            [Bindable]
+            [Embed(source="../assets/bulletCross.png")]
+            public var BulletCross:Class;
+            
+            [Bindable]private var _columns:ArrayCollection=new ArrayCollection();
+            [Bindable]private var _destinationCols:ArrayCollection=new ArrayCollection();
+            private var _grouping:Grouping;
+             
+            private var _selectedLabels:Array = []; 
+               
+            public function set columns(value:ArrayCollection):void  
+            {
+                _columns = value;                                
+            }
+            
+            public function get grouping():Grouping 
+            {
+                return _grouping;
+            }
+
+			public function get selectedLabels():Array 
+			{
+                return _selectedLabels?_selectedLabels:[];
+            }
+
+            override protected function keyDownHandler(event:KeyboardEvent):void 
+            {
+                super.keyDownHandler(event);
+                if (event.keyCode == Keyboard.ESCAPE) {
+                    close();
+                }
+            }      
+            
+            private function myLabelFunction(item:Object):String 
+            {
+                return item.headerText;
+            }
+            
+            private function srcIconFunction(item:Object):Class 
+            {                
+                return BulletCross;
+            }
+            
+            private function destIconFunction(item:Object):Class 
+            {                
+                return BulletCheck;
+            }
+            
+            
+            private function processGrouping():void
+            {   
+            	//création de l'objet grouping avec les columns à utiliser
+            	_grouping=new Grouping;
+            	
+            	_grouping.fields = [];
+            	_selectedLabels=[]
+                for each(var item:* in _destinationCols){
+                    
+                    //création du groupingField
+		            var groupingField:GroupingField;
+		        	groupingField=new GroupingField(item.headerText);
+		        	groupingField.numeric = false;
+		        	groupingField.descending=true;
+    				
+    				var sumRow:SummaryRow=new SummaryRow();
+    				var sumField:SummaryField=new SummaryField("sta_nbIndividual","SUM");
+    				sumField.label="sta_nbIndividual";
+    				sumRow.fields=[sumField];
+    				sumRow.summaryPlacement="group";
+    				
+    				groupingField.summaries=[sumRow];
+    				
+                    _grouping.fields.push(groupingField);
+                    
+                    //Creation du tableau avec les etiquettes des colonnes à grouper ==> pour le label du poupButton
+                    _selectedLabels.push(item.headerText);
+                }
+         	    
+         	    //Envoit un event au DATAGRID pour dire que c'est ok       
+                dispatchEvent(new Event('SetGroupingEvent',true));                    
+                
+                //Ferme le popupbutton
+                close();
+            }
+           
+           private function changeListClick(event:MouseEvent):void 
+           {
+           		var myImg:Image=event.currentTarget as Image;
+           		var anItem:Object
+           		switch (myImg.id)
+           		{
+           			case 'toSrc':
+           				 for each( anItem in destlist.selectedItems){
+                                _destinationCols.removeItemAt(_destinationCols.getItemIndex(anItem));                            
+                                _columns.addItem(anItem);
+                            }
+           			break
+           			case 'toDest':
+           				for each(anItem in srclist.selectedItems){                                                                                        
+                                _columns.removeItemAt(_columns.getItemIndex(anItem));                            
+                                _destinationCols.addItem(anItem);
+                            }
+           			break
+           		}
+           }
+           
+           private function doubleClick(event:MouseEvent):void 
+           {
+           		var myList:List=event.currentTarget as List;
+           		var anItem:Object
+           		switch (myList.id)
+           		{
+           			case 'srclist':
+           				 for each( anItem in myList.selectedItems){
+                                _columns.removeItemAt(_columns.getItemIndex(anItem));                            
+                                _destinationCols.addItem(anItem);
+                            }
+           			break
+           			case 'destlist':
+           				for each(anItem in myList.selectedItems){                                                                                        
+                                _destinationCols.removeItemAt(_destinationCols.getItemIndex(anItem));                            
+                                 _columns.addItem(anItem);
+                            }
+           			break
+           		}
+           }
+           
+           private function rollOut(event:MouseEvent):void
+           {
+           		if (event.relatedObject==null){
+           			//nothing
+           		}else{
+           			this.close();
+           		}
+           }
+           
+           
+        ]]>
+    </mx:Script>
+    <mx:popUp>
+        <mx:TitleWindow   
+            layout="horizontal"
+            title="Grouping Editor"
+            verticalAlign="middle"  
+            horizontalAlign="center" rollOut="rollOut(event)"
+            borderAlpha="1" horizontalScrollPolicy="off" verticalScrollPolicy="off" styleName="todo">
+            
+            <mx:VBox width="100%">
+                <mx:Label text="Available" fontWeight="bold" width="100%"/>        
+                <mx:List dataTipField="colGroupIndex" showDataTips="true"  width="100%" minWidth="108" 
+                    labelFunction="myLabelFunction" labelField="headerText" 
+                    id="srclist"  textAlign="left"
+                    dataProvider="{_columns}"
+                    rowCount="{Math.max(5,(_columns.length + _destinationCols.length))}"
+                    allowMultipleSelection="true" 
+                    dropShadowEnabled="true"               
+                    dragEnabled="true"
+                    dropEnabled="true"
+                    dragMoveEnabled="true" doubleClickEnabled="true" doubleClick="doubleClick(event)">
+                </mx:List>
+            </mx:VBox>
+            
+            <mx:VBox width="100%">
+            	<mx:Image id="toDest" click="changeListClick(event)" useHandCursor="true" buttonMode="true" source="{rightArrow}" toolTip="remove selected column"/>
+            	<mx:Image id="toSrc" click="changeListClick(event)" useHandCursor="true" buttonMode="true" source="{leftArrow}" toolTip="select column"/>
+            </mx:VBox>
+           
+            <mx:VBox width="100%">
+                <mx:Label text="Selected" fontWeight="bold" width="100%"/>        
+                <mx:List dataTipField="colGroupIndex" showDataTips="true" width="{srclist.width}"  
+                    labelFunction="myLabelFunction" labelField="headerText" iconFunction="destIconFunction"  
+                    id="destlist"  textAlign="left" 
+                    dataProvider="{_destinationCols}"
+                    rowCount="{Math.max(5,(_columns.length + _destinationCols.length))}"
+                    allowMultipleSelection="true"                
+                    dragEnabled="true"
+                    dropEnabled="true"
+                    dragMoveEnabled="true"
+                    dropShadowEnabled="true" doubleClickEnabled="true" doubleClick="doubleClick(event)">
+                </mx:List>        
+            </mx:VBox>    
+            <mx:ControlBar  horizontalAlign="right">
+                <mx:Button label="OK" click="processGrouping()"/>
+                <mx:Button label="Cancel" click="close()"/>
+            </mx:ControlBar>                
+    </mx:TitleWindow>                
+    </mx:popUp>
+</mx:PopUpButton>
+
+

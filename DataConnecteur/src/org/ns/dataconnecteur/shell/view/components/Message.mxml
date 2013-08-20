@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:mx="library://ns.adobe.com/flex/mx"
+		   xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		   xmlns:s="library://ns.adobe.com/flex/spark"
+	       width="100%" height="100%">
+		
+		<fx:Script>
+			<![CDATA[
+				import mx.events.CloseEvent;
+				
+				protected function pnl_closeHandler(event:CloseEvent):void
+				{
+					this.visible=false
+				}
+
+			]]>
+		</fx:Script>
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle"/>
+	</s:layout>
+	
+	<s:TitleWindow id="pnl" width="400" height="200" close="pnl_closeHandler(event)">
+		<s:layout>
+			<s:VerticalLayout paddingBottom="2" paddingLeft="2" paddingRight="2" paddingTop="2" horizontalAlign="center" verticalAlign="middle"/>
+		</s:layout>
+		<s:Label id="descriptif" text="" width="350"/>
+	</s:TitleWindow>
+</s:Group>

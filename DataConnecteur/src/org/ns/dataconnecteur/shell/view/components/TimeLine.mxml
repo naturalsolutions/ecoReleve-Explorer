@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+		
+		<fx:Script>
+			<![CDATA[
+				import mx.charts.chartClasses.IAxis;
+				import mx.charts.chartClasses.Series;
+				import mx.collections.ArrayCollection;				
+				
+
+				
+				[Bindable]
+				public var queries:Array=new Array
+
+				private function linearAxis_labelFunc(item:Object, prevValue:Object, axis:IAxis):String 
+				{
+					return new Date(item).fullYear.toString();
+				}
+				
+			]]>
+		</fx:Script>
+		
+		<fx:Declarations>
+			
+		</fx:Declarations>
+		
+		<s:layout>  
+			<s:HorizontalLayout gap="0" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" horizontalAlign="center"/>  
+		</s:layout>
+
+		<mx:BarChart id="chart" dataProvider="{queries}" height="250">
+			<mx:horizontalAxis >
+				<mx:LinearAxis id="hAxis" labelFunction="linearAxis_labelFunc"/>
+			</mx:horizontalAxis>
+			<mx:verticalAxis>
+				<mx:CategoryAxis dataProvider="{queries}" categoryField="name"/>
+			</mx:verticalAxis>
+			<mx:series>
+				<mx:BarSeries yField="name"
+					xField="dateMax" 
+					minField="dateMin" displayName="dateMax"/>
+			</mx:series>
+		</mx:BarChart>
+			
+	
+</s:Group>

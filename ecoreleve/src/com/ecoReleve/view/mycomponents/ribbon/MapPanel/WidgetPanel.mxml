@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:VGroup xmlns:ns="org.ns.genericComponents.ribbon.*"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+	 	 width="100%" height="100%"
+		 verticalAlign="middle" horizontalAlign="center">
+	 	 
+	<fx:Script>
+		<![CDATA[
+			
+			public static const MEDIA_SELECTED_CHANGE:String 	= 'mediaSelected';
+			public static const STATUS_SELECTED_CHANGE:String 	= 'statusSelected';
+			public static const INFO_SELECTED_CHANGE:String 	= 'infoSelected';
+			
+			 private function sendEvent(action:String):void
+             {
+                dispatchEvent(new Event(action,true));
+             }
+
+		]]>
+	</fx:Script>
+
+	<s:HGroup verticalAlign="middle">
+		<s:Label text="activate Media" width="100"/>
+		<s:CheckBox id="chkMedia" selected="true" change="sendEvent(MEDIA_SELECTED_CHANGE)"/>
+	</s:HGroup>
+	
+	<s:HGroup verticalAlign="middle">
+		<s:Label text="activate Status" width="100"/>
+		<s:CheckBox id="chkStatus" selected="true" change="sendEvent(STATUS_SELECTED_CHANGE)"/>
+	</s:HGroup>
+	
+	<s:HGroup verticalAlign="middle">
+		<s:Label text="activate info" width="100"/>
+		<s:CheckBox id="chkInfo" selected="true" change="sendEvent(INFO_SELECTED_CHANGE)"/>
+	</s:HGroup>
+	
+
+</s:VGroup>

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:PopUpButton xmlns:mx="http://www.adobe.com/2006/mxml" 
+         		buttonMode="true"  openAlways="true" maxWidth="350"
+        		toolTip = "olap query">
+    <mx:Metadata>
+        [Event(name="SetOlapQueryEvent",type="flash.events.Event")]                     
+    </mx:Metadata>
+    <mx:Script>
+        <![CDATA[
+        	import mx.olap.OLAPLevel;
+        	import mx.olap.OLAPAttribute;
+        	import mx.olap.OLAPHierarchy;
+        	import mx.olap.OLAPDimension;
+        	import mx.core.DragSource;
+        	import mx.events.ListEvent;
+        	import mx.olap.IOLAPMember;
+        	import mx.olap.OLAPMember;
+        	import mx.events.DragEvent;
+        	import mx.olap.OLAPMeasure;
+        	import mx.olap.OLAPCube;
+        	import mx.olap.OLAPQuery;
+        	import mx.olap.IOLAPQuery;
+        	import mx.olap.OLAPSet;
+        	import mx.olap.IOLAPQueryAxis;
+            import mx.collections.SortField;
+            import mx.collections.Sort;
+            import mx.collections.GroupingField;
+            import mx.collections.Grouping;            
+            import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
+            import mx.collections.ArrayCollection;
+            import mx.events.CollectionEventKind;
+            import mx.events.CollectionEvent;
+            import mx.utils.ObjectUtil;
+            
+            import OlapADG.renderer.MeasureListRenderer
+  
+            [Bindable]private var _columns:Array=new Array();
+            [Bindable]private var _destinationCols:ArrayCollection=new ArrayCollection();
+            [Bindable]private var _destinationRows:ArrayCollection=new ArrayCollection();
+            [Bindable]private var _destinationMeasures:ArrayCollection=new ArrayCollection();
+            
+            private var _olapQuery:IOLAPQuery; 
+            private var _measures:ArrayCollection;
+            [Bindable]private var _Coldim:Array;
+            [Bindable]private var _Rowdim:Array;
+            [Bindable]private var _dimensions:ArrayCollection;
+               
+            public function set columns(value:Array):void  
+            {
+                _columns = value;                                
+            }
+           
+            public function get dimensions():ArrayCollection
+            {
+                return _dimensions;
+            }
+           
+            public function get colDim():Array
+            {
+                return _Coldim;
+            }
+            
+            public function get rowDim():Array
+            {
+                return _Rowdim;
+            }
+            
+            public function get measures():ArrayCollection
+            {
+                return _measures;
+            }
+
+            override protected function keyDownHandler(event:KeyboardEvent):void 
+            {
+                super.keyDownHandler(event);
+                if (event.keyCode == Keyboard.ESCAPE) {
+                    close();
+                }
+            }      
+  
+            
+            private function createOlapQuery():void
+            {   
+            	if (_destinationMeasures.length>0 && _destinationRows.length>0 && _destinationCols.length>0){
+	            	 
+	            	 //CREATION DU TABLEAU DE MESURE
+					 _measures=new ArrayCollection;	
+					 var mes:OLAPMeasure=new OLAPMeasure("mes");
+					 mes.dataField=_destinationMeasures[0].dataField
+					 mes.aggregator=_destinationMeasures[0].aggregator
+					 
+					 _measures.addItem(mes)
+	            	
+	            	//CREATION DE LA DIMENSION COLONNE
+	            	_Coldim=createColDimension("col")
+	            	
+	            	//CREATION DE LA DIMENSION ROW
+	            	_Rowdim=createColDimension("row")        
+	            	
+	            	_dimensions=new ArrayCollection(_Rowdim.concat(_Coldim));
+	            	
+	         	    //Envoit un event au DATAGRID pour dire que c'est ok       
+	                dispatchEvent(new Event('SetOlapQueryEvent',true));                    
+	                
+	                //Ferme le popupbutton
+	                close();
+	            	}
+	           }
+	            
+	            //create an array of dimension
+	            private function createColDimension(type:String):Array
+	            {
+	            	
+	            	var arrItems:ArrayCollection=new ArrayCollection;
+
+	            	var dimensions:Array=new Array();
+	            	
+	            	if (type=="row"){
+	            		arrItems=_destinationRows
+	            	}else if (type=="col"){
+	            		arrItems=_destinationCols
+	            	}
+	            	
+	            	for each(var item:String in arrItems){
+					    //création de la dimension avec sa hierarchy
+					    var dim:OLAPDimension = new OLAPDimension(item + "_Dim");
+		            	var hier:OLAPHierarchy=new OLAPHierarchy(item + "_Hier");
+						hier.hasAll=true;
+					    
+					    //creation des attributs
+					    var attr:OLAPAttribute = new OLAPAttribute("myAttribute");
+						attr.dataField = item;
+						
+						//creation des levels
+						var level:OLAPLevel = new OLAPLevel();
+	 					level.attributeName = "myAttribute";
+	 					
+	 					hier.levels=new ArrayCollection([level]);
+	 					dim.attributes=new ArrayCollection([attr]);
+	            		dim.hierarchies=new ArrayCollection([hier]);
+	 					
+	 					dimensions.push(dim);
+	            	}
+	            	
+	            	return dimensions
+	            }
+	            /*
+	            //with hierarchy and level
+	            private function createColDimension(type:String):OLAPDimension
+	            {
+	            	var dim:OLAPDimension = new OLAPDimension(type + "_Dim");
+	            	var hier:OLAPHierarchy=new OLAPHierarchy(type + "_Hier");
+					hier.hasAll=true;
+	            	var arrItems:ArrayCollection=new ArrayCollection;
+	            	var levels:Array=new Array();
+	            	var attributes:Array=new Array();
+	            	
+	            	if (type=="row"){
+	            		arrItems=_destinationRows
+	            	}else if (type=="col"){
+	            		arrItems=_destinationCols
+	            	}
+	            	
+	            	for each(var item:String in arrItems){
+					    //creation des attributs
+					    var attr:OLAPAttribute = new OLAPAttribute(item + "_attr");
+						attr.dataField = item;
+						
+						//creation des levels
+						var level:OLAPLevel = new OLAPLevel();
+	 					level.attributeName = item + "_attr";
+						
+						levels.push(level);
+	 					attributes.push(attr);
+	            	}
+	            	
+	            	hier.levels=new ArrayCollection(levels);
+	 				dim.attributes=new ArrayCollection(attributes);
+	            	dim.hierarchies=new ArrayCollection([hier]);
+	            	
+	            	return dim
+	            }
+	            */
+	            
+	            //intercepte le drop event sur la list de mesures ==> transforme en objet
+	            private function dragDropHandler(event:DragEvent):void
+	            {
+	            	var myobj:Object=event.dragSource.dataForFormat("items")[0]					
+					if (!(myobj is String)){
+						var str:String=myobj.dataField
+						var myList:List=event.currentTarget as List
+						var index:int = myList.calculateDropIndex(event);
+						(myList.dataProvider as ArrayCollection).addItemAt(str,index);
+						
+						event.stopImmediatePropagation();
+					}
+	            }
+	            
+	            //intercepte le drop event sur la list de mesures ==> transforme en objet
+	            private function DragDropMeasureHandler(event:DragEvent):void
+	            {
+	            	var obj:Object=new Object
+	            	obj.dataField=event.dragSource.dataForFormat("items")[0]
+	            	obj.aggregator="COUNT"	
+	            	            	
+	            	_destinationMeasures.addItem(obj);
+	            	
+	            	event.stopImmediatePropagation();
+	         
+	            }  
+
+            
+        ]]>
+    </mx:Script>
+    <mx:popUp>
+        <mx:TitleWindow   
+            layout="horizontal"
+            title="Grouping Editor"
+            verticalAlign="top"  
+            horizontalAlign="center"
+            showCloseButton="true"  
+            borderAlpha="1" 
+            close="close()" keyDown="close()" horizontalScrollPolicy="off" verticalScrollPolicy="off" styleName="todo">
+            
+            <mx:VBox width="100%">
+                <mx:Label text="Available" fontWeight="bold" width="100%"/>        
+                <mx:List dataTipField="colGroupIndex" showDataTips="true"  width="100%" minWidth="108" 
+                    id="srclist"  textAlign="left"
+                    dataProvider="{_columns}"
+                    rowCount="{Math.max(5,(_columns.length))}"
+                    allowMultipleSelection="true" 
+                    dropShadowEnabled="true"               
+                    dragEnabled="true"
+                    dropEnabled="true"
+                    dragDrop="dragDropHandler(event);"
+                    dragMoveEnabled="true">
+                </mx:List>
+            </mx:VBox>
+          
+            <mx:VBox width="100%"> 
+            	<mx:Label text="OLAP datagrid" fontWeight="bold" width="100%"/> 
+            	<mx:HBox width="100%">
+            		<mx:VBox width="100%">     
+		                <mx:List width="{srclist.width}"		                    
+		                    id="destlistrow"  textAlign="left" 
+		                    dataProvider="{_destinationRows}"
+		                    rowCount="5"
+		                    allowMultipleSelection="true"                
+		                    dragEnabled="true"
+		                    dropEnabled="true"
+		                    dragDrop="dragDropHandler(event);"
+		                    dragMoveEnabled="true"
+		                    dropShadowEnabled="true">
+		                </mx:List> 
+		        	</mx:VBox>	
+		            <mx:VBox width="100%">     
+		                <mx:HorizontalList columnWidth="100" rowHeight="40"
+		                                   id="destlistcol"  textAlign="left" 
+					                       dataProvider="{_destinationCols}" columnCount="2"
+					                       allowMultipleSelection="true"                
+					                       dragEnabled="true"
+					                       dropEnabled="true"
+					                       dragDrop="dragDropHandler(event);"
+					                       dragMoveEnabled="true"
+					                       dropShadowEnabled="true" >
+		                </mx:HorizontalList>        
+		                <mx:List width="{destlistcol.width}" rowCount="3"
+			                     itemRenderer="OlapADG.renderer.MeasureListRenderer" rendererIsEditor="true" editorDataField="data"
+			                     id="destlistmeasures"  textAlign="left"
+			                     dataProvider="{_destinationMeasures}"
+			                     allowMultipleSelection="true"                
+			                     dragEnabled="true"
+			                     dropEnabled="true"
+			                     dragDrop="DragDropMeasureHandler(event);" 
+			                     dragMoveEnabled="true"
+			                     dropShadowEnabled="true" >
+		                </mx:List>                   
+		            </mx:VBox>
+            	</mx:HBox>
+            	<mx:CheckBox id="colSum" label="add column sum"/>
+            	<mx:CheckBox id="rowSum" label="add row sum"/>
+            </mx:VBox>	
+
+            <mx:ControlBar  horizontalAlign="right">
+                <mx:Button label="OK" click="createOlapQuery()"/>
+                <mx:Button label="Cancel" click="close()"/>
+            </mx:ControlBar>                
+    </mx:TitleWindow>                
+    </mx:popUp>
+</mx:PopUpButton>
+
+

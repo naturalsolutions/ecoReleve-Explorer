@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config:Config
+	xmlns:config 	= "config"
+	xmlns:dev		= "dev"
+	xmlns:prod    = "prod"
+	>	
+	
+	<!-- DEPLOYMENT ENVIRONMENT SELECTOR [ REQUIRED! ]-->
+	<config:deploy>dev</config:deploy>
+	
+	<!-- DEV ENVIRONMENT-->
+	<dev:appName>ecoReleve [ Development ]</dev:appName>
+	<dev:serveurURL>https://natural01.gn-noc.com:8443</dev:serveurURL>
+	<dev:wsName>WSecoReleve_alpha_0.2.361</dev:wsName>
+		
+	<dev:updateURL>https://natural01.gn-noc.com:8443/ecoReleve/dev/update.xml</dev:updateURL>
+	<dev:geoServerURL>https://natural01.gn-noc.com:8443/geoserver</dev:geoServerURL>	
+		
+	<dev:virtuosoURL>http://natural01.gn-noc.com:8890</dev:virtuosoURL>
+	<dev:endPointURL>
+		<source>
+			<name>TDWG 2010 - Bioblitz</name>
+			<url>http://lsd.taxonconcept.org</url>
+			<graph>urn:org:linkedopenspeciesdata:dataspace:tdwg2010bioblitz</graph>
+			<description>TaxonConcept endpoint</description>
+		</source>
+		<source>
+			<name>Avian knowledge network</name>
+			<url>http://natural01.gn-noc.com:8890</url>
+			<graph>urn:rdf.Occurences_AKN_dwc</graph>
+			<description>NS endpoint</description>
+		</source>
+		<source>
+			<name>LOD</name>
+			<url>http://lod.openlinksw.com</url>
+			<graph></graph>
+			<description>Linked Open Data endpoint</description>
+		</source>
+	</dev:endPointURL>
+		
+	<dev:carmenServiceURL>http://ws.carmencarto.fr/WFS/119/fxx_inpn?</dev:carmenServiceURL>
+
+	<!-- PRODUCTION ENVIRONMENT-->
+	<prod:appName>ecoReleve</prod:appName>
+	<prod:serveurURL>https://natural01.gn-noc.com:8443</prod:serveurURL>
+	<prod:wsName>WSecoReleve_stable_0.2</prod:wsName>
+		
+	<prod:updateURL>https://natural01.gn-noc.com:8443/ecoReleve/prod/update.xml</prod:updateURL>
+	<prod:geoServerURL>https://natural01.gn-noc.com:8443/geoserver</prod:geoServerURL>	
+		
+	<prod:virtuosoURL>http://natural01.gn-noc.com:8890</prod:virtuosoURL>
+	<prod:endPointURL>
+		<source>
+			<name>TDWG 2010 - Bioblitz</name>
+			<url>http://lsd.taxonconcept.org</url>
+			<graph>urn:org:linkedopenspeciesdata:dataspace:tdwg2010bioblitz</graph>
+			<description>TaxonConcept endpoint</description>
+		</source>
+		<source>
+			<name>Avian knowledge network</name>
+			<url>http://natural01.gn-noc.com:8890</url>
+			<graph>urn:rdf.Occurences_AKN_dwc</graph>
+			<description>NS endpoint</description>
+		</source>
+		<source>
+			<name>LOD</name>
+			<url>http://lod.openlinksw.com</url>
+			<graph></graph>
+			<description>Linked Open Data endpoint</description>
+		</source>
+	</prod:endPointURL>
+		
+	<prod:carmenServiceURL>http://ws.carmencarto.fr/WFS/119/fxx_inpn?</prod:carmenServiceURL>
+	
+	<!-- 
+	
+	URL CARMEN PAR SERVICE
+	----------------------
+	
+	http://carmen.developpement-durable.gouv.fr/services/catalogue/catalogue.php?style=catalogue.xsl&service_idx=ZZ
+	avec ZZ numéro de service
+	
+	DREAL PAYS DE LA LOIRE ==>	http://ws.carmen.developpement-durable.gouv.fr/WFS/26/R_MilieuxNaturels_L93_R52?	
+	DREAL PACA 			   ==> http://ws.carmen.developpement-durable.gouv.fr/WFS/25/preprod_environnement?
+	DREAL Midi-Pyrenées    ==> http://ws.carmen.developpement-durable.gouv.fr/WFS/23/global?
+	DREAL Rhone-Alpes      ==> http://ws.carmen.application.developpement-durable.gouv.fr/WFS/30/NATURE_PAYSAGE_BIODIVERSITE_RA?
+	
+	
+	MUSEUM INPN (NEW CARMEN) http://ws.carmencarto.fr/WFS/119/fxx_inpn?
+	
+	 -->
+	
+	
+	
+</config:Config>

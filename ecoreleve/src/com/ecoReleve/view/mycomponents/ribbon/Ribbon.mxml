@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+		   xmlns:RibbonComponents="com.ecoReleve.view.mycomponents.ribbon.*"
+		   xmlns:ns="org.ns.genericComponents.ribbon.*"
+	 	   horizontalScrollPolicy="off"
+	       verticalScrollPolicy="off" width="100%" xmlns:TablePanel="com.ecoReleve.view.mycomponents.ribbon.TablePanel.*" xmlns:MapPanel="com.ecoReleve.view.mycomponents.ribbon.MapPanel.*" xmlns:DataPanel="com.ecoReleve.view.mycomponents.ribbon.DataPanel.*" xmlns:IOPanel="com.ecoReleve.view.mycomponents.ribbon.IOPanel.*">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.utils.GraphicsUtil;
+			import flash.display.StageDisplayState;
+			import flash.events.FullScreenEvent;
+   
+			[Bindable]
+			public var boMapEnabled:Boolean=true;
+				
+			[Bindable]
+			public var boTableEnabled:Boolean=false;
+				
+			[Bindable]
+			public var boChartEnabled:Boolean=false;
+			
+            private function toggleFullScreen():void 
+            {
+                try 
+                {
+                    switch (this.stage.displayState) 
+                    {
+                        case StageDisplayState.FULL_SCREEN:
+                            this.stage.displayState = StageDisplayState.NORMAL;
+                            break;
+                        default:
+                            this.stage.displayState = StageDisplayState.FULL_SCREEN;
+                            break;
+                    }
+                } catch (err:SecurityError) {
+                    // rien
+            	 }
+            }
+            
+             private function sendEvent(action:String):void
+             {
+                dispatchEvent(new Event(action,true));
+             } 
+		]]>
+	</mx:Script>
+
+		<mx:Resize id="resizeEffect" target="{this}"/>
+
+	    <!-- RIBBON -->
+	    <ns:RibbonNavigator id="myRibbon" width="100%" height="100%" creationPolicy="all">
+	    	<!-- PAGE Data -->
+	    	<ns:RibbonPage id="pageData" label="Data">
+				<!-- PANNEL 1 -->
+				<ns:RibbonGroup id="pnlData" title="Data">
+					<DataPanel:DataPanel id="MyDataPanel" />
+				</ns:RibbonGroup>
+	    	</ns:RibbonPage>
+	    	
+			<!-- PAGE MAP TOOL-->
+			<ns:RibbonPage id="pageMapTool" label="Map tool" enabled="{boMapEnabled}">
+				<!-- PANNEL 1 -->
+				<ns:RibbonGroup id="pnlSearch"  title="Search place names">
+					<MapPanel:SearchPanel id="MySearchPanel" />
+				</ns:RibbonGroup> 
+				<!-- PANNEL 2 -->
+				<mx:VRule height="100%" alpha="0.8"/>
+				<ns:RibbonGroup id="pnlCluster" title="Cluster">
+					<MapPanel:ClusterPanel id="MyClusterPanel" />
+				</ns:RibbonGroup>
+				<!-- PANNEL 2 -->
+				<mx:VRule height="100%" alpha="0.8"/>
+				<ns:RibbonGroup id="pnlStyleOpacity" title="Style">
+					<MapPanel:StylePanel id="MyStyleOpacityPanel" />
+				</ns:RibbonGroup>
+				<!-- PANNEL 3 -->
+				<mx:VRule height="100%" alpha="0.8"/>
+				<ns:RibbonGroup id="pnlValue" title="Color classes">
+					<MapPanel:StyleClassColorPanel id="MyClassColorPanel"/>
+				</ns:RibbonGroup>
+				<!-- PANNEL 4 -->
+				<mx:VRule height="100%" alpha="0.8"/>
+				<ns:RibbonGroup id="pnlNumber" title="Proportional sizes">
+					<MapPanel:ProportionalSizePanel id="MyProportionalSizePanel"/>
+				</ns:RibbonGroup>
+				<mx:VRule height="100%" alpha="0.8"/>
+				<!-- PANNEL 5 -->
+				<ns:RibbonGroup id="pnlGeoTool" title="Geo processing">
+					<MapPanel:GeoToolPanel id="MyGeoToolPanel"/>
+				</ns:RibbonGroup>
+				<!-- PANNEL 6 -->
+				<mx:VRule height="100%" alpha="0.8"/>
+				<ns:RibbonGroup id="pnlWidget" title="Widget">
+					<MapPanel:WidgetPanel id="MyWidgetPanel"/>
+				</ns:RibbonGroup>			
+			</ns:RibbonPage>
+			
+	    	<!-- PAGE MAP LAYER-->
+	    	<ns:RibbonPage id="pageMapLayer" label="Map layer" enabled="{boMapEnabled}">
+				<!-- PANNEL 1 -->
+				<ns:RibbonGroup id="pnlView" title="View">
+					<MapPanel:ViewPanel id="MyViewPanel"/>
+				</ns:RibbonGroup> 
+				<mx:VRule height="100%" alpha="0.8"/>
+				<!-- PANNEL 2 -->
+	    		<ns:RibbonGroup id="pnlBaseMap" title="Base map">
+	    			<MapPanel:BaseMapPanel id="MyBaseMap" />
+				</ns:RibbonGroup>
+				<mx:VRule height="100%" alpha="0.8"/>
+	    		<!-- PANNEL 3 -->	    		
+	    		<ns:RibbonGroup id="pnlWMS" title="Wms layer">
+	    			<MapPanel:LayerWMSPanel id="MyWMSPanel"/>
+				</ns:RibbonGroup>
+				<mx:VRule height="100%" alpha="0.8"/>
+				<!-- PANNEL 4 -->
+				<ns:RibbonGroup id="pnlManager" title="Manager">
+					<MapPanel:LayerManagerPanel id="MyLayerManagerPanel"/>
+				</ns:RibbonGroup>		
+	    	</ns:RibbonPage>	
+
+			<!-- PAGE Table -->
+			<ns:RibbonPage id="pageTable" label="Table" enabled="{boTableEnabled}">
+				<ns:RibbonGroup id="pnlColumns" title="Columns">
+					<TablePanel:ColumnPanel id="MyColumnPanel" />
+				</ns:RibbonGroup>
+			</ns:RibbonPage>
+			
+			<!-- PAGE Chart -->
+			<ns:RibbonPage id="pageChart" label="Chart" enabled="{boChartEnabled}">
+			</ns:RibbonPage>
+			
+	    	<!-- PAGE I/O -->
+	    	<ns:RibbonPage id="pageIO" label="I/O">
+	    		<!-- PANNEL 1 -->
+	    		<ns:RibbonGroup id="pnlImport" title="Import">
+	    			<IOPanel:InputPanel id="MyInputPanel" />
+				</ns:RibbonGroup>
+				<mx:VRule height="100%" alpha="0.8"/>
+				<ns:RibbonGroup id="pnlOpen" title="Open">
+					<IOPanel:OpenPanel id="MyOpenPanel" />
+				</ns:RibbonGroup>
+				<mx:VRule height="100%" alpha="0.8"/>
+	    		<!-- PANNEL 2 -->
+	    		<ns:RibbonGroup id="pnlExport" title="Export data">	
+	    			<IOPanel:OutputPanel id="MyOutputPanel" />
+				</ns:RibbonGroup>
+				<mx:VRule height="100%" alpha="0.8"/>
+	    		<!-- PANNEL 3 -->
+	    		<ns:RibbonGroup id="pnlImage" title="Export image">
+	    			<MapPanel:PrintMapPanel id="MyPrintMapPanel" />
+				</ns:RibbonGroup>
+	    	</ns:RibbonPage>
+	    </ns:RibbonNavigator>
+
+</mx:Canvas>

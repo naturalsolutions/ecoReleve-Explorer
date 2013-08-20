@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ADOBE SYSTEMS INCORPORATED
+Copyright 2008 Adobe Systems Incorporated
+All Rights Reserved.
+
+NOTICE: Adobe permits you to use, modify, and distribute this file
+in accordance with the terms of the license agreement accompanying it.
+
+-->
+
+<!--- The default skin class for a Spark Panel container.  
+
+    @see spark.components.Panel
+
+    @langversion 3.0
+    @playerversion Flash 10
+    @playerversion AIR 1.5
+    @productversion Flex 4
+-->
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
+    		 xmlns:fb="http://ns.adobe.com/flashbuilder/2009" alpha.disabled="0.5" blendMode="normal" 
+			 xmlns:mx="library://ns.adobe.com/flex/mx">
+    <fx:Metadata>[HostComponent("org.ns.genericComponents.MDIDockable.components.MDIDockableWindow")]</fx:Metadata>
+    
+    <fx:Script fb:purpose="styling">
+        <![CDATA[
+		import mx.core.FlexVersion;
+		
+		/* Define the skin elements that should not be colorized. 
+        For panel, border and title background are skinned, but the content area, background, border, and title text are not. */
+        static private const exclusions:Array = ["background", "titleDisplay", "contentGroup", "controlBarGroup", "border"];
+			
+		/* exclusions before Flex 4.5 for backwards-compatibility purposes */
+		static private const exclusions_4_0:Array = ["background", "titleDisplay", "contentGroup", "controlBarGroup"];
+		
+		/**
+		 * @private
+		 */
+		override public function get colorizeExclusions():Array 
+		{
+			// Since border is styleable via borderColor, no need to allow chromeColor to affect
+			// the border.  This is wrapped in a compatibility flag since this change was added  
+			// in Flex 4.5
+			if (FlexVersion.compatibilityVersion < FlexVersion.VERSION_4_5)
+			{
+				return exclusions_4_0;
+			}
+			
+			return exclusions;
+		}
+			
+        /**
+         * @private
+         */
+        override protected function initializationComplete():void
+        {
+            useChromeColor = true;
+            super.initializationComplete();
+        }
+
+		]]>
+    </fx:Script>
+    
+	<fx:Declarations>
+		<s:Power id="collapseEaser" easeInFraction="1" />
+		<s:Power id="uncollapseEaser" easeInFraction="0" />
+	</fx:Declarations>
+	
+	<!-- STATES -->
+    <s:states>
+        <s:State name="normal" />
+		<s:State name="expanded"/>
+        <s:State name="disabled" />
+		<s:State name="normalWithControlBar"/>
+		<s:State name="disabledWithControlBar"/>
+    </s:states>
+
+	<!-- TRANSITION -->
+	<s:transitions>
+		<s:Transition fromState="normal" toState="expanded">
+			<s:Sequence>
+				<s:Resize target="{this}" duration="100" easer="{collapseEaser}"/>
+				<s:Fade target="{contentGroup}" duration="100" />
+			</s:Sequence>
+		</s:Transition>
+		<s:Transition fromState="expanded" toState="normal">
+			<s:Sequence>
+				<s:Fade target="{contentGroup}" duration="100" />
+				<s:Resize target="{this}" duration="100" easer="{collapseEaser}" />
+			</s:Sequence>
+		</s:Transition>
+	</s:transitions>
+	
+	
+	<!-- drop shadow -->
+	<s:RectangularDropShadow id="shadow" blurX="20" blurY="20" alpha="0.32" distance="11" 
+							 angle="90" color="#000000" left="0" top="0" right="0" bottom="0"/>
+	
+	<!-- TITLE BAR -->
+	<s:Group id="titleBarGroup" left="0" top="0" right="0" bottom="0" 
+			 maxHeight="32">
+		
+		<!-- layer 1: title bar fill -->
+		<s:Rect left="1" right="1" top="1" height="30">
+			<s:fill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="0xE2E2E2" />
+					<s:GradientEntry color="0xD9D9D9" />
+				</s:LinearGradient>
+			</s:fill>
+		</s:Rect>
+		
+		<!-- layer 2: title bar highlight -->
+		<s:Rect left="1" right="1" top="1" height="30">
+			<s:stroke>
+				<s:LinearGradientStroke rotation="90" weight="1">
+					<s:GradientEntry color="0xEAEAEA" />
+					<s:GradientEntry color="0xD9D9D9" />
+				</s:LinearGradientStroke>
+			</s:stroke>
+		</s:Rect>
+		<s:Rect left="1" right="1" top="31" height="1">
+			<s:fill>
+				<s:SolidColor color="0xC0C0C0" />
+			</s:fill>
+		</s:Rect>
+		
+		<!-- layer 3: text -->
+		<!--- Defines the appearance of the PanelSkin class's title bar. -->
+		<s:Label id="titleDisplay" lineBreak="explicit" paddingLeft="30" 
+				 textAlign.normal="left" 
+				 width="100%"
+				 left="10" right="30" top="2" height="30"
+				 verticalAlign="middle" fontWeight="bold" includeIn="expanded">
+		</s:Label>
+		
+		<!-- drag handle -->
+		<s:Group id="dragHandle" left="0" top="0" right="0" bottom="0"  maxHeight="32" includeIn="expanded">
+			<s:Rect left="0" right="0" top="0" bottom="0">
+				<s:fill>
+					<s:SolidColor alpha="0" />
+				</s:fill>
+			</s:Rect>
+		</s:Group>
+		
+		<!-- icon -->
+		<s:Group left="0" top="3" height="26">
+			<s:Image id="imgLogo" height="100%" useHandCursor="true" buttonMode="true"/>
+		</s:Group>		
+
+		<!-- layer 3: command -->
+		<s:HGroup width="100%" height="100%" 
+				  verticalAlign="middle" horizontalAlign="right" paddingLeft="2" paddingRight="5"
+				  includeIn="expanded" visible="false" visible.expanded="true">
+
+			<s:HSlider id="slider" minimum="0.1" maximum="1" stepSize="0.1" value="1" 
+					   change="{contentGroup.alpha=slider.value}" width="50"/>			
+			</s:HGroup>
+	</s:Group>
+	
+	
+	
+	<!-- layer 1: Main border -->
+	<s:Rect left="0" right="0" top="0" bottom="0">
+		<s:stroke>
+			<s:SolidColorStroke color="0" alpha="0.50" weight="1" />
+		</s:stroke>
+	</s:Rect>
+	
+	
+	<!-- CONTENT -->
+	<s:Group id="contentGroup" left="1" right="1" top="32" bottom="1" 
+			 minWidth="0" minHeight="0"
+			 includeIn="expanded" visible="false" visible.expanded="true">
+		<s:Rect left="0" right="0" top="0" bottom="0" includeIn="expanded">
+			<s:fill>
+				<s:SolidColor color="0xFFFFFF"/>
+			</s:fill>
+		</s:Rect>
+	</s:Group>
+	
+	<!-- resize handle -->
+	<s:Group id="resizeHandle" right="1" bottom="1" width="15" height="15" includeIn="expanded">
+		<s:Path data="M 4 13 L 13 4 L 13 13 L 4 13">
+			<s:fill>
+				<s:SolidColor color="0x000000" />
+			</s:fill>
+		</s:Path>
+	</s:Group>
+</s:SparkSkin>

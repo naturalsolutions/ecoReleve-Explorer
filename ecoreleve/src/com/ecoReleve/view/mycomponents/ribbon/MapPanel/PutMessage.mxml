@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:spin="Spinner.controls.*"
+		 	    horizontalScrollPolicy="off" verticalScrollPolicy="off"
+		        width="500" height="150" title="" resizeEffect="{resize}" horizontalAlign="center"
+		        showCloseButton="true" close="sendEvent(CANCEL)" >
+	         		
+		<mx:Script>
+			<![CDATA[	
+			
+				public static const CANCEL:String = 'cancel';
+				public static const SAVE:String = 'save';
+				
+				[Bindable]public var xml:XML;
+				[Bindable]public var strNbSucess:String="";				
+				[Bindable]public var strNbError:String="";
+				
+				static private const txtAllOk:String = "import completely successful";
+				static private const txtAllBad:String = "import completely failed";
+				static private const txtPartiallyOK:String = "import partially succeeded";
+								
+				[Bindable]
+				[Embed('com/ecoReleve/ressources/images/arrow_up.gif')]
+				private var IcoArrowUp:Class;
+				
+				[Bindable]
+				[Embed('com/ecoReleve/ressources/images/arrow_down.gif')]
+				private var IcoArrowDown:Class;
+				
+				[Bindable]
+				[Embed('com/ecoReleve/ressources/images/attention.png')]
+				private var IcoAttention:Class;
+				
+				[Bindable]
+				[Embed('com/ecoReleve/ressources/images/no.png')]
+				private var IcoNo:Class;
+				
+				[Bindable]
+				[Embed('com/ecoReleve/ressources/images/valid.png')]
+				private var IcoValid:Class;
+				
+			    private function sendEvent( action:String ):void
+	            {
+	                dispatchEvent(new Event( action, true ));
+	            }
+				
+				private function resizeDG():void
+				{
+					if (dgError.height==0){
+						this.height=400;
+						dgError.height=390;
+						lkButton.setStyle("icon",IcoArrowUp)
+					}else{
+						this.height=150;
+						dgError.height=0;
+						lkButton.setStyle("icon",IcoArrowDown)
+					}
+				}
+				
+			]]>
+		</mx:Script>
+
+	<!-- EFFECT -->
+	<mx:Resize id="resize" />
+	
+	<!-- STATES -->
+	<mx:states>
+		<mx:State name="recordset">
+			<mx:RemoveChild target="{H1}"/>
+			<mx:AddChild relativeTo="{V1}">
+				<mx:VBox horizontalAlign="center" width="100%" height="100%">
+					<mx:HBox horizontalAlign="left" verticalAlign="middle" width="300">
+						<mx:Image source="{IcoNo}"/>
+						<mx:Label text="{txtAllBad}" styleName="styleImport"/>
+					</mx:HBox>
+					<mx:HBox horizontalAlign="left" width="300">
+						<mx:Label text="File is invalid" styleName="styleImportDetail"/>
+						<mx:Button label="save" toolTip="save invalid file with error details" click="sendEvent(SAVE)" useHandCursor="true" buttonMode="true"/>
+					</mx:HBox>
+				</mx:VBox>
+			</mx:AddChild>
+		</mx:State>	
+		<mx:State name="record">
+			<mx:RemoveChild target="{H1}"/>
+			<mx:AddChild relativeTo="{V1}">	
+				<mx:VBox horizontalAlign="center" width="100%" height="100%">
+					<mx:HBox horizontalAlign="left" verticalAlign="middle" width="300">
+						<mx:Image source="{(strNbError=='0')?IcoValid:(strNbSucess=='0')?IcoNo:IcoAttention}"/>
+						<mx:Label text="{(strNbError=='0')?txtAllOk:(strNbSucess=='0')?txtAllBad:txtPartiallyOK}"/>
+					</mx:HBox>
+					<mx:HBox horizontalAlign="left" verticalAlign="middle" width="300">
+						<mx:Label id="lbl1" text="{strNbSucess}" styleName="styleImportDetail"/>
+						<mx:Label text=" station(s) well imported" styleName="styleImportDetail"/>
+					</mx:HBox>
+					<mx:HBox horizontalAlign="left" verticalAlign="middle" width="300">
+						<mx:Label id="lbl2" text="{strNbError}" styleName="styleImportDetail"/>
+						<mx:Label text=" station(s) not imported" styleName="styleImportDetail"/>
+						<mx:LinkButton id="lkButton" icon="{IcoArrowDown}" toolTip="show/hide error details" click="resizeDG()" useHandCursor="true" buttonMode="true" visible="{(strNbError!='0')?true:false}"/>
+						<mx:Button label="save" toolTip="save data not imported with error details" click="sendEvent(SAVE)" useHandCursor="true" buttonMode="true" visible="{(strNbError!='0')?true:false}"/>
+					</mx:HBox>					
+				</mx:VBox>		
+			</mx:AddChild>
+			<mx:AddChild relativeTo="{V1}">
+				<mx:DataGrid id="dgError" resizeEffect="{resize}" height="0"
+							 dataProvider="{xml.record.(success=='no') as XMLList}" 
+							 width="100%" rowCount="4">
+					<mx:columns>
+						<mx:DataGridColumn dataField="@id" headerText="Nb" width="0.2"/>
+						<mx:DataGridColumn dataField="message" headerText="error" width="0.8"/>	            
+					</mx:columns>
+				</mx:DataGrid>
+			</mx:AddChild>	
+		</mx:State>
+	</mx:states>
+	
+	<!-- -->
+	<mx:VBox id="V1" horizontalAlign="center"  width="100%" height="100%">
+		<mx:HBox id="H1" verticalAlign="middle" horizontalAlign="center" width="100%" height="100%">
+			<mx:Label id="myLabel" text="inserting data into database" styleName="MsgLabel"/>
+			<spin:Spinner id="MySpin" styleName="MsgSpin" width="100%" visible="true"/>
+		</mx:HBox>
+	</mx:VBox>
+	
+</mx:TitleWindow>

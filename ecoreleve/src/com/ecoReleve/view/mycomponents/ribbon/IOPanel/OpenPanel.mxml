@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:ns="org.ns.genericComponents.ribbon.*"
+		 width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+	<fx:Script>
+		<![CDATA[	
+			
+			import com.ecoReleve.view.mycomponents.ribbon.Ribbon;
+			
+			[Bindable]
+	        [Embed('com/ecoReleve/ressources/images/p-gpx.png')]	        
+	        private var IcoGPX:Class;
+			
+			[Bindable]
+			[Embed('com/ecoReleve/ressources/images/p-shp.png')]		
+			private var IcoSHP:Class;
+	
+			public static const OPEN_GPX:String = 'opengpx';
+			public static const OPEN_SHP:String = 'openshp';
+	    
+			 private function sendEvent(action:String):void
+	         {
+	            dispatchEvent(new Event(action,true));
+	         } 
+
+		]]>
+	</fx:Script>
+
+	<ns:RibbonButton id="btnNSML" icon="{IcoGPX}" iconPlacement="top" label="GPX" 
+					click="sendEvent(OPEN_GPX)" toolTipTitle="Open GPX" toolTip="open GPX data" AncestorToolTip="{Ribbon}"/> 
+	
+	<ns:RibbonButton id="btnSHP" icon="{IcoSHP}" iconPlacement="top" label="SHP" 
+					 click="sendEvent(OPEN_SHP)" toolTipTitle="Open SHP" toolTip="open shp data" AncestorToolTip="{Ribbon}"/>
+	
+</s:HGroup>

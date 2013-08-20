@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" verticalAlign="middle">
+	<mx:Script>
+		<![CDATA[
+			import com.importCSV.model.VO.CsvMappingVO;
+			
+			import flash.desktop.ClipboardFormats;
+			import flash.desktop.NativeDragManager;
+			
+			import mx.collections.ArrayCollection;
+			
+			public static const BROWSE:String = 'browse';
+			public static const NEXT:String = 'next';
+			public static const PREVIOUS:String = 'previous';
+			public static const FINISH:String = 'finish';
+			
+			[Bindable]public var f:File;
+			[Bindable]public var arrCsvLines:ArrayCollection=new ArrayCollection;
+			[Bindable]public var arrSeparator:Array=new Array(";",",","tab");
+			[Bindable]public var arrCSVField:ArrayCollection=new ArrayCollection;
+			
+			//object with: staFIELD,csvFIELD,format
+			public var arrFieldMapping:ArrayCollection=new ArrayCollection;
+			
+			
+			[Bindable] public var currentViewSelector:Number = STEP1;
+			public static const STEP1:Number = 0;
+			public static const STEP2:Number = 1;
+			public static const STEP3:Number = 2;
+			
+			private function sendEvent( action:String ):void
+			{
+				dispatchEvent(new Event( action, true ));
+			} 
+			
+			/**public function previousStep():void
+			{
+				//go to previous page
+				currentViewSelector-=1;
+			}
+			
+			public function nextStep():void
+			{				
+				//send event of next page
+				if (currentViewSelector==0){
+					sendEvent(NEXT1)
+				}else if(currentViewSelector==1){
+					sendEvent(NEXT2)
+				}
+				
+				//go to next page
+				currentViewSelector+=1;
+			}**/
+			
+			private function finishStep():void
+			{
+
+				// get form items
+				var formItems:Array = FormMapping.getChildren();
+				
+				// loop items and add values
+				for (var i:uint = 0; i < formItems.length; i++)
+				{
+					var csvMapping:CsvMappingVO=new CsvMappingVO;
+					
+					// formItem
+					var formItem:Array = formItems[i].getChildren();
+					if (formItems[i].label=="DATE"){
+						csvMapping.STA_FIELD=formItems[i].label
+						csvMapping.CSV_FIELD= formItem[0].value;
+						csvMapping.FORMAT= formItem[1].value;
+					}else {
+						csvMapping.STA_FIELD=	formItems[i].label
+						csvMapping.CSV_FIELD= formItem[0].value;
+						csvMapping.FORMAT=""
+					}
+					arrFieldMapping.addItem(csvMapping);
+				}
+				
+				sendEvent(FINISH)
+			}
+			
+			private function fctRowNumber(oItem:Object,iCol:int):String
+			{
+				var iIndex:int = arrCsvLines.getItemIndex(oItem) + 1;
+				return String(iIndex);
+			}
+			
+			private function myStyleFunc(data:Object,col:AdvancedDataGridColumn):Object
+			{
+				if (arrCsvLines.getItemIndex(data)<stepHeaderRow.value -1){
+					return {color:0xb0aaaa}; 
+				}else if (arrCsvLines.getItemIndex(data)==stepHeaderRow.value -1){
+					return {fontWeight:"bold"};
+				}else{
+					// Return null 
+					return null;
+				}
+			}
+		]]>
+	</mx:Script>
+
+	
+	<mx:ViewStack id="viewStack" x="0" y="0" creationPolicy="all" selectedIndex="{currentViewSelector}">
+		<!--STEP1 ==> browse-->
+		<mx:VBox width="400" height="400" 
+				 horizontalAlign="center" verticalAlign="middle" 
+				 borderStyle="solid" borderThickness="1" borderColor="black" 
+				 paddingLeft="10" paddingRight="10" paddingBottom="10" paddingTop="10">
+			<mx:Label text="Choose a csv file"/>
+			<mx:HBox>
+				<mx:TextInput id="txtFilePath" text="{f.name}"/>
+				<mx:Button label="..." click="sendEvent(BROWSE)"/>
+			</mx:HBox>	
+		</mx:VBox>
+			<!--STEP2 ==> header-->
+			<mx:VBox width="400" height="400"
+				 horizontalAlign="center" verticalAlign="middle" 
+				 borderStyle="solid" borderThickness="1" borderColor="black" 
+				 paddingLeft="10" paddingRight="10" paddingBottom="10" paddingTop="10">
+			<mx:HBox>
+				<mx:Label text="column name are in row "/>
+				<mx:NumericStepper id="stepHeaderRow" minimum="0" stepSize="1" click="{dg.invalidateList()}"/>
+			</mx:HBox>
+			<mx:HBox>
+				<mx:Label text="choose separator"/>
+				<mx:ComboBox id="cbSeparator" dataProvider="{arrSeparator}">
+				</mx:ComboBox>
+			</mx:HBox>
+			<mx:AdvancedDataGrid id="dg" showHeaders="false" selectable="false" sortableColumns="false" dataProvider="{arrCsvLines}" styleFunction="myStyleFunc" 
+						 width="300" resizableColumns="false">
+				<mx:columns>
+					<mx:AdvancedDataGridColumn width="30" labelFunction="fctRowNumber" />
+					<mx:AdvancedDataGridColumn />
+				</mx:columns>
+			</mx:AdvancedDataGrid>
+		</mx:VBox>
+			<!--STEP3 ==> mapping-->
+			<mx:VBox width="400" height="400" 
+				 horizontalAlign="center" verticalAlign="middle" 
+				 borderStyle="solid" borderThickness="1" borderColor="black" 
+				 paddingLeft="10" paddingRight="10" paddingBottom="10" paddingTop="10">
+			<mx:Form id="FormMapping">
+				<mx:FormItem label="NAME" required="true">
+					<mx:ComboBox dataProvider="{arrCSVField}"/>
+				</mx:FormItem>
+				<mx:FormItem label="LATITUDE" required="true">
+					<mx:ComboBox dataProvider="{arrCSVField}"/>
+				</mx:FormItem>
+				<mx:FormItem label="LONGITUDE" required="true">
+					<mx:ComboBox dataProvider="{arrCSVField}"/>
+				</mx:FormItem>
+				<mx:FormItem label="ELEVATION">
+					<mx:ComboBox dataProvider="{arrCSVField}"/>
+				</mx:FormItem>
+				<mx:FormItem label="DATE" required="true">
+					<mx:ComboBox id="cmbDate" dataProvider="{arrCSVField}"/>
+					<mx:ComboBox dataProvider="{['DD-MM-YYYY','MM-DD-YYYY','DD/MM/YYYY','MM/DD/YYYY']}" enabled="{cmbDate.selectedIndex!=0}"/>
+				</mx:FormItem>
+				<mx:FormItem label="NB_INDIVIDUAL" required="true">
+					<mx:ComboBox dataProvider="{arrCSVField}"/>
+				</mx:FormItem>
+				<mx:FormItem label="SPECIES_NAME" required="true">
+					<mx:ComboBox dataProvider="{arrCSVField}"/>
+				</mx:FormItem>
+				<mx:FormItem label="COMMENTS" required="false">
+					<mx:ComboBox dataProvider="{arrCSVField}"/>
+				</mx:FormItem>
+			</mx:Form>
+		</mx:VBox>
+	</mx:ViewStack>
+	
+	<mx:HBox width="400" horizontalAlign="right">
+		<mx:Button id="cancel" label="cancel"/>
+		<mx:Button id="previous" label="previous" click="sendEvent(PREVIOUS)" enabled="{(currentViewSelector==0)?false:true}"/>
+		<mx:Button id="next" label="next" click="sendEvent(NEXT)" enabled="{(txtFilePath.text!='')?(currentViewSelector!=viewStack.numChildren -1)?true:false:false}"/>
+		<mx:Button id="finish" label="finish" click="finishStep()" enabled="{(currentViewSelector==viewStack.numChildren -1)?true:false}"/>
+	</mx:HBox>
+	
+</mx:VBox>

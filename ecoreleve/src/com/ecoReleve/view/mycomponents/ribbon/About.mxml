@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow   xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+				 width="500" height="400" 
+				 title="about">
+	
+	<fx:Script>
+		<![CDATA[
+			
+			[Bindable]
+			public var appRelease:String;
+			
+			[Bindable]
+			[Embed('com/ecoReleve/ressources/images/IFHC.png')]
+			private var IcoIFHC:Class;
+			
+			[Bindable]
+			[Embed('com/ecoReleve/ressources/images/nsLogo.png')]
+			private var IcoNS:Class;
+			
+			[Bindable]
+			[Embed('com/ecoReleve/ressources/images/reneco.png')]
+			private var IcoReneco:Class;
+			
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" verticalAlign="middle" paddingLeft="5" paddingBottom="5" paddingRight="5" paddingTop="5"/>
+	</s:layout>
+	
+	<s:Label text="ecoReleve - Explorer" fontWeight="bold" fontSize="14" />
+	<s:Label text="release: {appRelease}" fontWeight="bold" fontSize="12" />
+	
+	<s:Spacer height="10"/>
+	
+	<s:Image source="{IcoIFHC}"/>
+	<s:HGroup verticalAlign="middle" horizontalAlign="center" width="100%">
+		<s:Image source="{IcoReneco}"/>
+		<s:Image source="{IcoNS}"/>
+	</s:HGroup>
+	
+	
+	<s:Spacer height="10"/>
+	
+	<s:RichEditableText id="richEdTxt"						
+						editable="false" focusEnabled="false" mouseChildren="false">
+		<s:textFlow>	
+			<s:TextFlow>			
+				<s:p>Visit <s:a href="http://code.google.com/p/ecoreleve/" target="_blank">http://code.google.com/p/ecoreleve/</s:a></s:p>		
+			</s:TextFlow>		
+		</s:textFlow>
+	</s:RichEditableText>
+</s:TitleWindow>

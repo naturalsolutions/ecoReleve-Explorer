@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:PopUpButton  xmlns:mx="http://www.adobe.com/2006/mxml"
+    			 openAlways="true"  buttonMode="true" label="Show/hide" labelPlacement="right" toolTip="Show/Hide Columns">
+    <mx:Metadata>
+        [Event(name="SetChangeVisibilityEvent",type="mx.events.ListEvent")]                     
+    </mx:Metadata>
+    <mx:Script>
+        <![CDATA[
+            import mx.events.ListEvent;
+            
+            [Bindable]private var _columns:Array;
+                
+            public function set columns(value:Array):void  {
+                _columns = value;                                
+            }
+            
+            public function cleanUp():void {
+                _columns = [];
+            }
+            
+            private function itemClickHandler(event:ListEvent):void {
+                if(_columns){
+                    if(event.itemRenderer.data.hasOwnProperty('visible')){
+                        event.itemRenderer.data['visible'] = !event.itemRenderer.data['visible'];
+                        
+                        //force le check du checkbox en question
+                        refresh()
+                        
+                        //Envoit un event au DATAGRID pour dire que c'est ok       
+                		dispatchEvent(new ListEvent('SetChangeVisibilityEvent',true));
+                    }
+
+                }
+            }
+            
+            private function refresh():void 
+            {
+            	var _arr:Array = [];
+                var nbMax:int=_columns.length
+                for ( var i:int=0; i < nbMax; i++ ) { 
+	                var item:Object = _columns[i] as Object;                    
+	                if(item.hasOwnProperty('visible')){                        
+	                    if( item['visible'] == true){            
+	                        _arr.push(i);;                    
+	                    }
+	                }
+                }
+               theChkList.selectedIndices = _arr;
+            }
+            
+            
+            private function selectAll():void 
+            {
+                var _arr:Array = [];
+                var nbMax:int=_columns.length
+                for ( var i:int=0; i < nbMax; i++ ) {
+                    _arr.push(i);
+                    var item:Object = _columns[i] as Object;                    
+                    if(item.hasOwnProperty('visible')){                        
+                        if( item['visible'] == false){            
+                            item['visible'] = true;                    
+                        }
+                    }
+                }
+               theChkList.selectedIndices = _arr;
+               //Envoit un event au DATAGRID pour dire que c'est ok       
+               dispatchEvent(new ListEvent('SetChangeVisibilityEvent',true));
+            }
+            private function deselectAll():void 
+            {
+            	var nbMax:int=_columns.length
+                for ( var j:int=0; j < nbMax; j++ ) {
+                    var item:Object = _columns[j] as Object;                    
+                    if(item.hasOwnProperty('visible')){                        
+                        if(item['visible'] == true){                                
+                            item['visible'] = false;                            
+                        }
+                    }
+                }
+               theChkList.selectedIndices = [];  
+               //Envoit un event au DATAGRID pour dire que c'est ok       
+               dispatchEvent(new ListEvent('SetChangeVisibilityEvent',true));              
+            }
+
+        ]]>
+    </mx:Script>
+    <mx:popUp>
+        <mx:TitleWindow  title="Show/Hide Columns" minWidth="180" borderAlpha="1" rollOut="close()"
+            			 styleName="todo">
+            
+            <mx:List id="theChkList" width="100%" dataProvider="{_columns}" labelField="headerText"  
+            		 allowMultipleSelection="true" itemClick="itemClickHandler(event)" selectionColor="white"
+            		 showDataTips="true" rowCount="{Math.min(8,(_columns.length))}">
+            	<mx:itemRenderer>
+		            <mx:Component>
+		                <mx:CheckBox selectedField="visible"/>
+		            </mx:Component>
+        		</mx:itemRenderer>
+			</mx:List>           
+            <mx:ControlBar  horizontalAlign="right">
+                <mx:Button label="Select All" width="100" click="selectAll()"/>
+                <mx:Button label="Deselect All" width="100" click="deselectAll()"/>
+            </mx:ControlBar>                         
+        </mx:TitleWindow>                
+    </mx:popUp>    
+</mx:PopUpButton>
+
+

@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<mx:HBox width="100%" xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.dataGridClasses.DataGridListData;
+			import mx.controls.Alert;
+			import com.ecoReleve.model.VO.InventoryVO;
+			
+			[Bindable] private var _data:Object;
+			[Bindable] private var strLabel:String;
+			[Bindable] private var strTaxonName:String;
+			[Bindable] private var strDistance:String;
+			[Bindable] private var strOccupe:String;
+										              
+            // Override the set method for the data property.
+            [Bindable]
+            override public function set data(value:Object):void 
+            {
+                _data = value;
+                var inventory:InventoryVO=_data.inventory as InventoryVO;
+                
+                if (inventory.TAXON_NAME!="" || inventory.TAXON_NAME==null){
+                	strTaxonName=inventory.TAXON_NAME
+                } 
+                if (!isNaN(inventory.NUMBER) && inventory.NUMBER!=0){
+                	strLabel=String(inventory.NUMBER)
+                } 
+                if (inventory.ABUNDANCY!="" && inventory.ABUNDANCY!=null ) {
+                	strLabel="class: " + String(inventory.ABUNDANCY)
+                } 
+                if (!isNaN(inventory.DISTANCE)) {
+                	strDistance="Distance: " + String(inventory.DISTANCE)
+                } 
+                if (inventory.OCCUPE!="") {
+                	strOccupe="Occupied: " + String(inventory.OCCUPE)
+                }
+            }
+            
+            public function jumpTo(event:Event):void
+			{
+				var strSpecies:String
+				
+				//enlever le texte entre parenthèses si il existe ==> meilleure réponse dans google
+				if (strTaxonName.indexOf("(")>0){
+					strSpecies=strTaxonName.substring(0,strTaxonName.indexOf("("))
+				} else {
+					strSpecies=strTaxonName
+				}
+				var url:URLRequest=new URLRequest("http://www.google.fr/images?q="+ strSpecies)
+			 	navigateToURL(url,"_blank");
+			}
+            
+            //override public getter for data property
+            override public function get data():Object
+            {
+            	return _data;
+        	}
+		]]>
+	</mx:Script>
+		<mx:VBox>
+			<mx:HBox>
+				<mx:Label text="{strLabel}" textAlign="right" width="50" styleName="myPlainStyle"/>
+				<mx:VBox>
+					<mx:HBox>
+						<!--<mx:Text width="150" text="{strTaxonName}" mouseChildren="false" styleName="myItalicStyle"/>-->
+						<mx:LinkButton width="150" label="{strTaxonName}" mouseChildren="false" 
+									   styleName="myItalicStyle" click="jumpTo(event)" toolTip="show picture(s)"/>
+					</mx:HBox>				
+					<mx:HBox>
+						<mx:Label text="{strDistance}" fontSize="12" />
+						<mx:Label text="{strOccupe}" fontSize="12" />
+					</mx:HBox>			
+				</mx:VBox>
+			</mx:HBox>
+		</mx:VBox>
+</mx:HBox>

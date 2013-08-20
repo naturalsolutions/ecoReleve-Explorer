@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties includeAllClasses="false" version="1">
+  <includeClasses>
+    <classEntry path="CollapsiblePanel.CollapsiblePanel"/>
+    <classEntry path="CommandLinks.CommandLinkButton"/>
+    <classEntry path="CommandLinks.MultilineLabel"/>
+    <classEntry path="HierachicalADG.HierachicalADG"/>
+    <classEntry path="HierachicalADG.controls.AutoResizableADG"/>
+    <classEntry path="HierachicalADG.controls.IconComboBox"/>
+    <classEntry path="HierachicalADG.editors.FilterEditor"/>
+    <classEntry path="HierachicalADG.editors.GroupingEditor"/>
+    <classEntry path="HierachicalADG.editors.ShowHideColumnsEditor"/>
+    <classEntry path="HierachicalADG.renderer.HierarchicalColumnHeaderRenderer"/>
+    <classEntry path="HierachicalADG.renderer.HierarchicalSortItemRenderer"/>
+    <classEntry path="OlapADG.OlapADG"/>
+    <classEntry path="OlapADG.chart.olapChartVisu"/>
+    <classEntry path="OlapADG.editors.olapQueryEditor"/>
+    <classEntry path="OlapADG.renderer.MeasureListRenderer"/>
+    <classEntry path="ResizableCanvas.ResizableCanvas"/>
+    <classEntry path="Ribbon.components.RibbonButton"/>
+    <classEntry path="Ribbon.components.RibbonButtonList"/>
+    <classEntry path="Ribbon.components.RibbonNavigator"/>
+    <classEntry path="Ribbon.components.RibbonPage"/>
+    <classEntry path="Ribbon.components.RibbonPanel"/>
+    <classEntry path="Ribbon.components.RibbonTab"/>
+    <classEntry path="Ribbon.components.RibbonTabBar"/>
+    <classEntry path="Ribbon.components.ribbonPanelToolTip"/>
+    <classEntry path="Search.searchPopUp"/>
+    <classEntry path="Spinner.controls.Spinner"/>
+    <classEntry path="Spinner.controls.Tick"/>
+    <classEntry path="Timeline.controls.FormattedDateTimeAxis"/>
+    <classEntry path="Timeline.Timeline"/>
+    <classEntry path="Timeline.controls.CustomDateFilter"/>
+    <classEntry path="Timeline.controls.RangeSelector"/>
+    <classEntry path="Timeline.event.TimeScaleEvent"/>
+    <classEntry path="Timeline.renderer.MyLabelRenderer"/>
+    <classEntry path="Timeline.renderer.ScrollableAxisRenderer"/>
+    <classEntry path="VerticalTabNavigator.VerticalTabNavigator"/>
+    <classEntry path="VerticalTabNavigator.VerticalTabPanel"/>
+    <classEntry path="HierachicalADG.utils.DataGridUtil"/>
+    <classEntry path="Ribbon.components.RibbonPopUpButton"/>
+    <classEntry path="GoogleMedias.GoogleMedias"/>
+    <classEntry path="GoogleMedias.controls.MovieClipContainer"/>
+    <classEntry path="RedList.RedListSearch"/>
+    <classEntry path="RedList.RedListItem"/>
+    <classEntry path="RedList.RedList"/>
+    <classEntry path="RedList.event.RedListEvent"/>
+    <classEntry path="RedList.renderer.RedListStatusRenderer"/>
+    <classEntry path="RedList.controls.NoHighLightHorizontalList"/>
+  </includeClasses>
+  <includeResources>
+    <resourceEntry destPath="HierachicalADG/assets/icon-grouping.png" sourcePath="HierachicalADG/assets/icon-grouping.png"/>
+    <resourceEntry destPath="HierachicalADG/assets/bulletCross.png" sourcePath="HierachicalADG/assets/bulletCross.png"/>
+    <resourceEntry destPath="Timeline/assets/mouseleftmove.png" sourcePath="Timeline/assets/mouseleftmove.png"/>
+    <resourceEntry destPath="HierachicalADG/assets/icon-collapseAll.png" sourcePath="HierachicalADG/assets/icon-collapseAll.png"/>
+    <resourceEntry destPath="ResizableCanvas/assets/img/ExpandPanel.png" sourcePath="ResizableCanvas/assets/img/ExpandPanel.png"/>
+    <resourceEntry destPath="VerticalTabNavigator/assets/img/ContractPanel.png" sourcePath="VerticalTabNavigator/assets/img/ContractPanel.png"/>
+    <resourceEntry destPath="Timeline/assets/mousescroll.png" sourcePath="Timeline/assets/mousescroll.png"/>
+    <resourceEntry destPath="OlapADG/assets/bulletCross.png" sourcePath="OlapADG/assets/bulletCross.png"/>
+    <resourceEntry destPath="VerticalTabNavigator/assets/img/EnrouleLeft.png" sourcePath="VerticalTabNavigator/assets/img/EnrouleLeft.png"/>
+    <resourceEntry destPath="OlapADG/assets/icon-olap.png" sourcePath="OlapADG/assets/icon-olap.png"/>
+    <resourceEntry destPath="VerticalTabNavigator/assets/img/resize_horizontal.gif" sourcePath="VerticalTabNavigator/assets/img/resize_horizontal.gif"/>
+    <resourceEntry destPath="ResizableCanvas/assets/img/ContractPanel.png" sourcePath="ResizableCanvas/assets/img/ContractPanel.png"/>
+    <resourceEntry destPath="ResizableCanvas/assets/img/h_resize.gif" sourcePath="ResizableCanvas/assets/img/h_resize.gif"/>
+    <resourceEntry destPath="OlapADG/assets/bulletCheck.png" sourcePath="OlapADG/assets/bulletCheck.png"/>
+    <resourceEntry destPath="HierachicalADG/assets/bulletCheck.png" sourcePath="HierachicalADG/assets/bulletCheck.png"/>
+    <resourceEntry destPath="Ribbon/asset/ico_up.png" sourcePath="Ribbon/asset/ico_up.png"/>
+    <resourceEntry destPath="VerticalTabNavigator/assets/img/ExpandPanel.png" sourcePath="VerticalTabNavigator/assets/img/ExpandPanel.png"/>
+    <resourceEntry destPath="OlapADG/assets/icon-chart.png" sourcePath="OlapADG/assets/icon-chart.png"/>
+    <resourceEntry destPath="HierachicalADG/assets/left_arrow.png" sourcePath="HierachicalADG/assets/left_arrow.png"/>
+    <resourceEntry destPath="ResizableCanvas/assets/img/EnrouleLeft.png" sourcePath="ResizableCanvas/assets/img/EnrouleLeft.png"/>
+    <resourceEntry destPath="VerticalTabNavigator/assets/img/h_resize.gif" sourcePath="VerticalTabNavigator/assets/img/h_resize.gif"/>
+    <resourceEntry destPath="Ribbon/asset/arrow_down.png" sourcePath="Ribbon/asset/arrow_down.png"/>
+    <resourceEntry destPath="HierachicalADG/assets/icon-column.png" sourcePath="HierachicalADG/assets/icon-column.png"/>
+    <resourceEntry destPath="HierachicalADG/assets/right_arrow.png" sourcePath="HierachicalADG/assets/right_arrow.png"/>
+    <resourceEntry destPath="ResizableCanvas/assets/img/resize_horizontal.gif" sourcePath="ResizableCanvas/assets/img/resize_horizontal.gif"/>
+    <resourceEntry destPath="Timeline/assets/close.png" sourcePath="Timeline/assets/close.png"/>
+    <resourceEntry destPath="Ribbon/asset/popup.png" sourcePath="Ribbon/asset/popup.png"/>
+    <resourceEntry destPath="HierachicalADG/assets/icon-expandAll.png" sourcePath="HierachicalADG/assets/icon-expandAll.png"/>
+    <resourceEntry destPath="HierachicalADG/assets/icon-reset-filter.png" sourcePath="HierachicalADG/assets/icon-reset-filter.png"/>
+    <resourceEntry destPath="Ribbon/asset/ico_down.png" sourcePath="Ribbon/asset/ico_down.png"/>
+  </includeResources>
+  <namespaceManifests/>
+</flexLibProperties>

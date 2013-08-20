@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wizard:WizardStep xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			xmlns:s="library://ns.adobe.com/flex/spark" 
+			xmlns:mx="library://ns.adobe.com/flex/mx"
+			xmlns="org.ns.genericComponents.wizardNew.*" 
+			stepName="Mapping"
+			stepDescription="Map the csv column" width="600" height="350" xmlns:wizard="org.ns.genericComponents.wizard.*">
+	
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.core.IVisualElement;
+			
+			import org.ns.CsvImportModule.model.VO.CsvMappingVO;
+			[Bindable]public var arrCSVField:ArrayCollection=new ArrayCollection();
+			
+			//object with: staFIELD,csvFIELD,format
+			public var arrFieldMapping:ArrayCollection=new ArrayCollection;
+			
+			private function process():void		
+			{
+				//remove mapping array
+				arrFieldMapping.removeAll();
+				var formIsValid:Boolean=true;
+				
+				//loop through the form and create the mapping array and check if all required field are completed (FormIsValid)
+				for (var i:int=0;i< FormMapping.numElements;i++)
+				{				
+					var csvMapping:CsvMappingVO=new CsvMappingVO;
+					var formItem:FormItem=FormMapping.getElementAt(i) as FormItem
+					
+					if (formItem.id=="sta_date"){
+						csvMapping.STA_FIELD=formItem.id
+						csvMapping.CSV_FIELD= (formItem.getElementAt(0) as DropDownList).selectedItem;
+						csvMapping.FORMAT= (formItem.getElementAt(1) as ComboBox).selectedItem;
+					}else {
+						csvMapping.STA_FIELD=	formItem.id
+						csvMapping.CSV_FIELD= (formItem.getElementAt(0) as DropDownList).selectedItem;
+						if (formItem.id=="sta_nbIndividual" || formItem.id=="sta_latitude" || formItem.id=="sta_longitude" || formItem.id=="sta_elevation" ){
+							csvMapping.FORMAT="numeric"
+						}else{
+							csvMapping.FORMAT="string"
+						}
+					}
+					
+					if (formItem.required==true){
+						if ((formItem.getElementAt(0) as DropDownList).selectedItem=="NONE"){
+							formIsValid=false;
+						}
+					}
+					
+					arrFieldMapping.addItem(csvMapping);
+				}
+				
+				//the stpe is valid if the form is valid (all reuqired field are completed
+				this.isValid=formIsValid;
+				
+			}
+			
+			override public function get stepDecision():* 
+			{
+				return arrFieldMapping;
+			}
+			
+			override public function get readableStepDecision():String 
+			{
+				var str:String="";
+				for each(var item:CsvMappingVO in arrFieldMapping){
+					str+= item.STA_FIELD + " ==> " + item.CSV_FIELD + " ("+ item.FORMAT +")\n"
+				}
+	
+				return str;
+
+			}
+		]]>
+	</fx:Script>
+	<s:Scroller id="scrllr"
+				focusEnabled="false"
+				hasFocusableChildren="true"
+				height="250"
+				horizontalCenter="0" verticalCenter="0">
+		<s:VGroup id="myGroup" width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">
+			<s:Form id="FormMapping">
+				<s:FormItem id="sta_latitude" label="Latitude" required="true">
+					<s:DropDownList dataProvider="{arrCSVField}" requireSelection="true" change="process()"/>
+				</s:FormItem>
+				<s:FormItem id="sta_longitude" label="Longitude" required="true">
+					<s:DropDownList dataProvider="{arrCSVField}" requireSelection="true" change="process()"/>
+				</s:FormItem>
+				<s:FormItem id="sta_date" label="Date" required="true">
+					<s:DropDownList id="cmbDate" dataProvider="{arrCSVField}" requireSelection="true" change="process()"/>
+					<s:ComboBox enabled="{cmbDate.selectedIndex!=0}" change="process()">
+						<s:dataProvider>
+							<s:ArrayList>
+								<fx:String>DD-MM-YYYY</fx:String>
+								<fx:String>MM-DD-YYYY</fx:String>
+								<fx:String>DD/MM/YYYY</fx:String>
+								<fx:String>MM/DD/YYYY</fx:String>
+								<fx:String>YYYYMMDD</fx:String>
+							</s:ArrayList>
+						</s:dataProvider>
+					</s:ComboBox>
+				</s:FormItem>
+				<s:FormItem id="sta_speciesName" label="species Name" required="true">
+					<s:DropDownList dataProvider="{arrCSVField}" requireSelection="true" change="process()"/>
+				</s:FormItem>
+				<s:FormItem id="sta_name" label="Name">
+					<s:DropDownList dataProvider="{arrCSVField}" requireSelection="true" change="process()"/>		
+				</s:FormItem>
+				<s:FormItem id="sta_elevation" label="Elevation">
+					<s:DropDownList dataProvider="{arrCSVField}" requireSelection="true" change="process()"/>
+				</s:FormItem>			
+				<s:FormItem id="sta_nbIndividual" label="nb Individual">
+					<s:DropDownList dataProvider="{arrCSVField}" requireSelection="true" change="process()"/>
+				</s:FormItem>				
+				<s:FormItem id="sta_comments" label="Comments" required="false">
+					<s:DropDownList dataProvider="{arrCSVField}" requireSelection="true" change="process()"/>
+				</s:FormItem>
+			</s:Form>
+		</s:VGroup>
+	</s:Scroller>
+</wizard:WizardStep>

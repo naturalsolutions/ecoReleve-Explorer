@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:GridItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					xmlns:s="library://ns.adobe.com/flex/spark"
+					xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Script>
+		<![CDATA[
+
+			override public function set data(value:Object):void 
+			{
+				super.data = value
+					
+				if (data!=null){
+					if (data["Name"]=="sta_speciesName"){
+						var sp:String=cleanSpeciesNames(data[column.dataField])
+						lbSp.label=sp
+						lbSp.visible=true
+						lblData.visible=false
+					}else{
+						lblData.text = data[column.dataField]
+						lblData.visible=true
+						lbSp.visible=false
+					}
+				}else{
+					lbSp.visible=false
+					lblData.visible=false
+				}
+			}
+			
+			private function cleanSpeciesNames(str:String):String
+			{
+				if (str.indexOf("(")>0){
+					return str.substring(0,str.indexOf("("));
+				} else {
+					return str;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+
+		<s:Label id="lblData" visible="false" height="100%" width="100%" 
+				 textAlign="left" verticalAlign="middle"
+				 paddingTop="2" paddingBottom="2" paddingLeft="2" paddingRight="2"/>
+		<mx:LinkButton id="lbSp" click="navigateToURL(new URLRequest('http://en.wikipedia.org/wiki/'+ lbSp.label.replace(' ','_')), 'quote')"
+					   visible="false" toolTip="go to wikipage" height="100%" width="100%" textAlign="left"
+					   paddingTop="2" paddingBottom="2" paddingLeft="2" paddingRight="2"/>
+		
+	
+</s:GridItemRenderer>
+

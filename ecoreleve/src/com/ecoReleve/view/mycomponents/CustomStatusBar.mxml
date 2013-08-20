@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox width="100%" xmlns:mx="http://www.adobe.com/2006/mxml" textAlign="left"
+    	 backgroundColor="white">
+    <mx:Script>
+        <![CDATA[
+			
+            import mx.events.FlexEvent;
+            
+            [Bindable]
+            [Embed('com/ecoReleve/ressources/images/rond_rouge.png')]
+            private var IcoDISCONNECTED:Class;
+            
+            [Bindable]
+            [Embed('com/ecoReleve/ressources/images/rond_vert.png')]
+            private var IcoCONNECTED:Class;
+            
+            [Bindable] private var boGeoSrv:Boolean = false;
+            [Bindable] private var boSrv:Boolean = false;
+
+            [Bindable] public function get status():String
+            {
+                return this.statusText.text;
+            }
+
+            public function set status(value:String):void
+            {
+                this.statusText.text = value;
+            }
+            
+            [Bindable] public function get GeoserverAvailable():Boolean
+            {
+                return this.boGeoSrv;
+            }
+
+            public function set GeoserverAvailable(value:Boolean):void
+            {
+                this.boGeoSrv = value;
+            }
+            
+            [Bindable] public function get ServerAvailable():Boolean
+            {
+                return this.boSrv;
+            }
+
+            public function set ServerAvailable(value:Boolean):void
+            {
+                this.boSrv = value;
+            }
+
+            
+        ]]>
+    </mx:Script>
+    <mx:HBox width="50%" horizontalAlign="left">
+	    <mx:Label id="statusText" text="" />
+	</mx:HBox>
+	<mx:HBox width="50%" horizontalAlign="right">
+		<mx:Image id="icoGeoserverStatus" source="{(boGeoSrv==true)?IcoCONNECTED:IcoDISCONNECTED}"
+				  toolTip="{(boGeoSrv==true)?'Geoserver is accessible':'Geoserver is unreachable'}"/>
+		<mx:Image id="icoServerStatus" source="{(boSrv==true)?IcoCONNECTED:IcoDISCONNECTED}" 
+				  toolTip="{(boSrv==true)?'NS server is accessible':'NS server is unreachable'}"/>
+	</mx:HBox>
+    
+</mx:HBox>

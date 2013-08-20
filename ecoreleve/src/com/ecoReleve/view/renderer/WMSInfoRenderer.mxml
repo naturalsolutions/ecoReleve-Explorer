@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<mx:VBox width="100%" xmlns:mx="http://www.adobe.com/2006/mxml" horizontalAlign="left">
+	<mx:Script>
+		<![CDATA[			
+			import mx.controls.Alert;
+			import mx.controls.Label;
+			import mx.controls.LinkButton;
+			import mx.controls.dataGridClasses.DataGridListData;
+			import mx.formatters.DateFormatter;
+			
+			[Bindable] private var _data:Object;
+			[Bindable] private var strParameter:String;
+			[Bindable] private var strValue:String;
+			
+            // Override the set method for the data property.
+            [Bindable]
+            override public function set data(value:Object):void 
+            {
+                _data = value;
+
+				strValue=_data.VALUE
+				strParameter=_data.PARAMETER + ":"
+				
+				//change state in function of data type
+				if (_data.PARAMETER=="LAYER"){
+					this.currentState="layer"
+				}else {
+					if (isAnHttpLink(_data.VALUE)){
+						this.currentState="link"
+					}else {
+						this.currentState="label"
+					}				
+				}
+				
+            }
+            
+            public function jumpTo(event:Event):void
+			{
+				var lnkButton:LinkButton=event.currentTarget as LinkButton
+				
+				var url:URLRequest=new URLRequest(lnkButton.label)
+			 	navigateToURL(url,"_self");
+			}
+            
+			//Test si le string est un lien http
+			private function isAnHttpLink(myLink:String):Boolean
+			{
+				if (myLink.indexOf("http://") == 0) {
+					return true
+				} else {
+					return false
+				}
+				
+			}
+			
+            //override public getter for data property
+            override public function get data():Object
+            {
+            	return _data;
+        	}
+		]]>
+	</mx:Script>	
+	<mx:states >
+		<mx:State name="layer">
+			<mx:AddChild>
+				<mx:HBox backgroundColor="#cccccc" horizontalScrollPolicy="off">					
+				 	<mx:Label text="{strValue}" fontWeight="bold" styleName="myPlainStyle"/>
+				</mx:HBox>
+			</mx:AddChild>			
+		</mx:State>
+		<mx:State name="label">
+			<mx:AddChild>
+				<mx:HBox horizontalScrollPolicy="off">
+					<mx:Label text="{strParameter}" fontWeight="bold" styleName="myPlainStyle"/>
+					<mx:Label text="{strValue}" textAlign="right" styleName="myPlainStyle"/>				
+				</mx:HBox>
+			</mx:AddChild>
+		</mx:State>
+		<mx:State name="link">
+			<mx:AddChild>
+				<mx:LinkButton label="{strValue}" click="jumpTo(event)"/>
+			</mx:AddChild>
+		</mx:State>
+	</mx:states>
+</mx:VBox>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config:Config
+	xmlns:config 	= "config"
+	xmlns:dev		= "dev"
+	xmlns:prod    = "prod"
+	>	
+	
+	<!-- DEPLOYMENT ENVIRONMENT SELECTOR [ REQUIRED! ]-->
+	<config:deploy>dev</config:deploy>
+	
+	<!-- DEV ENVIRONMENT-->
+	<dev:appName>pocket list generator [ Development ]</dev:appName>
+	<dev:serveurURL>https://natural01.gn-noc.com:8443</dev:serveurURL>
+	<dev:wsName>WSecoReleve_alpha_0.2.361</dev:wsName>		
+	<dev:updateURL>https://natural01.gn-noc.com:8443/pocketListGenerator/update.xml</dev:updateURL>
+
+	<!-- PRODUCTION ENVIRONMENT-->
+	<prod:appName>ecoReleve</prod:appName>
+	<prod:serveurURL>https://r21854.ovh.net:8443</prod:serveurURL>
+	<prod:wsName>WSecoReleve0.2</prod:wsName>
+	<prod:updateURL>https://r21854.ovh.net:8443/pocketListGenerator/update.xml</prod:updateURL>
+		
+</config:Config>

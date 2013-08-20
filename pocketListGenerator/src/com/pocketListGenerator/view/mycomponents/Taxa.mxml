@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:SearchComponents="Search.*"
+		 width="100%" height="100%">
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center"/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			public var mode:String= "scientific";	
+			
+			[Bindable] public var taxa:ArrayCollection;
+			[Bindable] public var thesaurus:ArrayCollection;
+			[Bindable] public var arrColToDisplay:Array=['TOPIC_FR','DEFINITION_FR'];
+			
+			//evenements
+			public static const CREATE_LIST:String = 'createlist';
+			public static const SELECT:String = 'select';
+			public static const UNSELECT:String = 'unselect';
+			public static const SEARCH_CREATED:String='searchcreated'
+			public static const EXPORT_CSV:String = 'exportcsv';
+				
+			private function changeMode(event:Event):void
+			{
+				if (mode=='vernacular'){
+					SearchTypeLink.label="switch to scientific mode"
+					arrColToDisplay=['DEFINITION_FR','TOPIC_FR']
+					mode='scientific'	
+				} else if (mode=='scientific'){
+					SearchTypeLink.label="switch to vernacular mode"
+					arrColToDisplay=['TOPIC_FR','DEFINITION_FR']
+					mode='vernacular'
+				}  
+			}
+			
+			private function sendEvent( action:String ):void
+			{
+				dispatchEvent(new Event( action, true ));
+			} 
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	
+	<s:HGroup>
+		<SearchComponents:searchPopUp id="myCriteria" width="300" PopUpSource="{thesaurus}" LogoSource="com/pocketListGenerator/ressources/images/loupe.png"
+									  NbRowCount="5" NbCaracSearch="3" defaultText="search taxon..." 
+									  onSearch="sendEvent(CREATE_LIST)" onSelect="sendEvent(SELECT)" 
+									  onUnSelect="sendEvent(UNSELECT)"
+									  ColToDisplay="{arrColToDisplay}" 
+									  creationComplete="sendEvent(SEARCH_CREATED)"/>
+		<s:Rect width="10"/>
+		<s:Button id="SearchTypeLink" label="switch to vernacular mode" click="changeMode(event)" styleName="linkStyle"/>			
+	</s:HGroup>
+	
+	<mx:DataGrid id="dg" width="100%" rowCount="10" dataProvider="{taxa}">
+		<mx:columns>
+			<mx:DataGridColumn dataField="ID" headerText="ID"/>
+			<mx:DataGridColumn dataField="DISPLAYNAME" headerText="DISPLAY NAME"/>
+			<mx:DataGridColumn dataField="STORAGENAME" headerText="STORAGE NAME"/>
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<s:Button label="create list" styleName="createListStyle" click="sendEvent(EXPORT_CSV)"/>
+</s:Group>

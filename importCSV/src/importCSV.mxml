@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" 
+						xmlns:mycomponents="com.importCSV.view.mycomponents.*"
+						layout="absolute" 
+						creationComplete="init()" >
+	<mx:Script>
+		<![CDATA[
+			import com.importCSV.view.ApplicationFacade;
+			
+			//Crée et initialise l’ApplicationFacade
+			private var facade:ApplicationFacade = ApplicationFacade.getInstance();
+			
+			private function init():void
+			{
+				this.maximize();
+				facade.startup(this);
+			}
+		]]>
+	</mx:Script>
+	
+	<mycomponents:Main id="main"/>
+	
+</mx:WindowedApplication>

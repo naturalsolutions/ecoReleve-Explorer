@@ -1,0 +1,47 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+
+/* APPLICATION */
+mx|DataGrid 
+{
+	contentBackgroundAlpha:.5; 
+	contentBackgroundColor: #000000;
+	borderColor:#000000;	
+}
+
+s|Button.linkStyle
+{
+	skinClass: ClassReference("com.pocketListGenerator.ressources.skins.linkButton");
+	color:black;
+}
+
+s|Button.createListStyle
+{
+	color:black;
+}
+
+s|Button.submitStyle
+{
+	color:black;
+}
+	
+/* LOGIN */
+s|SkinnableContainer#loginContainer
+{
+	skinClass: ClassReference("com.pocketListGenerator.ressources.skins.LoginContainer");
+}
+
+/* MENU */
+
+s|SkinnableContainer#menuContainer
+{
+	skinClass: ClassReference("com.pocketListGenerator.ressources.skins.MenuContainer");
+}
+global
+{
+	selection-color: #3A567C;
+}
+
+

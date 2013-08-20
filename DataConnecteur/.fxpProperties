@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fxpProperties abbreviated="false" authoringTool="Flex Builder" compiles="true" parentProject="f7a7b7fc-94a6-478f-be6a-d1cd91af8ef5" projectUUID="f7a7b7fc-94a6-478f-be6a-d1cd91af8ef5" sdkVersion="4.5.0" uuid="200c4d80-76f5-42d3-82ee-cfa991171163" version="4">
+  <projects>
+    <project filename="generic_components_Flex4.fxpl" position="1" projectUUID="fdff7b58-d34b-4cd9-a52f-deb0e4a22266" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+    <project filename="common.fxpl" position="3" projectUUID="daf81d8b-d021-470b-9fcc-8840560ce116" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+  </projects>
+  <src/>
+  <swc>
+    <linked location="D:/TAF/eclipse/FB4/workspace/DataConnecteur/libs" path="/libs" position="0" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+    <linked location="sdkPlaceHolder" path="sdkPlaceHolder" position="2" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+  </swc>
+  <misc/>
+  <theme/>
+</fxpProperties>

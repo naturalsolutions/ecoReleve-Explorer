@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fxpProperties abbreviated="false" authoringTool="Flex Builder" parentProject="71c52477-aeac-4e05-a695-7fa31cabd140" projectUUID="daf81d8b-d021-470b-9fcc-8840560ce116" sdkVersion="4.5.0" uuid="200c4d80-76f5-42d3-82ee-cfa991171163" version="4">
+  <projects/>
+  <src/>
+  <swc>
+    <linked location="sdkPlaceHolder" path="sdkPlaceHolder" position="0" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+    <linked location="D:/TAF/eclipse/FB4/workspace/common/libs" path="/libs" position="1" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+  </swc>
+  <misc/>
+  <theme/>
+</fxpProperties>

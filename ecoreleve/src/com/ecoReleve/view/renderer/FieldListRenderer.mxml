@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<mx:HBox width="100%" xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.dataGridClasses.DataGridListData;
+			
+			[Bindable] private var _data:Object;
+			[Bindable] private var strLabel:String;
+										              
+            // Override the set method for the data property.
+            [Bindable]
+            override public function set data(value:Object):void 
+            {
+                _data = value;
+                strLabel=_data.toString()
+                
+            }
+            
+            //override public getter for data property
+            override public function get data():Object
+            {
+            	return _data;
+        	}
+		]]>
+	</mx:Script>
+		<mx:Label text="{strLabel}"/>
+</mx:HBox>

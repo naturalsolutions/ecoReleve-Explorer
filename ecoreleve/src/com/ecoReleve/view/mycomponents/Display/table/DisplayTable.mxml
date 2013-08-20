@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:mx="library://ns.adobe.com/flex/mx" 
+					   xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+			 		  width="100%" height="100%" styleName="PanelCanvas" >
+    
+    <fx:Script>
+	    <![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			import spark.components.gridClasses.CellPosition;
+			
+	    	//noms d’événements
+            public static const SELECT:String= 'select';
+            
+            [Bindable] public var stations:ArrayCollection;
+
+			[Bindable] public var myCol:ArrayCollection;
+			
+            // Envoit l'évenement 
+            private function sendEvent( eventName:String ):void
+            {
+                dispatchEvent( new Event( eventName, true ) );
+            }
+
+
+			protected function my_keyUpHandler(event:KeyboardEvent):void
+			{
+				if (event.ctrlKey && event.keyCode == Keyboard.C)
+				{
+					// Separator used between Strings sent to clipboard
+					// to separate selected cells.
+					const separator:String = ";";
+					// The String sent to the clipboard
+					var dataString:String = "";
+					
+					// Loop over the selectedCells property.
+					// Data in selectedCells is ordered so that 
+					// the last selected cell is at the head of the list.
+					const selectedCells:Vector.<CellPosition> = event.currentTarget.selectedCells;
+					const n:int = selectedCells.length;
+					for (var i:int = 0; i < n; i++)
+					{
+						// Get the cell position.
+						var cell:CellPosition = selectedCells[i];
+						
+						// Get the row for the selected cell.
+						var data:Object = event.currentTarget.grid.dataProvider[cell.rowIndex];
+						
+						// Get the name of the field for the selected cell.
+						var dataField:String = event.currentTarget.grid.columns.getItemAt(cell.columnIndex).dataField;
+						
+						// Get the cell data using the field name.
+						dataString = data[dataField] + separator + dataString;
+					}
+					
+					// Remove trailing separator.
+					dataString = dataString.substr(0, dataString.length - separator.length);
+					
+					// Write dataString to the clipboard.
+					System.setClipboard(dataString);
+				}
+			}
+
+	    ]]>
+    </fx:Script>
+
+	 <s:layout>
+		 <s:VerticalLayout gap="10" horizontalAlign="center" paddingBottom="50" paddingLeft="10" paddingRight="20" paddingTop="10"/>
+	 </s:layout>
+	 
+	<s:DataGrid id="my" dataProvider="{stations}" selectionMode="multipleCells" alternatingRowColors="[0xFFFFFF,0xeaeaea]"
+				keyUp="my_keyUpHandler(event);"
+				width="100%" height="100%"/>
+	<s:Label text="select cells (shift for multiple, ctl+A for all) and use ctl+C to copy to clipboard"/>
+</s:SkinnableContainer>

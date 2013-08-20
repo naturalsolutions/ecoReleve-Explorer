@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fxpProperties abbreviated="false" authoringTool="Flex Builder" compiles="true" parentProject="39caa246-6412-4537-89c9-74e6523c000e" projectUUID="39caa246-6412-4537-89c9-74e6523c000e" sdkVersion="4.5.0" uuid="200c4d80-76f5-42d3-82ee-cfa991171163" version="4">
+  <projects>
+    <project filename="common.fxpl" position="2" projectUUID="daf81d8b-d021-470b-9fcc-8840560ce116" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+    <project filename="generic_components_Flex4.fxpl" position="3" projectUUID="fdff7b58-d34b-4cd9-a52f-deb0e4a22266" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+  </projects>
+  <src/>
+  <swc>
+    <linked location="sdkPlaceHolder" path="sdkPlaceHolder" position="0" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+    <linked location="D:/TAF/eclipse/FB4/workspace/ecoReleve/libs" path="/libs" position="1" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+    <linked location="${FLEXUNIT_LIB_LOCATION}/version4libs/Common/" path="${FLEXUNIT_LIB_LOCATION}/version4libs/Common/" position="4" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+    <linked location="${FLEXUNIT_LIB_LOCATION}/version4libs/FlexProject/" path="${FLEXUNIT_LIB_LOCATION}/version4libs/FlexProject/" position="5" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+    <linked location="${FLEXUNIT_LOCALE_LOCATION}/version4locale/" path="${FLEXUNIT_LOCALE_LOCATION}/version4locale/" position="6" uuid="200c4d80-76f5-42d3-82ee-cfa991171163"/>
+  </swc>
+  <misc/>
+  <theme/>
+</fxpProperties>

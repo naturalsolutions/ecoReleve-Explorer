@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:ns="org.ns.genericComponents.ribbon.*"
+		 width="100%" height="100%"	 verticalAlign="middle" horizontalAlign="center" >
+	<fx:Script>
+		<![CDATA[
+
+			import com.ecoReleve.view.mycomponents.ribbon.Ribbon;
+			
+			[Bindable]
+            [Embed('com/ecoReleve/ressources/images/baseMap_world_map.png')]
+            private var IcoWorldMap:Class;
+            
+            [Bindable]
+            [Embed('com/ecoReleve/ressources/images/baseMap_world_topo.png')]
+            private var IcoWorldTopo:Class;
+            
+            [Bindable]
+            [Embed('com/ecoReleve/ressources/images/baseMap_world_ortho.png')]
+            private var IcoWorldOrtho:Class;
+
+			[Bindable]
+			public var boEnabled:Boolean=true;
+
+			public static const SHOW_WORLD_MAP:String = 'showworldmap';
+			public static const SHOW_WORLD_TOPO:String = 'showworldtopo';
+			public static const SHOW_WORLD_ORTHO:String = 'showworld';
+						
+			private function sendEvent(action:String):void
+            {
+               dispatchEvent(new Event(action,true));
+            } 
+
+		]]>
+	</fx:Script>
+
+
+	<ns:RibbonButton id="btnMapnik" enabled="{boEnabled}" icon="{IcoWorldMap}" iconPlacement="top" label="Map"
+					 click="sendEvent(SHOW_WORLD_MAP)" AncestorToolTip="{Ribbon}"
+					 toolTip="Show Mapnik as baselayer" toolTipTitle="Map"/>
+	<ns:RibbonButton id="btnTopo" enabled="{boEnabled}" icon="{IcoWorldTopo}" iconPlacement="top" label="Topo" 
+					 click="sendEvent(SHOW_WORLD_TOPO)" AncestorToolTip="{Ribbon}"
+					 toolTip="Show Topo as baselayer" toolTipTitle="Topo"/>
+	<ns:RibbonButton id="btnNasa" enabled="{boEnabled}" icon="{IcoWorldOrtho}" iconPlacement="top" label="Satellite"
+					 click="sendEvent(SHOW_WORLD_ORTHO)" AncestorToolTip="{Ribbon}"
+					 toolTip="Show Satellite as baselayer" toolTipTitle="Satellite"/>
+
+</s:HGroup>

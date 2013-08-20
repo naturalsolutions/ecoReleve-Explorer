@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wizard xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns="org.ns.genericComponents.wizard.*"  
+		title="odata import wizard" xmlns:Steps="steps.*" logo="{img}"
+		showSummaryStep="true" showProgressBar="true" 
+		xmlns:steps="org.ns.OdataImportModule.view.components.steps.*">
+	
+	<fx:Script>
+		<![CDATA[        
+			[Bindable]
+			[Embed('org\\ns\\OdataImportModule\\ressources\\image\\odata.png')]
+			private var img:Class;
+			
+		]]>
+	</fx:Script>
+	
+	<steps>
+		<steps:Step1 id="step1" dataField="ENTITY"/>
+		<steps:Step2 id="step2" dataField="ENTITY_LINKED"/>
+		<steps:Step3 id="step3" dataField="ENTITY_QUERY"/>
+	</steps>
+</Wizard>

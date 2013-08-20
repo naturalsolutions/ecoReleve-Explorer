@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<mx:HBox width="100%" xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			import com.ecoReleve.model.VO.DatasourceVO;
+			import mx.controls.dataGridClasses.DataGridListData;
+			
+			[Bindable] private var _data:DatasourceVO;
+			[Bindable] private var strName:String;
+			[Bindable] private var strDescription:String;
+			
+			[Bindable]
+            [Embed('com/ecoReleve/ressources/images/ns.png')]
+            private var IcoNS:Class;
+            
+            [Bindable]
+            [Embed('com/ecoReleve/ressources/images/endpoint.png')]
+            private var IcoEndPoint:Class;
+										              
+            // Override the set method for the data property.
+            [Bindable]
+            override public function set data(value:Object):void 
+            {
+                _data = value as DatasourceVO;
+                strName=_data.NAME
+                strDescription=_data.DESCRIPTION
+                switch (_data.TYPE)
+				{
+					case "ns":    
+						type.source=IcoNS
+						break;
+					case "endpoint":   
+						type.source=IcoEndPoint
+						break;
+				}
+                
+            }
+            
+            //override public getter for data property
+            override public function get data():Object
+            {
+            	return _data;
+        	}
+		]]>
+	</mx:Script>
+		<mx:HBox width="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+		<mx:Image id="type" name="icon" horizontalAlign="right" buttonMode="true" useHandCursor="true"/>
+		<mx:VBox width="100%" verticalScrollPolicy="off" horizontalScrollPolicy="off">
+			<mx:Label text="{strName}" fontWeight="bold" fontSize="18"/>
+			<mx:Text id="description" fontSize="12" htmlText="{strDescription}" width="100%" height="100%" selectable="false" />
+		</mx:VBox>	
+	</mx:HBox>
+</mx:HBox>

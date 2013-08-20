@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+		
+		<fx:Script>
+			<![CDATA[
+				import mx.collections.ArrayCollection;
+				
+				
+				
+			]]>
+		</fx:Script>
+		
+		<fx:Declarations>			
+		</fx:Declarations>
+		
+	<s:layout>  
+		<s:HorizontalLayout gap="0" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" 
+							horizontalAlign="center" verticalAlign="middle"/>  
+	</s:layout>
+	
+	<mx:PieChart id="pieChart" showDataTips="true" width="300">
+		<mx:series>
+			<mx:PieSeries field="count" nameField="sta_source" labelPosition="callout"/>
+		</mx:series>
+	</mx:PieChart>
+	
+	<mx:Legend dataProvider="{pieChart}"/>	
+	
+	
+</s:Group>

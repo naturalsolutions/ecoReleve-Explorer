@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wizard:WizardStep xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			xmlns:s="library://ns.adobe.com/flex/spark" 
+			xmlns:mx="library://ns.adobe.com/flex/mx"
+			xmlns="org.ns.genericComponents.wizardNew.*" 
+			stepName="Settings"
+			stepDescription="Set delimiters and row containing columns" width="600" height="350" xmlns:wizard="org.ns.genericComponents.wizard.*">
+	
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.collections.ArrayList;
+			
+			[Bindable]public var arrCsvLines:ArrayCollection=new ArrayCollection();
+			
+			[Bindable]public var nbRowHeader:int=0;
+			
+			private function sendEvent( action:String ):void
+			{
+				dispatchEvent(new Event( action, true ));
+			} 
+			
+			override public function get stepDecision():* 
+			{
+				return [nbRowHeader,cbSeparator.selectedItem];
+			}
+			
+			override public function get readableStepDecision():String 
+			{
+				var str:String="Header row: " + String(nbRowHeader) + " | Separator: " + String(cbSeparator.selectedItem)
+				return str;
+			}
+		]]>
+	</fx:Script>
+
+	<s:VGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle">		
+		<s:HGroup>
+			<s:Label text="choose separator" textAlign="left"/>
+			<s:DropDownList id="cbSeparator" selectedIndex="0" width="60">
+				<s:dataProvider>
+					<s:ArrayList>
+						<fx:String>;</fx:String>
+						<fx:String>,</fx:String>
+						<fx:String>tab</fx:String>
+					</s:ArrayList>
+				</s:dataProvider>
+			</s:DropDownList>
+		</s:HGroup>
+		<s:HGroup>
+			<s:Label text="column name are in row " textAlign="left"/>
+			<s:NumericStepper id="stepHeaderRow" value="{nbRowHeader}" change="nbRowHeader=stepHeaderRow.value" minimum="0" maximum="{arrCsvLines.length}" stepSize="1"/>
+		</s:HGroup>
+		<s:DataGrid id="dg" width="400" height="250" sortableColumns="false" resizableColumns="false"
+					dataProvider="{arrCsvLines}" selectedIndex="{nbRowHeader -1}" selectionChange="nbRowHeader=dg.selectedIndex+1">
+			<s:columns>
+				<s:ArrayList>				
+					<s:GridColumn width="40" headerText="row" dataField="rowNb"/>
+					<s:GridColumn headerText="line" dataField="line" />
+				</s:ArrayList>
+			</s:columns>
+		</s:DataGrid>
+	</s:VGroup>
+</wizard:WizardStep>

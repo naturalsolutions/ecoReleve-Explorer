@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true">
+	
+	<s:states>		
+		<s:State name="normal" />	
+		<s:State name="hovered" />		
+		<s:State name="selected" />		
+		<s:State name="normalAndShowsCaret" />	
+		<s:State name="hoveredAndShowsCaret" />	
+		<s:State name="selectedAndShowsCaret" />	
+	</s:states>
+	
+	<s:VGroup verticalAlign="middle" horizontalAlign="left" gap="8" paddingBottom="2" paddingLeft="2" paddingRight="2" paddingTop="2">
+		<s:HGroup verticalAlign="middle" horizontalAlign="left" gap="8" paddingBottom="2" paddingLeft="2" paddingRight="2" paddingTop="2">
+			<s:Image source="{'com/ecoReleve/ressources/images/public.png'}"/>
+			<s:Label text="{data.title}" fontWeight="bold"/>
+		</s:HGroup>
+		<s:Label text="{data.abstract}" width="210" textAlign="center" includeIn="hovered,hoveredAndShowsCaret,selected,selectedAndShowsCaret"/>
+	</s:VGroup>
+	
+</s:ItemRenderer>

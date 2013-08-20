@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:ns="org.ns.genericComponents.ribbon.*"
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark"
+				   xmlns:MyComponents="com.ecoReleve.view.mycomponents.*"
+				   xmlns:MDI="org.ns.genericComponents.MDI.components.*"
+				   xmlns:MDIDockable="org.ns.genericComponents.MDIDockable.components.*"
+				   xmlns:googleImage="org.ns.genericComponents.GoogleImage"
+				   xmlns:ribbon="com.ecoReleve.view.mycomponents.ribbon.*" 
+				   xmlns:GoogleImage="org.ns.genericComponents.GoogleImage.*" 
+				   xmlns:Display="com.ecoReleve.view.mycomponents.Display.*" 
+				   xmlns:Filters="com.ecoReleve.view.mycomponents.Filters.*" 
+				   xmlns:chart="com.ecoReleve.view.mycomponents.Display.chart.*" 
+				   xmlns:map="com.ecoReleve.view.mycomponents.Display.map.*" 
+				   xmlns:table="com.ecoReleve.view.mycomponents.Display.table.*" 
+				   xmlns:selection="com.ecoReleve.view.mycomponents.Display.map.selection.*"
+				   width="100%" height="100%" >
+	
+	<fx:Script>
+		<![CDATA[
+			
+			public static const CHANGE_DISPLAY:String = 'changeDisplay';
+			
+			[Bindable] public var gap:Number=10;
+			
+			[Bindable]
+			[Embed('com\\ecoReleve\\ressources\\images\\info.png')]
+			private var imgInfo:Class;
+			
+			[Bindable]
+			[Embed('com\\ecoReleve\\ressources\\images\\Legend.png')]
+			private var imgLegend:Class;
+			
+			[Bindable]
+			[Embed('com\\ecoReleve\\ressources\\images\\multimedia.png')]
+			private var imgMedia:Class;
+			
+			[Bindable]
+			[Embed('com\\ecoReleve\\ressources\\images\\redlist.gif')]
+			private var imgRedlist:Class;
+			
+			private function sendEvent(action:String):void
+			{
+				dispatchEvent(new Event(action,true));
+			} 
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:Fade id="fadeOut" alphaFrom="1" alphaTo="0" duration="1000"/>
+	</fx:Declarations>
+	
+	
+	<s:VGroup gap="0" width="100%" height="100%">
+		<!-- RIBBON -->
+		<ribbon:Ribbon id="MyRibbon" width="100%"/>
+		
+		<s:HGroup width="100%" height="100%">
+			<!-- FACET-->
+			<Filters:FilterSpecies id="MyFilterPanel" width="200" height="100%"/>
+			
+			<!--MDI Canvas -->
+			<MDI:MDICanvas  id="cnvMDI" width="100%" height="100%">
+				<!-- TABLE WINDOW -->
+				<MDI:MDIWindow id="winTable" title="table">
+					<table:DisplayTable id="MyPanelStationList" alpha="1.0" width="100%" height="100%"/>
+				</MDI:MDIWindow>
+				<!-- GRAPH WINDOW -->
+				<MDI:MDIWindow id="winChart" title="chart">
+					<chart:DisplayChart id="MyTimeLine" width="100%" height="100%" alpha="1.0"/>
+				</MDI:MDIWindow>
+				<!-- MAP WINDOW -->
+				<MDI:MDIWindow id="winMap" title="map">
+					<map:DisplayMap id="MyStaMap" width="100%" height="100%"/>
+					
+					<!--MDI Dockable Canvas -->
+					<MDIDockable:MDIDockableCanvas id="cnvMDIDockable" width="100%" height="100%">
+						<!-- MDI Legend Window -->
+						<MDIDockable:MDIDockableWindow title="legend" logo="{imgLegend}" minWidth="300" minHeight="300" 
+													   maxWidth="{MyStaMap.width - MyPanelLegend.x}" maxHeight="{MyStaMap.height - MyPanelLegend.y}">
+							<map:Legend id="MyPanelLegend" width="100%" height="100%"/>
+						</MDIDockable:MDIDockableWindow>
+					</MDIDockable:MDIDockableCanvas>
+					
+					<!-- SELECTION -->
+					<selection:Selection id="selection" x="{winMap.x}" y="{winMap.height-selection.height}" width="100%" height="100%"/>
+				</MDI:MDIWindow>				
+			</MDI:MDICanvas>
+		</s:HGroup>
+	</s:VGroup>	
+	
+	<!-- TABBAR DISPLAY-->
+	<s:TabBar id="tabBar" x="{this.width - tabBar.width-10}" y="{this.height - tabBar.height}" change="sendEvent(CHANGE_DISPLAY)">
+		<mx:ArrayCollection>
+			<fx:String>map</fx:String>
+			<fx:String>table</fx:String>
+			<fx:String>chart</fx:String>
+		</mx:ArrayCollection>
+	</s:TabBar>
+	
+	<!-- MSG PANEL 
+	<MyComponents:Message id="MyMsg" width="100%" height="100%"/>-->
+	
+</s:BorderContainer>

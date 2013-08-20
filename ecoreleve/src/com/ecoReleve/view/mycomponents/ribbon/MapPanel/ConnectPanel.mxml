@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:ns="org.ns.genericComponents.ribbon.*"
+	 	 width="100%" height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="off"
+	 	 horizontalAlign="center">
+	 	 
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+
+			[Bindable]
+            [Embed('com/ecoReleve/ressources/images/data_new.png')]
+            private var IcoNewDts:Class;
+
+			[Bindable]
+            [Embed('com/ecoReleve/ressources/images/data_manager.png')]
+            private var IcoDtsMng:Class;
+
+			public static const CONNECT_CLICK:String = 'connectfilter';
+			public static const CONNECT_WS_CLICK:String = 'connectwsfilter';
+			public static const FILTER_CLICK:String = 'filter';
+			
+			[Bindable] public var filterArrCol:ArrayCollection=new ArrayCollection;
+			[Bindable] public var DatasourceArrCol:ArrayCollection=new ArrayCollection;
+			[Bindable] public var boShowMsg:Boolean=false;	
+			[Bindable] public var boEnabled:Boolean=false;
+			[Bindable] public var boStaEnabled:Boolean=false;
+			
+			 private function sendEvent(action:String):void
+             {
+                dispatchEvent(new Event(action,true));
+             }
+
+		]]>
+	</fx:Script>
+
+	<ns:RibbonButton id="btnFiltre" icon="{IcoDtsMng}" enabled="{boStaEnabled}" iconPlacement="top" label="manage"
+						 click="sendEvent(FILTER_CLICK)" 
+						 toolTip="manage dataset" toolTipTitle="Manager"/>
+			
+</s:HGroup>

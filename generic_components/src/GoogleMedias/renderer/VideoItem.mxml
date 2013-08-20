@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+		   width="150" height="120" horizontalScrollPolicy="off" verticalScrollPolicy="off" 
+		   horizontalAlign="center" verticalAlign="middle"
+		   click="showVideo()">
+	
+	<mx:Script>
+		<![CDATA[
+			import GoogleMedias.controls.MovieClipContainer;
+			
+			import flash.events.*;
+			import flash.net.LocalConnection;
+			import flash.system.System;
+			
+			import mx.containers.TitleWindow;
+			import mx.containers.VBox;
+			import mx.controls.HorizontalList;
+			import mx.core.UIComponent;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			
+			private var win:TitleWindow;
+			private var loader:Loader;
+			private var currentClip:MovieClip;
+			private var mc:MovieClipContainer;
+			
+			private function showVideo():void
+			{
+				win=new TitleWindow();
+				win.showCloseButton=true;
+				win.title="click on the video to see it in a browser";
+				win.addEventListener(CloseEvent.CLOSE,removePopup,false,0,true);				
+				win.width=510;
+				win.height=430;
+				
+				win.setStyle("addedEffect", win_addedEffect);
+				win.setStyle("removedEffect", win_removedEffect);
+				
+				mc=new MovieClipContainer();
+				win.addChild(mc);
+					
+				loader=new Loader;
+			
+				loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, loadFailed,false,0,true);
+				loader.contentLoaderInfo.addEventListener(Event.COMPLETE, loadCompleted,false,0,true);
+				mc.addChild(loader);
+				loader.load(new URLRequest(data.playUrl));
+				pbr.visible=true;
+			}
+			
+			private function loadCompleted(event:Event):void
+			{				
+				//get parent application for the popup
+				var FirstDO:DisplayObject=this.parentApplication as DisplayObject;
+				
+				//get Horizontalist for unselect item
+				(this.parent.parent as HorizontalList).selectedItem=-1;
+				
+				PopUpManager.addPopUp(win,FirstDO,true);
+				PopUpManager.centerPopUp(win);
+				
+				pbr.visible=false;
+				loader.visible=true
+			}
+			
+			private function loadFailed(event:IOErrorEvent):void 
+			{
+				killLoader()
+				pbr.visible=false;
+			}
+			
+			private function removePopup(evt:CloseEvent):void 
+			{
+				killLoader();
+				evt.stopPropagation();
+				PopUpManager.removePopUp(win);
+				win=null;
+				collectGarbage()
+			}
+			
+			private function killLoader():void 
+			{
+				//remove loader from movieclip
+				mc.removeChild(loader);
+				win.removeChild(mc);
+					
+				//unreference loader for GC				
+				SoundMixer.stopAll();
+				loader.unload();
+				loader=null;
+				
+				//unreference movieclip for GC
+				mc=null;
+			}
+			
+			private function collectGarbage():void {
+				trace("memory before:" + (System.totalMemory/1024) + " kiB");
+				try {
+					new LocalConnection().connect("foo");
+					new LocalConnection().connect("foo");
+				} catch (e:*) {}
+				trace("memory after: " + (System.totalMemory/1024) + " kiB");
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Parallel id="win_addedEffect">
+		<mx:Fade />
+		<mx:Zoom />
+	</mx:Parallel>
+	
+	<mx:Parallel id="win_removedEffect">
+		<mx:Zoom />
+		<mx:Fade />
+	</mx:Parallel>
+	
+	<mx:Image x="10" y="10" source="{data.thumbUrl}" maxHeight="100" maxWidth="145"/>
+	<mx:ProgressBar id="pbr" indeterminate="true" label="" width="50%" visible="false" showEffect="Fade" hideEffect="Fade"/>
+	
+</mx:VBox>

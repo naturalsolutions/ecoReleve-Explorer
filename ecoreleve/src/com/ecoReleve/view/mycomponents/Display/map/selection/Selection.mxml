@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group  xmlns:mx="library://ns.adobe.com/flex/mx"
+		  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark"
+		  xmlns:MyComponents="com.ecoReleve.view.mycomponents.*"
+	      width="100%" height="100%" xmlns:map="com.ecoReleve.view.mycomponents.Display.map.*" xmlns:selection="com.ecoReleve.view.mycomponents.Display.map.selection.*">
+		
+		<fx:Script>
+			<![CDATA[
+
+			]]>
+		</fx:Script>
+
+	<s:layout>
+		<s:BasicLayout />
+	</s:layout>
+
+
+		<selection:QuickInfo id="MyPanelInfos" width="300" height="250" 
+							 y="{this.height - MyPanelInfos.height -20}" />
+		<selection:RedList id="MyPanelRedList" 	   
+						   x="{this.width - MyPanelRedList.width - 40}" 
+						   y="{this.height-MyPanelRedList.height - MyPanelMedia.height -40}"/>
+		<selection:Media id="MyPanelMedia" 
+						 x="{this.width-MyPanelMedia.width -80}"
+						 y="{this.height-MyPanelMedia.height -40}"/>
+
+		<selection:SelectionNavigator id="MySelectionNavigator" 
+									  x="{this.width/2 - MySelectionNavigator.width/2}" 
+									  y="{this.height - MySelectionNavigator.height -10}"/>
+
+</s:Group>

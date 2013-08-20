@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="20" horizontalScrollPolicy="off" verticalScrollPolicy="off" paddingRight="17">
+
+	<mx:Metadata>
+        [Event(name="classChange",type="com.ecoReleve.view.events.ClassEvent")]
+    </mx:Metadata>
+
+	<mx:Script>
+		<![CDATA[
+			import mx.formatters.DateFormatter;
+			import com.ecoReleve.view.events.ClassEvent;
+			[Bindable] private var _data:Object;
+			
+			[Bindable] private var strOccurenceName:String="";
+										              
+            // Override the set method for the data property.
+            [Bindable]
+            override public function set data(value:Object):void 
+            {
+                _data = value;
+                if (_data!=null){
+                	strOccurenceName=_data.VALUE.toString()
+                	myColorPickerFill.visible=true
+                	myColorPickerFill.selectedColor=_data.COLOR
+                } else {
+                	myColorPickerFill.visible=false
+                }                
+            }
+                  
+            //override public getter for data property
+            override public function get data():Object
+            {
+            	return _data;
+        	}
+        	
+        	private function changeColorHandler(event:Event):void
+        	{
+				_data.COLOR=myColorPickerFill.selectedColor;
+        		dispatchEvent(new ClassEvent("classChange", true, true,_data));
+        	}
+        	
+		]]>
+	</mx:Script>
+	<mx:HBox width="100%" height="100%" textAlign="right">
+		<mx:Label text="{strOccurenceName}" width="160" fontWeight="bold" fontSize="10" textAlign="left"/>
+		<mx:ColorPicker id="myColorPickerFill" selectedColor="0xFF9900" change="changeColorHandler(event)" height="20" width="20" textAlign="right"/>
+	</mx:HBox>
+</mx:VBox>

@@ -16,7 +16,7 @@ package org.ns.dataconnecteur.shell.controller
     	{    		         	
 			var pxyDatabase:DatabaseProxy=retrieveProxy(DatabaseProxy.NAME) as DatabaseProxy;
 			var pxyQuery:QueryProxy=retrieveProxy(QueryProxy.NAME) as QueryProxy;
-			
+			trace("query get: "+note.getBody());
 			
 			pxyQuery.addQuery(pxyDatabase.getSqlConnexion,note.getBody() as QueryVO);
 			

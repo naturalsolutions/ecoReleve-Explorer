@@ -11,10 +11,6 @@
         </excludedEntries>
       </libraryPathEntry>
       <libraryPathEntry kind="3" linkType="1" path="/common/bin/common.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="/KapITFXPatches_4_0/bin/KapITFXPatches_4_0.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="/PureMVCConsole/bin/PureMVCConsole.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="/PureMVCKapit/bin/PureMVCKapit.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="/KapInspect_proper/bin/KapInspect_proper.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -28,7 +24,7 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget buildTargetName="default">
-      <airSettings airCertificatePath="" airTimestamp="true" version="1">
+      <airSettings airCertificatePath="C:/Users/tahamada/Documents/Ecoreleve explorer recup/FB4/workspace/DataConnecteur/certi.p12" airTimestamp="false" version="1">
         <airExcludes/>
       </airSettings>
       <actionScriptSettings version="1"/>

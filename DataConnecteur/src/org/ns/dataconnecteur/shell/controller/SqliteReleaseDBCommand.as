@@ -20,7 +20,6 @@ package org.ns.dataconnecteur.shell.controller
 			var pxyRelease:ReleaseProxy=retrieveProxy(ReleaseProxy.NAME) as ReleaseProxy;
 
 			pxyRelease.getReleaseNumber(pxyDatabase.getSqlConnexion);
-
 		}
     }
 

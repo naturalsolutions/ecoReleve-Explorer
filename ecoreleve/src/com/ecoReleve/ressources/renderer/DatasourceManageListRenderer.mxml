@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" 
+				autoDrawBackground="true">
+	
+	<fx:Script>
+		<![CDATA[
+			
+			import org.ns.common.model.VO.RemoteDatasourceVO;
+			
+			import spark.components.supportClasses.ListBase;
+			
+			[Bindable]
+			[Embed('org/ns/dataconnecteur/shell/ressources/image/delete.png')]
+			private var IcoDelete:Class;
+			
+			private function onNameChange(event:Event):void 
+			{	
+				var oldValue:String = nameLbl.text;
+				
+				if (oldValue != nameInput.text)
+				{
+					data.rd_name = nameInput.text;
+					nameLbl.text = nameInput.text;
+					
+					
+					//dispatch the data update event
+					var list:ListBase = this.owner as ListBase;
+					list.dataProvider.itemUpdated(data, 'rd_name', oldValue, nameInput.text); 
+				}				
+			}
+			
+			private function onUrlChange(event:Event):void 
+			{	
+				var oldValue:String = urlLbl.text;
+				
+				if (oldValue != urlInput.text)
+				{
+					data.rd_url = urlInput.text;
+					urlLbl.text = urlInput.text;
+					
+					
+					//dispatch the data update event
+					var list:ListBase = this.owner as ListBase;
+					list.dataProvider.itemUpdated(data, 'rd_url', oldValue, urlInput.text); 
+				}				
+			}
+			
+			private function onLoginChange(event:Event):void 
+			{	
+				var oldValue:String = loginLbl.text;
+				
+				if (oldValue != loginInput.text)
+				{
+					data.rd_login = loginInput.text;
+					loginLbl.text = loginInput.text;
+					
+					
+					//dispatch the data update event
+					var list:ListBase = this.owner as ListBase;
+					list.dataProvider.itemUpdated(data, 'rd_login', oldValue, loginInput.text); 
+				}				 			
+			}
+			
+			private function onPwdChange(event:Event):void 
+			{	
+				var oldValue:String = pwdLbl.text;
+				
+				if (oldValue != pwdInput.text)
+				{
+					data.rd_password = pwdInput.text;
+					pwdLbl.text = pwdInput.text;
+					
+					
+					//dispatch the data update event
+					var list:ListBase = this.owner as ListBase;
+					list.dataProvider.itemUpdated(data, 'rd_password', oldValue, pwdInput.text); 
+				}	 			
+			}
+			
+			private function click(event:MouseEvent):void 
+			{
+				var list:ListBase = this.owner as ListBase;
+				list.dataProvider.removeItemAt(list.dataProvider.getItemIndex(data));
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<s:states>		
+		<s:State name="normal" />	
+		<s:State name="hovered" />	
+		<s:State name="selected" />	
+		<s:State name="normalAndShowsCaret" />	
+		<s:State name="hoveredAndShowsCaret" />	
+		<s:State name="selectedAndShowsCaret" />		
+	</s:states>
+	
+	<s:layout>
+		<s:HorizontalLayout verticalAlign="middle"/>
+	</s:layout>
+
+	<s:VGroup width="100%" height="100%" horizontalAlign="center" paddingBottom="2" paddingLeft="2" paddingRight="2" paddingTop="2">
+			<s:Label id="nameLbl" text="{data.rd_name}" width="100%" height="100%" fontWeight="bold" includeIn="normal,normalAndShowsCaret,hovered,hoveredAndShowsCaret"/>
+			<s:TextInput id="nameInput" text="{data.rd_name}" width="100" focusOut="onNameChange(event)" fontWeight="bold" includeIn="selected,selectedAndShowsCaret"/>
+		<s:HGroup width="100%" >
+			<s:Label text="url: " includeIn="selected,selectedAndShowsCaret,hovered,hoveredAndShowsCaret"/>
+			<s:Label id="urlLbl" text="{data.rd_url}" width="200" includeIn="hovered,hoveredAndShowsCaret"/>
+			<s:TextInput id="urlInput" text="{data.rd_url}" width="200" focusOut="onUrlChange(event)" includeIn="selected,selectedAndShowsCaret"/>
+		</s:HGroup>
+		<s:HGroup width="100%" visible="{data.rd_authRequired}">
+			<s:Label text="login: " includeIn="selected,selectedAndShowsCaret,hovered,hoveredAndShowsCaret"/>
+			<s:Label id="loginLbl" text="{data.rd_login}" width="80"  includeIn="hovered,hoveredAndShowsCaret"/>
+			<s:TextInput id="loginInput" text="{data.rd_login}" width="80"  focusOut="onLoginChange(event)" includeIn="selected,selectedAndShowsCaret"/>
+			
+			<s:Label text="pwd: " includeIn="selected,selectedAndShowsCaret,hovered,hoveredAndShowsCaret"/>
+			<s:Label id="pwdLbl" text="{data.rd_password}" width="80" includeIn="hovered,hoveredAndShowsCaret"/>
+			<s:TextInput id="pwdInput" text="{data.rd_password}" width="80"  focusOut="onPwdChange(event)" includeIn="selected,selectedAndShowsCaret"/>
+		</s:HGroup>	
+	</s:VGroup>		
+	
+	<s:Image width="40" click="click(event)" source="{IcoDelete}"  buttonMode="true" useHandCursor="true" 
+			 includeIn="hovered,hoveredAndShowsCaret,selected,selectedAndShowsCaret" toolTip="delete this query"/>
+	
+</s:ItemRenderer>

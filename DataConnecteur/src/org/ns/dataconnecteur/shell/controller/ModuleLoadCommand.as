@@ -44,13 +44,15 @@ package org.ns.dataconnecteur.shell.controller
 			moduleLoader.addEventListener(ModuleEvent.ERROR, ModuleErrorHandler);
 
 			params=note.getBody() as Array
-			
+			trace("param "+params)
 			var connector:Object=params[0] as Object;
+			trace("connector : "+params[0])
 			moduleUrl+=connector.mod_url;
 			
 			sendNotification(NotificationConstants.LOG_NOTIFICATION,"try to load module" + moduleUrl,"log");
+			trace("Url module connector : "+connector.mod_url+" url module : "+moduleUrl)
 			moduleLoader.loadModule(moduleUrl);
-			CursorManager.setBusyCursor()
+			CursorManager.setBusyCursor();
 		}
 		
 		private function ModuleSetupHandler( e:ModuleEvent ):void 

@@ -8,9 +8,12 @@ package org.ns.dataconnecteur.shell.model.proxy
 	import flash.filesystem.File;
 	import flash.utils.*;
 	
+	import flash.html.HTMLLoader;
+	
 	import mx.collections.ArrayCollection;
 	
 	import org.ns.dataconnecteur.shell.controller.*;
+	import org.ns.dataconnecteur.shell.ressources.util.*;
 	import org.puremvc.as3.multicore.utilities.fabrication.patterns.proxy.FabricationProxy;
 	
 	public class DatabaseProxy extends FabricationProxy
@@ -25,6 +28,8 @@ package org.ns.dataconnecteur.shell.model.proxy
 		private  var sqlFile:File;
 		private  var dbFile:File;
 		private  var countInit:int=0;
+		
+		var nativeAlert:NativeAlert;
 		
 		public function DatabaseProxy()
 		{
@@ -44,12 +49,16 @@ package org.ns.dataconnecteur.shell.model.proxy
 		public function init():void
 		{
 			var dbModel:File=File.applicationDirectory.resolvePath(dbFilePath);
+			trace("db file path: "+dbFilePath)
 			// applicationStorageDirectory==> user name/Application Data/applicationID.publisherID/Local Store/
 			dbFile = File.applicationStorageDirectory.resolvePath(dbRWFile);
+			trace("app path"+dbFile.url)
+			nativeAlert= new NativeAlert();
 			
-			if (!dbFile.exists){
+			if (!dbFile.exists){				
 				dbModel.copyTo(dbFile,true);
 			}
+			
 			
 			sqlConnexion=new SQLConnection();
 			
@@ -97,7 +106,7 @@ package org.ns.dataconnecteur.shell.model.proxy
 		private function openSuccess(event:SQLEvent):void			
 		{
 			countInit+=1;
-			
+			//nativeAlert.alert("dbfile open success");
 			sqlConnexion.removeEventListener(SQLEvent.OPEN, openSuccess);
 			sqlConnexion.removeEventListener(SQLErrorEvent.ERROR, openFailure);
 			//notify the app that sqlite is initialized
@@ -133,13 +142,13 @@ package org.ns.dataconnecteur.shell.model.proxy
 		
 		private function openFailure(event:SQLErrorEvent):void
 		{
+			nativeAlert.alert("DBFILE OPEN FAIL: "+event.error.toString()+" DETAIL: "+event.error.details);
 			sqlConnexion.removeEventListener(SQLEvent.OPEN, openSuccess);
 			sqlConnexion.removeEventListener(SQLErrorEvent.ERROR, openFailure);
 			trace('DB ERROR')
 			//notify the app that sqlite is not initialized
 			sendNotification(NotificationConstants.SQLITE_ERROR_NOTIFICATION);
-		} 
-		
+		}		
 	}
 }
 

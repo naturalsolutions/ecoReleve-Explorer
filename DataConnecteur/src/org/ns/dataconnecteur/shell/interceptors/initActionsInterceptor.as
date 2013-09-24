@@ -34,7 +34,6 @@ package org.ns.dataconnecteur.shell.interceptors
 			pxyModule.selectModules(pxyDatabase.getSqlConnexion);
 			//get all datasources
 			pxyDatasource.selectDatasources(pxyDatabase.getSqlConnexion);
-			
 			sendNotification(NotificationConstants.LOG_NOTIFICATION,'APP:DB INIT SQL')
 			
 			this.proceed();

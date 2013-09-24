@@ -39,14 +39,19 @@ package org.ns.RemoteImportModule.controller
 			//Construit l'url avec la requête	
 			var url:String=connector.rd_url;
 			if (connector.rd_format=='nsml'){
-				url+= '/count' + QueryVOCast.toNsHttpStr(query);
+				query.qry_Count=true;
+				url+= QueryVOCast.toNsHttpStr(query);
 			}else if (connector.rd_format=='sparql'){
 				url+="?default-graph-uri=&should-sponge=&query=";
 				var sparql:String=escape(QueryVOCast.toSparql(query,'count'));
 				url+=sparql
 				url+="&format=xml&debug=off&timeout=";
-			}						
+			}else if (connector.rd_format=='ns'){
+				query.qry_Count=true;
+				url+=QueryVOCast.toNsHttpStr(query);
+			}
 			
+			//trace(connector.rd_format)
 			pxyRemoteStation.countStation(url,strAuthentification)
 		}
 		

@@ -57,11 +57,13 @@ package com.ecoReleve.view
 			switch ( note.getName() ) 
 			{
 				case NotificationConstants.STATIONS_ADDED_NOTIFICATION:	
-					if ((note.getBody() as ArrayCollection).length==0){
-						proportionalsizepanel.boEnabled=false;
-					}else{
-						populateAttributeCombobox();		
-						proportionalsizepanel.boEnabled=true;
+					if ((note.getBody() as ArrayCollection)!=null){
+						if ((note.getBody() as ArrayCollection).length==0){
+							proportionalsizepanel.boEnabled=false;
+						}else{
+							populateAttributeCombobox();		
+							proportionalsizepanel.boEnabled=true;
+						}
 					}
 					break;
 				case NotificationConstants.DECONNEXION_NOTIFICATION:	

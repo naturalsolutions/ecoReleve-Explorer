@@ -18,6 +18,11 @@ package org.ns.common.model.utils
 			var numMaxLat:Number=query.qry_maxLat;
 			var numMinLon:Number=query.qry_minLon;
 			var numMaxLon:Number=query.qry_maxLon;
+			var fieldfctivity:String=query.qry_FieldActivity;
+			var region:String=query.qry_region;
+			var place:String=query.qry_place;
+			var viewname:String=query.qry_ViewName;
+			var cpt:Boolean=query.qry_Count;
 			//var numStartIndex:Number=query.START_INDEX;
 			//var numMaxResults:Number=query.MAX_RESULTS;
 			var strDataOwner:String=query.qry_dataOwner;
@@ -49,6 +54,18 @@ package org.ns.common.model.utils
 			if (!isNaN(numMaxLon)){
 				strCritere=strCritere + "&max-lon=" + numMaxLon.toString();
 			}	
+			if (fieldfctivity!=""){
+				strCritere=strCritere + "&fieldactivity=" + fieldfctivity;
+			}
+			if (region!=""){
+				strCritere=strCritere + "&region=" + region;
+			}
+			if (place!=""){
+				strCritere=strCritere + "&place=" + place;
+			}
+			if (viewname!=""){
+				strCritere=strCritere + "&table=" + viewname;
+			}
 			/*if (!isNaN(numStartIndex)){
 				strCritere=strCritere + "&startrndex" + numStartIndex.toString();
 			}
@@ -61,7 +78,10 @@ package org.ns.common.model.utils
 			
 			//remplace le premier & par ? si strCritere n'est pas vide
 			if (strCritere!=""){
-				strCritere= "?" + strCritere.substring(1);
+				var count:String="yes";
+				if(!cpt)
+					count="no";	
+				strCritere= "?count="+count+"&" + strCritere.substring(1);
 			}
 			
 			return strCritere;
@@ -312,6 +332,10 @@ package org.ns.common.model.utils
 			var numMaxLat:Number=query.qry_maxLat;
 			var numMinLon:Number=query.qry_minLon;
 			var numMaxLon:Number=query.qry_maxLon;
+			var place:String=query.qry_place;
+			var region:String=query.qry_region;
+			var fa:String=query.qry_FieldActivity;
+			var eview:String=query.qry_ViewName;
 			var strDataOwner:String=query.qry_dataOwner;
 			
 			if (strDataOwner!=""){strText+=strDataOwner + " observation(s)";} 
@@ -324,16 +348,21 @@ package org.ns.common.model.utils
 			if (dMinDate!=null){strText+= " from " + DateUtils.CastDateToString(dMinDate,"DD-MM-YYYY");}
 			if (dMaxDate!=null){strText+=" to " + DateUtils.CastDateToString(dMaxDate,"DD-MM-YYYY");}
 			//saut de ligne
-			strText=strText + "<br>"
+			strText=strText + "<br>";
 			
-			if (!isNaN(numMinLat) && !isNaN(numMaxLat) && !isNaN(numMinLon) && !isNaN(numMaxLon)){
+			/*if (!isNaN(numMinLat) && !isNaN(numMaxLat) && !isNaN(numMinLon) && !isNaN(numMaxLon)){
 				strText+=" in (" 
 				strText+=String(Math.round(numMinLon*100000)/100000) + "," 
 				strText+=String(Math.round(numMaxLat*100000)/100000) + ","
 				strText+=String(Math.round(numMaxLon*100000)/100000) + ","
 				strText+=String(Math.round(numMinLat*100000)/100000)
 				strText+=")";
-			}		
+			}	*/
+			strText+="with"
+			if(place!="" && place!=null){ strText+=" place="+place;}
+			if(region!="" && region!=null){	strText+=" region="+region;}				
+			if(fa!="" && fa!=null){strText+=" field activity="+fa;}				
+			if(eview!="" && eview!=null){strText+=" exportView="+eview;}
 			
 			return strText;
 		}

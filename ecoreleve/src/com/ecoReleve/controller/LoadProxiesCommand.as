@@ -1,6 +1,7 @@
 package com.ecoReleve.controller
 {
 	import com.ecoReleve.model.*;
+	import com.ecoReleve.view.DataPanelMediator;
 	
 	import flash.filesystem.File;
 	
@@ -26,10 +27,12 @@ package com.ecoReleve.controller
 			var sqlFile:File = dir.resolvePath("mydbRW.sqlite");
 			
 			if (sqlFile.exists){
-				var proxyDB:DatabaseProxy=retrieveProxy(DatabaseProxy.NAME) as DatabaseProxy
-				proxyDB.init(sqlFile)
+				var proxyDB:DatabaseProxy=retrieveProxy(DatabaseProxy.NAME) as DatabaseProxy;
+				proxyDB.init(sqlFile);
 			}
-    	}
+			var dtm:DataPanelMediator = retrieveMediator(DataPanelMediator.NAME) as DataPanelMediator;
+    		dtm.list(proxyDB);	
+		}
     }
 
 }

@@ -168,7 +168,10 @@ package com.ecoReleve.controller
 
 		public static const STATION_CLASS_CHANGED_NOTIFICATION:String="stationclasschanged"
 		public static const STATION_CLASS_UNSELECT_NOTIFICATION:String="stationclassUnselect"
+			
+		static public const LOAD_MODULE_NOTIFICATION:String 				= "loadModule";
+		static public const MODULE_LOADED_NOTIFICATION:String 				= "moduleLoaded";	
 		
-		
+		static public const CONNECTORS_REMOTE_SELECTED_NOTIFICATION:String 	= "connectorsRemoteSelected";
 	}
 }

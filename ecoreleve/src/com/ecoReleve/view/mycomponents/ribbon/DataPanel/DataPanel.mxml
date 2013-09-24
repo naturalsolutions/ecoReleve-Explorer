@@ -15,8 +15,19 @@
             [Embed('com/ecoReleve/ressources/images/refresh.png')]
             private var IcoNewDts:Class;
 
-
+			[Bindable]
+			[Embed('com/ecoReleve/ressources/images/services.png')]
+			private var IcoServices:Class;
+			
+			[Bindable]
+			public var arrLocalModules:ArrayCollection=new ArrayCollection;
+			
+			[Bindable]
+			public var arrWebServiceModules:ArrayCollection=new ArrayCollection;
+			
 			public static const GET_DATA_CLICK:String = 'getData';
+			public static const Start_service_module:String = 'start_WS';
+			
 			
 			 private function sendEvent(action:String):void
              {
@@ -29,6 +40,19 @@
 	<ns:RibbonButton id="btnGetData" icon="{IcoNewDts}" iconPlacement="top" label="Refresh data"
 						 click="sendEvent(GET_DATA_CLICK)" 
 						 toolTip="Refresh data" toolTipTitle="Refresh" AncestorToolTip="{Ribbon}"/>
-
+	
+	
+	<!-- WEBSERVICES -->
+	
+	<ns:RibbonButton id="btnServices" label="web services" icon="{IcoServices}" iconPlacement="top" AncestorToolTip="{Ribbon}"
+					 toolTip="Add data from web service" toolTipTitle="WEB SERVICE" PopUp="{popupWebServices}"/>
+	<ns:RibbonButtonPopup id="popupWebServices">
+		<s:VGroup width="150">
+			<s:List id="lstWebService" width="100%" dataProvider="{arrWebServiceModules}" textAlign="left" 
+					itemRenderer="com.ecoReleve.ressources.renderer.RemoteModulesListRenderer"/>
+		</s:VGroup>
+	</ns:RibbonButtonPopup>	
+	
+	<!--<mx:ModuleLoader url="com.ecoReleve.modules.RemoteImportModule.swf"/>-->
 
 </s:HGroup>

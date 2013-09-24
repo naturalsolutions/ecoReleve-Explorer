@@ -56,12 +56,14 @@ package com.ecoReleve.view
 					filter.boEnabled=true;
 					break;
 				case NotificationConstants.STATIONS_ADDED_NOTIFICATION:	
-					if ((note.getBody() as ArrayCollection).length==0){
-						filter.boEnabled=false;
-					}else{
-						if (boAmIAsk==false){
-							sendNotification(NotificationConstants.SELECT_ATTRIBUTE_NOTIFICATION,'sta_speciesName','uniqueValue')
-							filter.boEnabled=true;
+					if ((note.getBody() as ArrayCollection)!=null){
+						if ((note.getBody() as ArrayCollection).length==0){
+							filter.boEnabled=false;
+						}else{
+							if (boAmIAsk==false){
+								sendNotification(NotificationConstants.SELECT_ATTRIBUTE_NOTIFICATION,'sta_speciesName','uniqueValue')
+								filter.boEnabled=true;
+							}
 						}
 					}
 					break;

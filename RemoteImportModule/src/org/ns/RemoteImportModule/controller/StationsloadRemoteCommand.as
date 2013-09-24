@@ -51,7 +51,10 @@ package org.ns.RemoteImportModule.controller
 				//notify to log url
 				routeNotification("httpRequested",sparql, "sparql request", "*")
 			}						
-			
+			if (connector.rd_format=='ns'){
+				query.qry_Count=false;
+				url+=QueryVOCast.toNsHttpStr(query);
+			}	
 			//notify to log url
 			routeNotification("httpRequested",url, "url request", "*")
 			

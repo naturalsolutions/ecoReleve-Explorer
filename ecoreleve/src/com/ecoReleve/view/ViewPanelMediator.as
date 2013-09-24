@@ -65,10 +65,12 @@ package com.ecoReleve.view
 			switch ( note.getName() )
 			{      
 				case NotificationConstants.STATIONS_ADDED_NOTIFICATION:
-					if ((note.getBody() as ArrayCollection).length==0){
-						viewpanel.boEnabled=false;
-					}else{
-						viewpanel.boEnabled=true;
+					if ((note.getBody() as ArrayCollection)!=null){
+						if ((note.getBody() as ArrayCollection).length==0){
+							viewpanel.boEnabled=false;
+						}else{
+							viewpanel.boEnabled=true;
+						}
 					}
 					break;
 				case NotificationConstants.STATION_LAYER_MODE_NOTIFICATION:

@@ -37,7 +37,8 @@ package org.ns.RemoteImportModule.controller
 			var results:XML;
 			var i:XML;
 			var stations:ArrayCollection= new ArrayCollection();
-			
+			trace("query: "+query);
+			//trace("xml: "+data);
 			//create datasource name
 			var strDatasourceName:String
 			if (connector.rd_authRequired==true){
@@ -47,8 +48,8 @@ package org.ns.RemoteImportModule.controller
 			}
 			
 			
-			if (connector.rd_format=='nsml'){
-				results=new XML(data);
+			if (connector.rd_format=='nsml' || connector.rd_format=='ns'){
+				/*results=new XML(data);
 				var strData:String=String(results.nsData.flatData.jsonResult.text());
 				//Parse le json en array          
 				var DataArray:Array=JSON.decode(strData) as Array; 
@@ -58,7 +59,26 @@ package org.ns.RemoteImportModule.controller
 				for each (j in DataArray)
 				{
 					stations.addItem(StationVOCast.fromJSON(j,query.qry_id,strDatasourceName));
-				}
+				}*/
+				var index:int;	
+				results=new XML(data);
+				var when:XML;
+				var where:XML;
+				var who:XML;
+				var what:XML;
+				//trace("xml releves0:"+results.RELEVE[0])
+				for each(var rel in results..RELEVE){				
+					//trace(rel.DATE)
+					when=XML(rel.WHEN);
+					where=XML(rel.WHERE);
+					who=XML(rel.WHO);
+					//trace("what: "+rel.WHAT+"end what");
+					what=XML(rel.WHAT);
+					//StationVOCast.fromNSML(when,where,who,what,strDatasourceName);
+					//trace("RE "+when.DATE+" RE")
+					if(when.DATE.text()!=null && when.DATE!="")
+						stations.addItem(StationVOCast.fromNSML(when,where,who,what,strDatasourceName));
+				}	
 			}else if (connector.rd_format=='sparql'){
 				//nettoyage du xml ==> erreur de convertion xml
 				// on ne garde que la balise results
@@ -77,24 +97,6 @@ package org.ns.RemoteImportModule.controller
 				{
 					stations.addItem(StationVOCast.fromDwcXML(i,query.qry_id,strDatasourceName));
 				}
-			}			
-			else if (connector.rd_format=='ns'){
-				var index:int;	
-				results=new XML(data);
-				var when:XML;
-				var where:XML;
-				var who:XML;
-				var what:XML;
-				//trace("xml releves0:"+results.RELEVE[0])
-				for each(var rel in results..RELEVE){				
-					//trace(rel.DATE)
-					when=XML(rel.WHEN);
-					where=XML(rel.WHERE);
-					who=XML(rel.WHO);
-					what=XML(rel.WHAT);
-					//StationVOCast.fromNSML(when,where,who,what,strDatasourceName);
-					//stations.addItem(StationVOCast.fromNsmlReleve(rel));
-				}		
 			}
 			CursorManager.removeBusyCursor();
 			
@@ -102,7 +104,7 @@ package org.ns.RemoteImportModule.controller
 			if (stations.length==0){
 				trace("CANCEL IMPORT")
 									
-				Alert.show("no station(s) returned","info",4,module.app,null,null,4 ,module.app.moduleFactory);
+				Alert.show("no station(s)returned","info",4,module.app,null,null,4 ,module.app.moduleFactory);
 			} else {
 				//notify shell with stations
 				routeNotification("stationsImported",stations, "stations", "*")
@@ -111,6 +113,5 @@ package org.ns.RemoteImportModule.controller
 			}
 			
 		}
-
 	}
 }

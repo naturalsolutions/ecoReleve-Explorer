@@ -60,7 +60,7 @@ package com.ecoReleve.model
 		{
 			sqlConnexion.removeEventListener(SQLEvent.OPEN, openSuccess);
 			sqlConnexion.removeEventListener(SQLErrorEvent.ERROR, openFailure);
-			trace('DB ERROR')
+			trace('DB ERROR:'+event.error.toString())
 			//notify the app that sqlite is not initialized
 			//sendNotification(NotificationConstants.SQLITE_ERROR_NOTIFICATION);
 		} 

@@ -17,8 +17,8 @@ package org.ns.RemoteImportModule.controller
 		override public function execute( note:INotification ):void
 		{
 			//do init
-			trace("init module")
-			
+			trace("init module remoteImportModule")
+			trace("ini remoteImportModule notebody : "+note.getBody())
 			var arr:Array=note.getBody() as Array
 			var container:Object=arr[0]	
 			var params:Array=arr[1] as Array

@@ -3,9 +3,6 @@
 	<name>ecoReleve</name>
 	<comment></comment>
 	<projects>
-		<project>common</project>
-		<project>generic_components</project>
-		<project>generic_components_Flex4</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

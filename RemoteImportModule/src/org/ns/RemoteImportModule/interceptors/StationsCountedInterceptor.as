@@ -16,8 +16,11 @@ package org.ns.RemoteImportModule.interceptors
 			var results:XML
 			
 			if (connector.rd_format=="nsml"){
+				//results=new XML(data);
+				//nbResult=Number(results.header.summary.attribute("totalMatched"));
 				results=new XML(data);
-				nbResult=Number(results.header.summary.attribute("totalMatched"));
+				nbResult=Number(results);				
+				trace("result: "+results);
 			}else if (connector.rd_format=="sparql"){
 				//nettoyage du xml ==> erreur de convertion xml
 				// on ne garde que la balise results
@@ -34,8 +37,12 @@ package org.ns.RemoteImportModule.interceptors
 				results=new XML(settingsClean);
 				
 				nbResult=Number(results.result.binding.literal.text());
-			}	
-			
+			}else if (connector.rd_format=="ns"){
+				results=new XML(data);
+				nbResult=Number(results);
+				
+				trace("result: "+results);
+			}
 			//change notification body with nb of returned data
 			notification.setBody(nbResult)
 			

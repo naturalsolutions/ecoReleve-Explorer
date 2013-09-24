@@ -15,6 +15,7 @@ package org.ns.RemoteImportModule.controller
 		{
 			//notify shell with query
 			routeNotification(CommonNotificationConstants.RECORD_QUERY_NOTIFICATION,note.getBody() as QueryVO, "query", "*")
+			trace("query create: "+note.getBody())
 		}
 	
 	}

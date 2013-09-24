@@ -82,10 +82,12 @@ package com.ecoReleve.view
 					map=mapMediator.myMap
 					break;
 				case NotificationConstants.STATIONS_ADDED_NOTIFICATION: 
-					if ((note.getBody() as ArrayCollection).length==0){
-						geotool.boEnabled=false;
-					}else{
-						geotool.boEnabled=true;
+					if ((note.getBody() as ArrayCollection)!=null){
+						if ((note.getBody() as ArrayCollection).length==0){
+							geotool.boEnabled=false;
+						}else{
+							geotool.boEnabled=true;
+						}
 					}
 					break;
 				case NotificationConstants.STATION_LAYER_MODE_NOTIFICATION:

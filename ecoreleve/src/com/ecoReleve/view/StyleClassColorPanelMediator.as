@@ -76,11 +76,13 @@ package com.ecoReleve.view
 					}
 					break;
 				case NotificationConstants.STATIONS_ADDED_NOTIFICATION:	
-					if ((note.getBody() as ArrayCollection).length==0){
-						classcolorpanel.boEnabled=false;
-					}else{
-						populateAttributeCombobox();			
-						classcolorpanel.boEnabled=true;
+					if((note.getBody() as ArrayCollection)!=null){
+						if ((note.getBody() as ArrayCollection).length==0){
+							classcolorpanel.boEnabled=false;
+						}else{
+							populateAttributeCombobox();			
+							classcolorpanel.boEnabled=true;
+						}
 					}
 					break;
 				case NotificationConstants.STATION_LAYER_MODE_NOTIFICATION:

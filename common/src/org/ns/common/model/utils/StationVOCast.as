@@ -130,11 +130,12 @@ package org.ns.common.model.utils
 			station.sta_id=NaN
 			station.sta_name=where.NAME.text
 				
-			station.sta_date=DateUtils.CastStringToDate(when.DATE.text()," ","DD/MM/YYYY","HH:NN:SS")
-			station.sta_dateY=String(station.sta_date.getFullYear())
-			station.sta_dateYM=station.sta_dateY + "-" + String(station.sta_date.getMonth()+1)
-			station.sta_dateYMD=station.sta_dateYM + "-" + String(station.sta_date.getDate())
-			
+			station.sta_date=DateUtils.CastStringToDate(when.DATE.text()," ","YYYY-MM-DD","HH:NN:SS")
+			if(station.sta_date!=null){
+				station.sta_dateY=String(station.sta_date.getFullYear())
+				station.sta_dateYM=station.sta_dateY + "-" + String(station.sta_date.getMonth()+1)
+				station.sta_dateYMD=station.sta_dateYM + "-" + String(station.sta_date.getDate())
+			}
 			
 			station.sta_speciesName=what.TAXON.TAXON_NAME.text()
 			

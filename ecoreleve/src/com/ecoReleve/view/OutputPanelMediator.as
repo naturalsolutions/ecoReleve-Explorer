@@ -40,12 +40,15 @@ package com.ecoReleve.view
 			switch ( note.getName() ) 
 			{
 				case NotificationConstants.STATIONS_ADDED_NOTIFICATION:	
-					if ((note.getBody() as ArrayCollection).length==0){
-						outputpanel.boEnabled=false;
-					}else{
-						outputpanel.boEnabled=true;
+					trace("OutputPanel noteboby: "+note.getBody());
+					if ((note.getBody() as ArrayCollection)!=null){
+						if ((note.getBody() as ArrayCollection).length==0){
+							outputpanel.boEnabled=false;
+						}else{
+							outputpanel.boEnabled=true;
+						}
+						break;
 					}
-					break;
 			}
 		} 
         

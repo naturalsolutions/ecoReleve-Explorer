@@ -56,14 +56,16 @@ package com.ecoReleve.view
 					columnpanel.boEnabled=true;
 					break;
 				case NotificationConstants.STATIONS_ADDED_NOTIFICATION:	
-					if ((note.getBody() as ArrayCollection).length==0){
-						columnpanel.boEnabled=false;
-					}else{
-						if (boOnlyOnce==true){
-							populateAttributeList()
+					if ((note.getBody() as ArrayCollection)!=null){
+						if ((note.getBody() as ArrayCollection).length==0){
+							columnpanel.boEnabled=false;
+						}else{
+							if (boOnlyOnce==true){
+								populateAttributeList()
+							}
+							columnpanel.boEnabled=true;
+							
 						}
-						columnpanel.boEnabled=true;
-						
 					}
 					break;
 			}

@@ -70,10 +70,12 @@ package com.ecoReleve.view
 					GetStationOpacity()
 					break;
 				case NotificationConstants.STATIONS_ADDED_NOTIFICATION:	
-					if ((note.getBody() as ArrayCollection).length==0){
-						stylePanel.boEnabled=false;
-					}else{
-						stylePanel.boEnabled=true;
+					if ((note.getBody() as ArrayCollection)!=null){
+						if ((note.getBody() as ArrayCollection).length==0){
+							stylePanel.boEnabled=false;
+						}else{
+							stylePanel.boEnabled=true;
+						}
 					}
 					break;
 				case NotificationConstants.STATION_LAYER_MODE_NOTIFICATION:

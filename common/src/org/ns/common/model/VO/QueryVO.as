@@ -145,5 +145,51 @@ package org.ns.common.model.VO
 			_qry_persist = value;
 		}
 		
+		private var _qry_region : String;
+		public function get qry_region() : String {
+			return _qry_region;
+		}
+		
+		public function set qry_region( value : String ) : void  {
+			_qry_region = value;
+		}
+		
+		private var _qry_place : String;
+		public function get qry_place() : String {
+			return _qry_place;
+		}
+		
+		public function set qry_place( value : String ) : void  {
+			_qry_place = value;
+		}
+		
+		private var _qry_FieldActivity : String;
+		public function get qry_FieldActivity() : String {
+			return _qry_FieldActivity;
+		}
+		
+		public function set qry_FieldActivity( value : String ) : void  {
+			_qry_FieldActivity = value;
+		}
+		
+		private var _qry_ViewName : String;
+		public function get qry_ViewName() : String {
+			return _qry_ViewName;
+		}
+		
+		public function set qry_ViewName( value : String ) : void  {
+			_qry_ViewName = value;
+		}
+		
+		private var _qry_Count : Boolean;
+		public function get qry_Count() : Boolean {
+			trace("QUERYVO GET COUNT");
+			return _qry_Count;
+		}
+		
+		public function set qry_Count( value : Boolean ) : void  {
+			trace("QUERYVO SET COUNT");
+			_qry_Count = value;
+		}
 	}
 }

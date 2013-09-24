@@ -72,10 +72,12 @@ package com.ecoReleve.view
 				case NotificationConstants.STATIONS_ADDED_NOTIFICATION:
 					//masque le panel message aprés 3 sec
 					var arrCol:ArrayCollection=note.getBody() as ArrayCollection
-					if (arrCol.length==0){
-						changeMessage("No station(s) in database")
-					}else{
-						changeMessage(String(arrCol.length) +  " station(s) loaded")
+					if(arrCol!=null){ 
+						if (arrCol.length==0){
+							changeMessage("No station(s) in database")
+						}else{
+							changeMessage(String(arrCol.length) +  " station(s) loaded")
+						}
 					}
 					setTimeout(hideMessage,3000)					
 					break;
